@@ -8,13 +8,27 @@ import { defineCollection, z } from 'astro:content';
 import { notionLoader } from '../lib/notion-loader';
 
 /**
- * Gets a Notion environment variable with validation warning
+ * Gets Notion environment variables with validation warnings.
+ * Uses static property access because Vite replaces import.meta.env.X at build time
+ * but cannot resolve dynamic access like import.meta.env[name].
  */
-function getNotionEnvVar(name: string): string {
-  const value = import.meta.env[name] || process.env[name];
+function getNotionDataSourceId(): string {
+  const value = import.meta.env.NOTION_DATA_SOURCE_ID || process.env.NOTION_DATA_SOURCE_ID;
   if (!value) {
     console.warn(
-      `[content] Missing ${name} environment variable. Content will not be loaded from Notion.`,
+      '[content] Missing NOTION_DATA_SOURCE_ID environment variable. Content will not be loaded from Notion.',
+    );
+    return '';
+  }
+  return value;
+}
+
+function getNotionPhotosDataSourceId(): string {
+  const value =
+    import.meta.env.NOTION_PHOTOS_DATA_SOURCE_ID || process.env.NOTION_PHOTOS_DATA_SOURCE_ID;
+  if (!value) {
+    console.warn(
+      '[content] Missing NOTION_PHOTOS_DATA_SOURCE_ID environment variable. Content will not be loaded from Notion.',
     );
     return '';
   }
@@ -39,7 +53,7 @@ const postSchema = z.object({
 // All section posts (general blog posts)
 const posts = defineCollection({
   loader: notionLoader({
-    dataSourceId: getNotionEnvVar('NOTION_DATA_SOURCE_ID'),
+    dataSourceId: getNotionDataSourceId(),
     filter: {
       property: 'Section',
       select: { equals: 'All' },
@@ -51,7 +65,7 @@ const posts = defineCollection({
 // VBC (Value-Based Care) series posts
 const vbcPosts = defineCollection({
   loader: notionLoader({
-    dataSourceId: getNotionEnvVar('NOTION_DATA_SOURCE_ID'),
+    dataSourceId: getNotionDataSourceId(),
     filter: {
       property: 'Section',
       select: { equals: 'VBC' },
@@ -63,7 +77,7 @@ const vbcPosts = defineCollection({
 // Photo posts
 const photos = defineCollection({
   loader: notionLoader({
-    dataSourceId: getNotionEnvVar('NOTION_PHOTOS_DATA_SOURCE_ID'),
+    dataSourceId: getNotionPhotosDataSourceId(),
   }),
   schema: postSchema,
 });
