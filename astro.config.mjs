@@ -5,7 +5,7 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://brennanmoore.com',
+  site: 'https://www.zamiang.com',
   output: 'static',
 
   integrations: [
@@ -34,7 +34,7 @@ export default defineConfig({
 
   // Image optimization
   image: {
-    domains: ['brennanmoore.com'],
+    domains: ['www.zamiang.com'],
     service: {
       entrypoint: 'astro/assets/services/sharp',
     },
