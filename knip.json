@@ -16,7 +16,8 @@
   "ignoreDependencies": [
     "tailwindcss",
     "@tailwindcss/typography",
-    "class-variance-authority"
+    "class-variance-authority",
+    "@vitest/coverage-v8"
   ],
   "ignoreExportsUsedInFile": {
     "interface": true,
