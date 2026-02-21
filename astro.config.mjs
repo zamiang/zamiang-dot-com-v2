@@ -1,10 +1,32 @@
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
+  env: {
+    schema: {
+      NOTION_TOKEN: envField.string({ context: 'server', access: 'secret', optional: true }),
+      NOTION_DATA_SOURCE_ID: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+      }),
+      NOTION_PHOTOS_DATA_SOURCE_ID: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+      }),
+      SITE_URL: envField.string({
+        context: 'server',
+        access: 'public',
+        optional: true,
+        default: 'https://www.zamiang.com',
+      }),
+    },
+  },
+
   site: 'https://www.zamiang.com',
   output: 'static',
 
