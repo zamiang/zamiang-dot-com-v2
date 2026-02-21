@@ -55,9 +55,9 @@
     "@types/react-syntax-highlighter": "15.5.13",
     "@vitejs/plugin-react": "5.1.4",
     "@vitest/coverage-istanbul": "4.0.18",
-    "eslint": "9.39.2",
+    "eslint": "10.0.1",
     "eslint-plugin-astro": "1.6.0",
-    "jsdom": "27.4.0",
+    "jsdom": "28.1.0",
     "knip": "5.84.1",
     "postcss": "8.5.6",
     "prettier": "3.8.1",
@@ -67,6 +67,10 @@
     "typescript-eslint": "8.56.0",
     "vite-tsconfig-paths": "6.1.1",
     "vitest": "4.0.18"
+  },
+  "overrides": {
+    "minimatch": ">=10.2.1",
+    "lodash": ">=4.17.22"
   },
   "engines": {
     "node": "24.x"
