@@ -2,38 +2,12 @@
  * Astro Content Collections Configuration
  *
  * Defines the schema for posts, VBC posts, and photos loaded from Notion.
+ * Env vars are declared in astro.config.mjs env schema and imported from astro:env/server.
  */
 import { defineCollection, z } from 'astro:content';
+import { NOTION_DATA_SOURCE_ID, NOTION_PHOTOS_DATA_SOURCE_ID } from 'astro:env/server';
 
 import { notionLoader } from '../lib/notion-loader';
-
-/**
- * Gets Notion environment variables with validation warnings.
- * Uses static property access because Vite replaces import.meta.env.X at build time
- * but cannot resolve dynamic access like import.meta.env[name].
- */
-function getNotionDataSourceId(): string {
-  const value = import.meta.env.NOTION_DATA_SOURCE_ID || process.env.NOTION_DATA_SOURCE_ID;
-  if (!value) {
-    console.warn(
-      '[content] Missing NOTION_DATA_SOURCE_ID environment variable. Content will not be loaded from Notion.',
-    );
-    return '';
-  }
-  return value;
-}
-
-function getNotionPhotosDataSourceId(): string {
-  const value =
-    import.meta.env.NOTION_PHOTOS_DATA_SOURCE_ID || process.env.NOTION_PHOTOS_DATA_SOURCE_ID;
-  if (!value) {
-    console.warn(
-      '[content] Missing NOTION_PHOTOS_DATA_SOURCE_ID environment variable. Content will not be loaded from Notion.',
-    );
-    return '';
-  }
-  return value;
-}
 
 // Schema shared by all content types
 const postSchema = z.object({
@@ -53,7 +27,7 @@ const postSchema = z.object({
 // All section posts (general blog posts)
 const posts = defineCollection({
   loader: notionLoader({
-    dataSourceId: getNotionDataSourceId(),
+    dataSourceId: NOTION_DATA_SOURCE_ID || '',
     filter: {
       property: 'Section',
       select: { equals: 'All' },
@@ -65,7 +39,7 @@ const posts = defineCollection({
 // VBC (Value-Based Care) series posts
 const vbcPosts = defineCollection({
   loader: notionLoader({
-    dataSourceId: getNotionDataSourceId(),
+    dataSourceId: NOTION_DATA_SOURCE_ID || '',
     filter: {
       property: 'Section',
       select: { equals: 'VBC' },
@@ -77,7 +51,7 @@ const vbcPosts = defineCollection({
 // Photo posts
 const photos = defineCollection({
   loader: notionLoader({
-    dataSourceId: getNotionPhotosDataSourceId(),
+    dataSourceId: NOTION_PHOTOS_DATA_SOURCE_ID || '',
   }),
   schema: postSchema,
 });
