@@ -3,5 +3,12 @@
 name = "brennanmoore-homepage"
 pages_build_output_dir = "dist"
 
+# Build environment variables
+# NOTION_TOKEN is set as a secret via: wrangler pages secret put NOTION_TOKEN --project-name zamiang-dot-com
+[vars]
+NOTION_DATA_SOURCE_ID = "ff789388-b5dc-40dc-8abc-5c99060f0760"
+NOTION_PHOTOS_DATA_SOURCE_ID = "a9946ffd-a73f-42a7-a44b-aa339450c19b"
+SITE_URL = "https://www.zamiang.com"
+
 # Explicitly disable any function invocation
 # https://developers.cloudflare.com/pages/configuration/wrangler-configuration/
