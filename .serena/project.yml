@@ -28,7 +28,15 @@ ignore_all_files_in_gitignore: true
 # same syntax as gitignore, so you can use * and **
 # Was previously called `ignored_dirs`, please update your config if you are using that.
 # Added (renamed) on 2025-04-07
-ignored_paths: []
+ignored_paths:
+- "dist/**"
+- ".astro/**"
+- "node_modules/**"
+- "coverage/**"
+- ".wrangler/**"
+- "public/images/**"
+- "docs/**"
+- "package-lock.json"
 
 # whether the project is in read-only mode
 # If set to true, all editing tools will be disabled and attempts to use them will result in an error
@@ -78,7 +86,31 @@ excluded_tools: []
 
 # initial prompt for the project. It will always be given to the LLM upon activating the project
 # (contrary to the memories, which are loaded on demand).
-initial_prompt: ""
+initial_prompt: |
+  This is a personal homepage/blog built with Astro 5 + React 19 islands, deployed to Cloudflare Pages.
+
+  **Architecture:**
+  - Astro static site generation with content collections powered by a custom Notion loader
+  - React islands (in src/components/islands/) for interactive components — hydrated via client:load or client:visible
+  - Notion as headless CMS via @notion/client v5 (uses dataSources.query(), NOT databases.query())
+  - Tailwind CSS v4 with Vite plugin
+  - Vitest for testing (~153 tests)
+
+  **Key entry points:**
+  - src/pages/ — Astro pages and API routes (index.astro, writing/[slug].astro, rss.xml.ts, feed.json.ts)
+  - src/content/config.ts — Astro content collection definitions with custom Notion loader
+  - src/lib/notion-loader.ts — Custom content loader bridging Notion API to Astro collections
+  - src/lib/config.ts — Centralized site configuration
+  - src/components/islands/ — React interactive components (Header.tsx, FloatingParticles.tsx)
+  - src/layouts/ — BaseLayout.astro, PostLayout.astro
+
+  **Conventions:**
+  - TypeScript strict mode throughout
+  - Tests live in __tests__/ mirroring src/ structure
+  - .astro files use Astro component syntax (not TSX) — only islands/ are React
+  - Environment variables: NOTION_TOKEN, NOTION_DATA_SOURCE_ID, NOTION_PHOTOS_DATA_SOURCE_ID, SITE_URL
+
+  **Commands:** npm test, npm run build, npm run typecheck, npm run check (astro check), npm run lint
 # the name by which the project can be referenced within Serena
 project_name: "homepage-notion-nextjs"
 
@@ -103,3 +135,23 @@ default_modes:
 # fixed set of tools to use as the base tool set (if non-empty), replacing Serena's default set of tools.
 # This cannot be combined with non-empty excluded_tools or included_optional_tools.
 fixed_tools: []
+
+# override of the corresponding setting in serena_config.yml, see the documentation there.
+# If null or missing, the value from the global config is used.
+symbol_info_budget:
+
+# The language backend to use for this project.
+# If not set, the global setting from serena_config.yml is used.
+# Valid values: LSP, JetBrains
+# Note: the backend is fixed at startup. If a project with a different backend
+# is activated post-init, an error will be returned.
+language_backend:
+
+# line ending convention to use when writing source files.
+# Possible values: unset (use global setting), "lf", "crlf", or "native" (platform default)
+# This does not affect Serena's own files (e.g. memories and configuration files), which always use native line endings.
+line_ending:
+
+# list of regex patterns which, when matched, mark a memory entry as read‑only.
+# Extends the list from the global configuration, merging the two lists.
+read_only_memory_patterns: []
