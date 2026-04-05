@@ -858,8 +858,7 @@
   }
 
   .work-card-sep {
-    color: var(--muted-foreground);
-    opacity: 0.4;
+    color: color-mix(in srgb, var(--muted-foreground) 40%, transparent);
   }
 
   .work-card-role {
