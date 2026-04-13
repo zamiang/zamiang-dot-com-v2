@@ -22,3 +22,10 @@
 /feed.json
   Content-Type: application/feed+json; charset=utf-8
   Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+# Markdown alternate endpoints
+/writing/*.md
+  Content-Type: text/markdown; charset=utf-8
+
+/photos/*.md
+  Content-Type: text/markdown; charset=utf-8
