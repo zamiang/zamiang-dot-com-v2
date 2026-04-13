@@ -87,16 +87,20 @@ const jsonLd = {
       <h1>Brennan Moore</h1>
       <p>CTO / Engineering Leader — I build innovative digital products people love.</p>
       <div class="resume-links">
-        <a href="https://www.linkedin.com/in/brennan-moore/">LinkedIn</a>
+        <a
+          href="https://www.linkedin.com/in/brennan-moore/"
+          target="_blank"
+          rel="noopener noreferrer">LinkedIn</a
+        >
         <span class="sep" aria-hidden="true">&middot;</span>
         <a href="/Brennan_Moore_Resume.pdf">Resume</a>
         <span class="sep" aria-hidden="true">&middot;</span>
-        <a href="https://github.com/zamiang">GitHub</a>
+        <a href="https://github.com/zamiang" target="_blank" rel="noopener noreferrer">GitHub</a>
       </div>
     </div>
   </header>
 
-  <div class="section-rule" style="max-width: 960px; margin: 0 auto;"></div>
+  <div class="section-rule resume-rule"></div>
 
   {/* Two-Column Body */}
   <div class="resume-layout">
@@ -105,7 +109,7 @@ const jsonLd = {
       <section>
         <h2 class="resume-section-heading">Currently</h2>
         <p class="text-sm text-muted-foreground">Consulting</p>
-        <p class="text-sm" style="margin-top: 0.5rem;">
+        <p class="text-sm mt-2">
           I work best with small teams, digging into the business to find what actually moves the
           needle.
         </p>
@@ -138,9 +142,7 @@ const jsonLd = {
             <p class="text-sm">
               <a href={`/writing/${vbcPosts[0].data.slug}`}>{VBC_TITLE}</a>
             </p>
-            <p class="text-xs text-muted-foreground" style="margin-top: 0.25rem;">
-              {vbcPosts.length} parts
-            </p>
+            <p class="text-xs text-muted-foreground mt-1">{vbcPosts.length} parts</p>
           </section>
         )
       }
@@ -155,8 +157,9 @@ const jsonLd = {
               ))}
             </div>
             {photos.length > 2 && (
-              <a href="#photography-full" class="view-all-link">
-                View all {photos.length} photos →
+              <a href="/photos" class="view-all-link">
+                {' '}
+                View all photos →{' '}
               </a>
             )}
           </section>
@@ -165,7 +168,7 @@ const jsonLd = {
     </aside>
 
     {/* Right Main Column */}
-    <main>
+    <div>
       <section id="work">
         <h2 class="resume-section-heading">Experience</h2>
 
@@ -239,19 +242,20 @@ const jsonLd = {
 
       {
         posts.length > 0 && (
-          <section id="writing" style="margin-top: 2rem;">
+          <section id="writing" class="mt-8">
             <h2 class="resume-section-heading">Writing</h2>
             {recentPosts.map((post) => (
               <PostCard post={post.data} compact />
             ))}
             {posts.length > recentPosts.length && (
-              <a href="#writing-full" class="view-all-link">
-                View all {posts.length} posts →
+              <a href="/writing" class="view-all-link">
+                {' '}
+                View all writing →{' '}
               </a>
             )}
           </section>
         )
       }
-    </main>
+    </div>
   </div>
 </BaseLayout>

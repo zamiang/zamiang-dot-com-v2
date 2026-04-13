@@ -712,6 +712,13 @@
     line-height: 1.4;
   }
 
+  /* Constrained rule under resume header */
+  .resume-rule {
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   .resume-links {
     display: flex;
     align-items: center;
