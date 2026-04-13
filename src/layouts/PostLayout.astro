@@ -104,6 +104,15 @@ const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
   article={true}
   canonicalUrl={`${siteUrl}/${type}/${post.slug}`}
 >
+  <Fragment slot="head">
+    <link
+      href={`${siteUrl}/${type}/${post.slug}.md`}
+      type="text/markdown"
+      rel="alternate"
+      title="Markdown"
+    />
+  </Fragment>
+
   <Fragment slot="json-ld">
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </Fragment>

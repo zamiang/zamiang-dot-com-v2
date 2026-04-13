@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -18,18 +14,11 @@
     "jsx": "react-jsx",
     "incremental": true,
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
-    "types": [
-      "vitest/globals"
-    ]
+    "types": ["vitest/globals"]
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx"
-  ],
+  "include": ["**/*.ts", "**/*.tsx"],
   "exclude": [
     "node_modules",
     ".astro",
@@ -37,6 +26,8 @@
     "src/content/config.ts",
     "src/lib/notion-loader.ts",
     "src/pages/feed.json.ts",
-    "src/pages/rss.xml.ts"
+    "src/pages/rss.xml.ts",
+    "src/pages/writing/[slug].md.ts",
+    "src/pages/photos/[slug].md.ts"
   ]
 }
