@@ -44,6 +44,14 @@ export function toMarkdownPostData(raw: Record<string, unknown>): MarkdownPostDa
 }
 
 /**
+ * Escapes markdown formatting characters so text renders literally.
+ * Used for the H1 title in the body to prevent unintended bold/italic/etc.
+ */
+function escapeMarkdown(value: string): string {
+  return value.replace(/([*_`~\[\]#|\\>])/g, '\\$1');
+}
+
+/**
  * Builds a markdown Response with YAML frontmatter for a given post.
  *
  * @param post - The post data to render as markdown
@@ -57,12 +65,14 @@ export function buildMarkdownResponse(
 ): Response {
   const canonicalUrl = `${siteUrl}/${type}/${post.slug}`;
 
+  // All string values are escaped for YAML double-quoted scalars,
+  // even date and canonical_url, for consistency.
   const lines = [
     '---',
     `title: "${escapeYamlString(post.title)}"`,
-    `date: "${post.date}"`,
+    `date: "${escapeYamlString(post.date)}"`,
     `author: "${escapeYamlString(post.author)}"`,
-    `canonical_url: "${canonicalUrl}"`,
+    `canonical_url: "${escapeYamlString(canonicalUrl)}"`,
   ];
 
   if (post.excerpt) {
@@ -72,8 +82,11 @@ export function buildMarkdownResponse(
     lines.push(`section: "${escapeYamlString(post.section)}"`);
   }
 
-  lines.push('---', '', `# ${post.title}`, '', post.content);
+  lines.push('---', '', `# ${escapeMarkdown(post.title)}`, '', post.content);
 
+  // Headers are set here for `astro preview` (local dev). In production,
+  // Cloudflare Pages serves these as static files and public/_headers
+  // is the authoritative source for Content-Type and Cache-Control.
   return new Response(lines.join('\n'), {
     headers: {
       'Content-Type': 'text/markdown; charset=utf-8',

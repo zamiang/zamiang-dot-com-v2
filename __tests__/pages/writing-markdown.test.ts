@@ -114,6 +114,13 @@ describe('Writing Markdown Endpoint', () => {
       expect(body).toContain('title: "The \\\\n (newline)"');
     });
 
+    it('should escape the date field', async () => {
+      const response = buildWritingResponse(createMockPost({ date: '2025-06-15' }));
+      const body = await response.text();
+
+      expect(body).toContain('date: "2025-06-15"');
+    });
+
     it('should escape backslashes before quotes', async () => {
       const response = buildWritingResponse(createMockPost({ title: 'path\\to\\"file"' }));
       const body = await response.text();
@@ -128,6 +135,16 @@ describe('Writing Markdown Endpoint', () => {
       const body = await response.text();
 
       expect(body).toContain('\n# My Great Post\n');
+    });
+
+    it('should escape markdown syntax in the h1 title', async () => {
+      const response = buildWritingResponse(
+        createMockPost({ title: 'Lessons from "The **Hard** Way"' }),
+      );
+      const body = await response.text();
+
+      // Bold markers should be escaped so they render literally
+      expect(body).toContain('# Lessons from "The \\*\\*Hard\\*\\* Way"');
     });
 
     it('should include the full markdown content', async () => {
