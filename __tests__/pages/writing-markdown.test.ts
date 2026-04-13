@@ -1,5 +1,10 @@
 import { config } from '@/lib/config';
-import { type MarkdownPostData, buildMarkdownResponse } from '@/lib/markdown-response';
+import {
+  type MarkdownPostData,
+  buildMarkdownResponse,
+  escapeYamlString,
+  toMarkdownPostData,
+} from '@/lib/markdown-response';
 import { describe, expect, it } from 'vitest';
 
 function createMockPost(overrides: Partial<MarkdownPostData> = {}): MarkdownPostData {
@@ -164,5 +169,85 @@ describe('Writing Markdown Endpoint', () => {
 
       expect(body).toContain(`canonical_url: "${config.site.url}/writing/`);
     });
+  });
+});
+
+describe('escapeYamlString', () => {
+  it('should escape backslashes', () => {
+    expect(escapeYamlString('a\\b')).toBe('a\\\\b');
+  });
+
+  it('should escape double quotes', () => {
+    expect(escapeYamlString('say "hello"')).toBe('say \\"hello\\"');
+  });
+
+  it('should escape newlines', () => {
+    expect(escapeYamlString('line1\nline2')).toBe('line1\\nline2');
+  });
+
+  it('should escape carriage returns', () => {
+    expect(escapeYamlString('line1\rline2')).toBe('line1\\rline2');
+  });
+
+  it('should escape tabs', () => {
+    expect(escapeYamlString('col1\tcol2')).toBe('col1\\tcol2');
+  });
+
+  it('should escape backslashes before other characters', () => {
+    // Backslash followed by quote: \ then " → \\ then \"
+    expect(escapeYamlString('\\"')).toBe('\\\\\\"');
+  });
+
+  it('should handle strings with no special characters', () => {
+    expect(escapeYamlString('plain text')).toBe('plain text');
+  });
+});
+
+describe('toMarkdownPostData', () => {
+  it('should map all fields from raw data', () => {
+    const raw = {
+      title: 'My Post',
+      slug: 'my-post',
+      date: '2025-01-01',
+      author: 'Author',
+      content: 'Content here',
+      excerpt: 'Excerpt',
+      section: 'VBC',
+    };
+    const result = toMarkdownPostData(raw);
+
+    expect(result).toEqual(raw);
+  });
+
+  it('should default title to "Untitled" when missing', () => {
+    const result = toMarkdownPostData({});
+    expect(result.title).toBe('Untitled');
+  });
+
+  it('should default string fields to empty string when missing', () => {
+    const result = toMarkdownPostData({});
+    expect(result.slug).toBe('');
+    expect(result.date).toBe('');
+    expect(result.author).toBe('');
+    expect(result.content).toBe('');
+  });
+
+  it('should set optional fields to undefined when missing', () => {
+    const result = toMarkdownPostData({ title: 'Test' });
+    expect(result.excerpt).toBeUndefined();
+    expect(result.section).toBeUndefined();
+  });
+
+  it('should coerce null values to defaults', () => {
+    const result = toMarkdownPostData({ title: null, slug: null, excerpt: null });
+    expect(result.title).toBe('Untitled');
+    expect(result.slug).toBe('');
+    expect(result.excerpt).toBeUndefined();
+  });
+
+  it('should coerce numeric values to strings', () => {
+    const result = toMarkdownPostData({ title: 42, slug: 123 });
+    expect(result.title).toBe('42');
+    expect(result.slug).toBe('123');
   });
 });

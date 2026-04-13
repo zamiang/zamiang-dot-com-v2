@@ -6,7 +6,7 @@ import type { APIContext } from 'astro';
 import { getCollection } from 'astro:content';
 
 import { config } from '../../lib/config';
-import { type MarkdownPostData, buildMarkdownResponse } from '../../lib/markdown-response';
+import { buildMarkdownResponse, toMarkdownPostData } from '../../lib/markdown-response';
 
 export async function getStaticPaths() {
   const photos = await getCollection('photos');
@@ -18,6 +18,6 @@ export async function getStaticPaths() {
 }
 
 export async function GET(context: APIContext) {
-  const post = context.props.post as MarkdownPostData;
+  const post = toMarkdownPostData(context.props.post as Record<string, unknown>);
   return buildMarkdownResponse(post, 'photos', config.site.url);
 }

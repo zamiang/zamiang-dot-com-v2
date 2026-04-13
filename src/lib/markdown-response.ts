@@ -16,10 +16,31 @@ export interface MarkdownPostData {
 
 /**
  * Escapes a string for use in a YAML double-quoted scalar.
- * Handles backslashes (must be first) and double quotes.
+ * Handles backslashes (must be first), then double quotes and control characters.
  */
-function escapeYamlString(value: string): string {
-  return value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+export function escapeYamlString(value: string): string {
+  return value
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '\\r')
+    .replace(/\t/g, '\\t');
+}
+
+/**
+ * Safely maps raw post data to MarkdownPostData, providing defaults
+ * for missing fields instead of silently passing through nulls.
+ */
+export function toMarkdownPostData(raw: Record<string, unknown>): MarkdownPostData {
+  return {
+    title: String(raw.title ?? 'Untitled'),
+    slug: String(raw.slug ?? ''),
+    date: String(raw.date ?? ''),
+    author: String(raw.author ?? ''),
+    content: String(raw.content ?? ''),
+    excerpt: raw.excerpt ? String(raw.excerpt) : undefined,
+    section: raw.section ? String(raw.section) : undefined,
+  };
 }
 
 /**

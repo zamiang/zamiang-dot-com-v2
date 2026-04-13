@@ -80,6 +80,13 @@ describe('Photos Markdown Endpoint', () => {
 
       expect(body).toContain('title: "Path\\\\to\\\\photo"');
     });
+
+    it('should escape newlines in excerpt', async () => {
+      const response = buildPhotoResponse(createMockPhoto({ excerpt: 'Line one\nLine two' }));
+      const body = await response.text();
+
+      expect(body).toContain('excerpt: "Line one\\nLine two"');
+    });
   });
 
   describe('canonical URL', () => {
