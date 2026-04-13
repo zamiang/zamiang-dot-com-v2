@@ -93,7 +93,7 @@ const jsonLd = {
           rel="noopener noreferrer">LinkedIn</a
         >
         <span class="sep" aria-hidden="true">&middot;</span>
-        <a href="/Brennan_Moore_Resume.pdf">Resume</a>
+        <a href="/resume.pdf">Resume</a>
         <span class="sep" aria-hidden="true">&middot;</span>
         <a href="https://github.com/zamiang" target="_blank" rel="noopener noreferrer">GitHub</a>
       </div>
@@ -121,6 +121,8 @@ const jsonLd = {
           <h4>
             <a
               href="https://v1.personalinformatics.org/docs/chi2010/moore_assisted_self_reflection.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Assisted Self Reflection
             </a>
@@ -129,7 +131,11 @@ const jsonLd = {
         </div>
         <div class="publication-entry">
           <h4>
-            <a href="https://dl.acm.org/doi/10.1145/1772690.1772787"> Atomate It! </a>
+            <a
+              href="https://dl.acm.org/doi/10.1145/1772690.1772787"
+              target="_blank"
+              rel="noopener noreferrer">Atomate It!</a
+            >
           </h4>
           <p><i>Van Kleek, Moore, Karger, André, Schraefel</i> — WWW 2010</p>
         </div>
@@ -158,8 +164,7 @@ const jsonLd = {
             </div>
             {photos.length > 2 && (
               <a href="/photos" class="view-all-link">
-                {' '}
-                View all photos →{' '}
+                View all photos →
               </a>
             )}
           </section>
@@ -249,8 +254,7 @@ const jsonLd = {
             ))}
             {posts.length > recentPosts.length && (
               <a href="/writing" class="view-all-link">
-                {' '}
-                View all writing →{' '}
+                View all writing →
               </a>
             )}
           </section>
