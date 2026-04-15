@@ -111,6 +111,14 @@ const jsonLd = {
           {recentPosts.map((post) => (
             <PostCard post={post.data} />
           ))}
+          {vbcPosts.length > 0 && (
+            <div class="vbc-callout">
+              <h3 class="vbc-callout-title">
+                <a href={`/writing/${vbcPosts[0].data.slug}`}>{VBC_TITLE}</a>
+              </h3>
+              <p class="vbc-callout-meta">{vbcPosts.length}-part series on healthcare technology</p>
+            </div>
+          )}
           {posts.length > recentPosts.length && (
             <a href="/writing" class="view-all-link">
               View all writing →
@@ -180,17 +188,6 @@ const jsonLd = {
         </div>
       </section>
 
-      {
-        vbcPosts.length > 0 && (
-          <section id="vbc">
-            <h2 class="resume-section-heading">VBC Series</h2>
-            <p class="text-sm">
-              <a href={`/writing/${vbcPosts[0].data.slug}`}>{VBC_TITLE}</a>
-            </p>
-            <p class="text-xs text-muted-foreground mt-1">{vbcPosts.length} parts</p>
-          </section>
-        )
-      }
     </aside>
 
     {/* Right Main Column */}

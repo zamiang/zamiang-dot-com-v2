@@ -1,5 +1,5 @@
 // Animation constants
-const PARTICLE_COUNT = 8; // Reduced for spare, professional aesthetic
+const PARTICLE_COUNT = 16; // Balanced: visible but not distracting
 export const SCROLL_VELOCITY_DECAY = 0.95; // Slower decay for smoother feel
 export const PARTICLE_VELOCITY_DECAY = 0.92; // Slower decay
 export const MIN_INERTIA_FACTOR = 0.15; // Reduced inertia response
@@ -9,10 +9,10 @@ export const MAX_SCROLL_FACTOR = 0.04;
 export const INERTIA_MULTIPLIER = 0.05; // Reduced multiplier
 
 // Particle size and movement ranges
-const MIN_PARTICLE_SIZE = 1;
-export const MAX_PARTICLE_SIZE = 3;
-const MIN_OPACITY = 0.1;
-const MAX_OPACITY = 0.3;
+const MIN_PARTICLE_SIZE = 2;
+export const MAX_PARTICLE_SIZE = 5;
+const MIN_OPACITY = 0.2;
+const MAX_OPACITY = 0.45;
 const MIN_SPEED_X = 0.002;
 const MAX_SPEED_X = 0.006;
 const MIN_SPEED_Y = 0.0015;

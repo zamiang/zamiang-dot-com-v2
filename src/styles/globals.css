@@ -619,6 +619,26 @@
     line-height: 1.5;
   }
 
+  /* VBC series callout in writing section */
+  .vbc-callout {
+    padding: 0.75rem 0;
+    margin-top: 0.25rem;
+    border-top: 1px solid rgba(209, 213, 219, 0.3);
+  }
+
+  .vbc-callout-title {
+    font-family: var(--font-serif);
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .vbc-callout-meta {
+    font-size: var(--font-size-sm);
+    color: var(--muted-foreground);
+    margin: 0.125rem 0 0 0;
+  }
+
   .photo-card-date {
     @apply mt-2 mb-0 bg-transparent text-muted-foreground text-sm;
   }
