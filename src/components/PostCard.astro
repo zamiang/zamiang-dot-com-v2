@@ -2,6 +2,7 @@
 /**
  * PostCard Component (Astro)
  * Displays a blog post preview with date, title, and excerpt
+ * Supports compact mode for homepage listing (date + title inline, no excerpt)
  */
 
 import { format } from 'date-fns';
@@ -13,27 +14,48 @@ interface Props {
     date: string;
     excerpt?: string;
   };
+  compact?: boolean;
 }
 
-const { post } = Astro.props;
+const { post, compact = false } = Astro.props;
 const postDate = new Date(post.date);
 ---
 
-<div class="post group rounded-lg -mx-3 px-3 py-3 transition-colors duration-150 hover:bg-muted/30">
-  <div class="post-meta">
-    <p class="post-date text-sm text-muted-foreground">
-      <time datetime={postDate.toISOString().split('T')[0]}>
-        {format(postDate, 'MMM d, yyyy')}
-      </time>
-    </p>
-  </div>
-  <h3 class="post-title font-serif font-medium">
-    <a
-      href={`/writing/${post.slug}`}
-      class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 group-hover:text-accent transition-colors duration-150"
-    >
-      {post.title}
-    </a>
-  </h3>
-  {post.excerpt && <p class="truncated-text text-foreground/70 text-[0.95rem]">{post.excerpt}</p>}
-</div>
+{
+  compact ? (
+    <div class="flex items-baseline gap-4 py-1.5">
+      <p class="text-sm text-muted-foreground whitespace-nowrap m-0">
+        <time datetime={postDate.toISOString().split('T')[0]}>{format(postDate, 'MMM yyyy')}</time>
+      </p>
+      <h3 class="font-serif font-medium text-base m-0">
+        <a
+          href={`/writing/${post.slug}`}
+          class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+        >
+          {post.title}
+        </a>
+      </h3>
+    </div>
+  ) : (
+    <div class="post group rounded-lg -mx-3 px-3 py-3">
+      <div class="post-meta">
+        <p class="post-date text-sm text-muted-foreground">
+          <time datetime={postDate.toISOString().split('T')[0]}>
+            {format(postDate, 'MMM d, yyyy')}
+          </time>
+        </p>
+      </div>
+      <h3 class="post-title font-serif font-medium">
+        <a
+          href={`/writing/${post.slug}`}
+          class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+        >
+          {post.title}
+        </a>
+      </h3>
+      {post.excerpt && (
+        <p class="truncated-text text-foreground/70 text-[0.95rem]">{post.excerpt}</p>
+      )}
+    </div>
+  )
+}

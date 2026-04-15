@@ -25,6 +25,9 @@ function getEnv(key: string, defaultValue: string): string {
  * Application configuration
  * Validates environment variables on import
  */
+/** Title for the Value-Based Care series, used on homepage and writing index */
+export const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
+
 export const config = {
   /**
    * Site configuration

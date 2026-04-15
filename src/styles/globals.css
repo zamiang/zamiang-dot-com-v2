@@ -62,6 +62,9 @@
   --line-height-relaxed: 1.8; /* For long-form reading */
   --line-height-tight: 1.3; /* For headings */
 
+  /* Layout */
+  --resume-max-width: 960px;
+
   /* Transition Timing Scale - Consistent across all interactions */
   --transition-fast: 150ms; /* Micro-interactions: focus, color changes */
   --transition-normal: 200ms; /* Standard UI: hovers, state changes */
@@ -477,55 +480,12 @@
      4.11 Layout - Sections
      -------------------------------------------------------------------------- */
 
-  .header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding-top: 3.5rem;
-    padding-bottom: 2rem;
-  }
-
-  /* Hero-specific spacing for profile photo */
-  .header .profile-photo {
-    margin-bottom: 1.25rem;
-  }
-
-  /* Hero-specific spacing for section label after profile */
-  .header .section-label {
-    margin-bottom: 0.5rem;
-  }
-
-  /* Hero-specific spacing for main heading */
-  .header .section-heading {
-    margin-bottom: 0.75rem;
-  }
-
-  /* Hero-specific spacing for subtitle */
-  .header .section-subtitle {
-    margin-bottom: 0;
-  }
-
   .section {
     @apply pb-8 mb-8;
   }
 
-  /* Add breathing room between hero and first body paragraph */
-  .header + .section > p:first-child {
-    margin-top: 0.5rem;
-  }
-
   .section:last-child {
     @apply border-b-0;
-  }
-
-  /* Homepage sections - consistent vertical spacing */
-  .homepage-section {
-    @apply mt-12;
-  }
-
-  .homepage-section:first-child {
-    @apply mt-0;
   }
 
   /* --------------------------------------------------------------------------
@@ -628,6 +588,40 @@
     @apply mb-4;
   }
 
+  .photo-card img {
+    transition: opacity var(--transition-normal) var(--ease-out);
+  }
+
+  .photo-card:hover img {
+    opacity: 0.85;
+  }
+
+  /* Remove bottom margin when used in homepage grid (shouldHideText) */
+  .homepage-photo-grid .photo-card {
+    margin-bottom: 0;
+  }
+
+  /* Tighter post cards in homepage primary section */
+  .homepage-primary .post {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(209, 213, 219, 0.3);
+  }
+
+  .homepage-primary .post:last-of-type {
+    border-bottom: none;
+  }
+
+  .homepage-primary .truncated-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
+  }
+
   .photo-card-date {
     @apply mt-2 mb-0 bg-transparent text-muted-foreground text-sm;
   }
@@ -647,32 +641,6 @@
 
   .next-button:hover {
     background-color: color-mix(in srgb, var(--primary) 85%, black);
-  }
-
-  /* Bold accent CTA button - warm copper for emphasis */
-  .cta-button {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    font-family: var(--font-sans);
-    font-size: 0.875rem;
-    font-weight: 600;
-    letter-spacing: 0.025em;
-    color: var(--accent-bold-foreground);
-    background: var(--accent-bold);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background-color var(--transition-normal) var(--ease-out);
-  }
-
-  .cta-button:hover {
-    background: var(--accent-bold-hover);
-  }
-
-  .cta-button:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-bold) 40%, transparent);
   }
 
   /* --------------------------------------------------------------------------
@@ -727,7 +695,8 @@
 }
 
 /* ==========================================================================
-   5. SECTION WRAPPERS
+   5. SECTION WRAPPERS & INNER-PAGE STYLES
+   Used by PostsFooter.astro, VBCFooter.astro, PostLayout.astro
    ========================================================================== */
 
 @layer components {
@@ -746,22 +715,18 @@
     margin-right: auto;
   }
 
-  /* Alternating section backgrounds - semi-transparent to show particles */
   .section-wrapper--warm {
     background-color: rgba(245, 240, 232, 0.85);
   }
 
-  /* Cool grey */
   .section-wrapper--cool {
     background-color: rgba(235, 238, 242, 0.85);
   }
 
-  /* Muted grey */
   .section-wrapper--muted {
     background-color: rgba(229, 232, 236, 0.85);
   }
 
-  /* Accent teal-grey */
   .section-wrapper--accent {
     background-color: rgba(232, 239, 242, 0.85);
   }
@@ -769,9 +734,9 @@
   /* Section label - small caps accent text above headings */
   .section-label {
     font-family: var(--font-sans);
-    font-size: clamp(0.7rem, 0.65rem + 0.15vw, 0.8rem); /* Fluid: 11-13px */
+    font-size: clamp(0.7rem, 0.65rem + 0.15vw, 0.8rem);
     font-weight: 600;
-    letter-spacing: 0.15em; /* Tightened from 0.2em for better readability */
+    letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--accent);
     margin-bottom: 0.5rem;
@@ -781,7 +746,7 @@
   /* Large section heading - refined serif */
   .section-heading {
     font-family: var(--font-serif);
-    font-size: var(--font-size-3xl); /* Fluid: 30-40px */
+    font-size: var(--font-size-3xl);
     font-weight: 500;
     font-style: normal;
     line-height: var(--line-height-tight);
@@ -791,34 +756,155 @@
     background: transparent;
   }
 
-  /* Section heading size variants */
-  .section-heading--hero {
-    font-size: var(--font-size-4xl); /* Fluid: 36-48px */
-  }
-
-  .section-heading--subsection {
-    font-size: var(--font-size-xl); /* Fluid: 20-24px */
-  }
-
   /* Section subtitle */
   .section-subtitle {
     font-family: var(--font-sans);
-    font-size: var(--font-size-base); /* Fluid: 16-18px */
+    font-size: var(--font-size-base);
     color: var(--muted-foreground);
     margin-bottom: 1.5rem;
     background: transparent;
   }
 
-  /* Section subtitle width constraint for hero */
-  .section-subtitle--constrained {
-    max-width: 480px;
+  /* ==========================================================================
+     6. RESUME LAYOUT & HOMEPAGE STYLES
+     ========================================================================== */
+
+  /* Hide desktop nav when resume header serves as identity */
+  @media (min-width: 768px) {
+    .hide-nav-desktop {
+      display: none;
+    }
+  }
+
+  /* Two-column resume layout */
+  .resume-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    max-width: var(--resume-max-width);
+    margin: 0 auto;
+  }
+
+  @media (min-width: 1024px) {
+    .resume-layout {
+      grid-template-columns: 260px 1fr;
+      gap: 4rem;
+    }
+  }
+
+  /* Primary content area: Writing + Photography side by side */
+  .homepage-primary {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    max-width: var(--resume-max-width);
+    margin: 0 auto;
+  }
+
+  @media (min-width: 768px) {
+    .homepage-primary {
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+  }
+
+  /* Photo grid for homepage */
+  .homepage-photo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.375rem;
+  }
+
+  /* Resume header - compact identity block */
+  .resume-header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding-top: 3rem;
+    padding-bottom: 1.5rem;
+    max-width: var(--resume-max-width);
+    margin: 0 auto;
+  }
+
+  .resume-header-photo {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .resume-header-info h1 {
+    font-family: var(--font-serif);
+    font-size: var(--font-size-2xl);
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .resume-header-info p {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--muted-foreground);
+    line-height: 1.4;
+  }
+
+  /* Constrained rule under resume header */
+  .resume-rule {
+    max-width: var(--resume-max-width);
     margin-left: auto;
     margin-right: auto;
   }
 
-  /* Section label with tighter bottom margin */
-  .section-label--tight {
-    margin-bottom: 0.25rem;
+  .resume-links {
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--font-size-sm);
+    color: var(--muted-foreground);
+    margin-top: 0.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .resume-links {
+      display: flex;
+    }
+  }
+
+  .resume-links a {
+    border-bottom: none;
+  }
+
+  .resume-links a:hover {
+    color: var(--accent);
+  }
+
+  .resume-links .sep {
+    color: var(--border);
+  }
+
+  /* Resume section heading - sans-serif, uppercase, muted */
+  .resume-section-heading {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted-foreground);
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    background: transparent;
+  }
+
+  /* Sidebar section spacing */
+  .resume-sidebar section {
+    margin-bottom: 2rem;
+  }
+
+  .resume-sidebar section:first-child .resume-section-heading {
+    margin-top: 0;
   }
 
   /* Section divider line */
@@ -827,15 +913,15 @@
     height: 1px;
     border: none;
     border-top: 1px solid rgba(209, 213, 219, 0.5);
-    margin: 1.5rem 0;
+    margin: 2rem 0;
   }
 
   /* Work Cards - Career timeline items */
   .work-card {
     position: relative;
-    padding: 1.25rem 0;
+    padding: 1rem 0;
     margin-bottom: 0;
-    border-bottom: 1px solid rgba(209, 213, 219, 0.5);
+    border-bottom: 1px solid rgba(209, 213, 219, 0.3);
   }
 
   .work-card:last-of-type {
@@ -851,7 +937,7 @@
 
   .work-card-date {
     font-family: var(--font-sans);
-    font-size: var(--font-size-sm); /* Fluid: 14-15px */
+    font-size: var(--font-size-sm);
     font-weight: 600;
     color: var(--accent);
     letter-spacing: 0.05em;
@@ -863,20 +949,16 @@
 
   .work-card-role {
     font-family: var(--font-sans);
-    font-size: clamp(
-      0.6875rem,
-      0.65rem + 0.1vw,
-      0.75rem
-    ); /* Fluid: 11-12px - improved readability */
+    font-size: clamp(0.6875rem, 0.65rem + 0.1vw, 0.75rem);
     font-weight: 500;
     color: var(--muted-foreground);
   }
 
   .work-card-title {
     font-family: var(--font-serif);
-    font-size: var(--font-size-xl); /* Fluid: 20-24px */
+    font-size: var(--font-size-lg);
     font-weight: 500;
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.25rem 0;
     background: transparent;
   }
 
@@ -893,16 +975,48 @@
   }
 
   .work-card-description {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     line-height: 1.6;
     color: var(--muted-foreground);
     margin: 0;
     background: transparent;
   }
 
-  /* CTA button inside work card - reduce prominence */
-  .work-card .cta-button {
-    font-size: 0.8rem;
-    padding: 0.5rem 1rem;
+  /* Compact publication entry */
+  .publication-entry {
+    margin-bottom: 1rem;
+  }
+
+  .publication-entry h4 {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    margin: 0 0 0.125rem 0;
+    line-height: 1.4;
+  }
+
+  .publication-entry p {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* View all link */
+  .view-all-link {
+    font-size: var(--font-size-sm);
+    color: var(--muted-foreground);
+    border-bottom: none;
+    margin-top: 0.5rem;
+    display: inline-block;
+  }
+
+  .view-all-link:hover {
+    color: var(--accent);
+  }
+
+  .view-all-link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
   }
 }

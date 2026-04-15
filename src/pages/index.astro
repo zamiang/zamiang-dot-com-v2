@@ -1,26 +1,20 @@
 ---
 /**
  * Homepage
- * Main landing page with hero, work history, writing, VBC series, and photography
+ * Spare, professional resume-style layout with two-column body
  */
 
 import { getCollection } from 'astro:content';
 
 import PhotoCard from '../components/PhotoCard.astro';
 import PostCard from '../components/PostCard.astro';
-import SeriesPostCard from '../components/SeriesPostCard.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { config } from '../lib/config';
-
-// VBC constants
-const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
-const VBC_DESCRIPTION =
-  'This series argues that U.S. healthcare is "harder than rocket science" due to its "consolidated fragmentation," where powerful, siloed players hinder effective, affordable patient care.';
+import { VBC_TITLE, config } from '../lib/config';
 
 // Load content from collections - fail the build if content is unavailable
 const posts = await getCollection('posts');
 const vbcPosts = (await getCollection('vbcPosts')).sort((a, b) =>
-  a.data.title > b.data.title ? 1 : -1,
+  a.data.title.localeCompare(b.data.title),
 );
 const photos = await getCollection('photos');
 
@@ -32,6 +26,11 @@ if (posts.length === 0 && vbcPosts.length === 0 && photos.length === 0) {
 }
 
 const siteUrl = config.site.url;
+
+// Limit posts shown on homepage, sorted newest first
+const recentPosts = posts
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 5);
 
 // Schema.org JSON-LD for homepage
 const jsonLd = {
@@ -68,74 +67,134 @@ const jsonLd = {
 };
 ---
 
-<BaseLayout>
+<BaseLayout hideDesktopNav>
   <Fragment slot="json-ld">
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </Fragment>
 
-  <div class="homepage">
-    {/* Hero & About Section */}
-    <article>
-      <header class="header">
-        <div
-          class="profile-photo-container w-44 h-44 mx-auto rounded-full overflow-hidden mb-5 shadow-lg shadow-foreground/10 ring-1 ring-border/30"
+  {/* Compact Header */}
+  <header class="resume-header">
+    <img
+      src="/about.jpg"
+      alt="Brennan Moore - Engineering Leader and CTO"
+      width="84"
+      height="84"
+      class="resume-header-photo"
+      loading="eager"
+    />
+    <div class="resume-header-info">
+      <h1>Brennan Moore</h1>
+      <p>CTO / Engineering Leader — I build innovative digital products people love.</p>
+      <div class="resume-links">
+        <a
+          href="https://www.linkedin.com/in/brennan-moore/"
+          target="_blank"
+          rel="noopener noreferrer">LinkedIn</a
         >
-          <img
-            src="/about.jpg"
-            alt="Brennan Moore - Engineering Leader and CTO"
-            width="176"
-            height="176"
-            class="w-full h-full object-cover"
-            loading="eager"
-          />
-        </div>
-        <p class="section-label">Engineering Leader & Builder</p>
-        <h1 class="section-heading section-heading--hero">Hi, I'm Brennan.</h1>
-        <p class="section-subtitle section-subtitle--constrained">
-          I build innovative digital products people love.
-        </p>
-      </header>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="/resume.pdf">Resume</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="https://github.com/zamiang" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </div>
+  </header>
 
-      <div class="section">
-        <p>
+  <div class="section-rule resume-rule"></div>
+
+  {/* Primary Content: Writing + Photography */}
+  <div class="homepage-primary">
+    {
+      posts.length > 0 && (
+        <section id="writing">
+          <h2 class="resume-section-heading">Writing</h2>
+          {vbcPosts.length > 0 && (
+            <PostCard
+              post={{
+                slug: vbcPosts[0].data.slug,
+                title: VBC_TITLE,
+                date: vbcPosts[0].data.date,
+                excerpt: `${vbcPosts.length}-part series on healthcare technology`,
+              }}
+            />
+          )}
+          {recentPosts.map((post) => (
+            <PostCard post={post.data} />
+          ))}
+          {posts.length > recentPosts.length && (
+            <a href="/writing" class="view-all-link">
+              View all writing →
+            </a>
+          )}
+        </section>
+      )
+    }
+
+    {
+      photos.length > 0 && (
+        <section id="photography">
+          <h2 class="resume-section-heading">Photography</h2>
+          <div class="homepage-photo-grid">
+            {photos.slice(0, 8).map((post) => (
+              <PhotoCard post={post.data} shouldHideText />
+            ))}
+          </div>
+          {photos.length > 8 && (
+            <a href="/photos" class="view-all-link">
+              View all photos →
+            </a>
+          )}
+        </section>
+      )
+    }
+  </div>
+
+  <div class="section-rule resume-rule"></div>
+
+  {/* Secondary Content: Experience + Sidebar */}
+  <div class="resume-layout">
+    {/* Left Sidebar */}
+    <aside class="resume-sidebar">
+      <section>
+        <h2 class="resume-section-heading">Currently</h2>
+        <p class="text-sm text-muted-foreground">Consulting</p>
+        <p class="text-sm mt-2">
           I work best with small teams, digging into the business to find what actually moves the
-          needle. For me, success isn't just shipping a quality product—it's building teams that
-          continue to deliver long after launch.
+          needle.
         </p>
+      </section>
 
-        <div class="section-rule"></div>
+      <section id="publications">
+        <h2 class="resume-section-heading">Publications</h2>
+        <div class="publication-entry">
+          <h4>
+            <a
+              href="https://v1.personalinformatics.org/docs/chi2010/moore_assisted_self_reflection.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Assisted Self Reflection
+            </a>
+          </h4>
+          <p><i>Moore, Van Kleek, Karger, schraefel</i> — CHI 2010</p>
+        </div>
+        <div class="publication-entry">
+          <h4>
+            <a
+              href="https://dl.acm.org/doi/10.1145/1772690.1772787"
+              target="_blank"
+              rel="noopener noreferrer">Atomate It!</a
+            >
+          </h4>
+          <p><i>Van Kleek, Moore, Karger, André, Schraefel</i> — WWW 2010</p>
+        </div>
+      </section>
+    </aside>
 
-        <p class="section-label">Currently</p>
-        <h3 class="section-heading section-heading--subsection">Consulting</h3>
+    {/* Right Main Column */}
+    <div>
+      <section id="work">
+        <h2 class="resume-section-heading">Experience</h2>
 
-        {
-          (photos.length > 0 || vbcPosts.length > 0) && (
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-              {photos.length > 0 && (
-                <div>
-                  <p class="section-label section-label--tight">Latest photos</p>
-                  <PhotoCard post={photos[0].data} shouldHideText priority />
-                </div>
-              )}
-              {vbcPosts.length > 0 && (
-                <div>
-                  <p class="section-label section-label--tight">Latest writing</p>
-                  <PostCard post={vbcPosts[0].data} />
-                </div>
-              )}
-            </div>
-          )
-        }
-
-        {/* Work Section */}
-        <div class="section-rule" id="work"></div>
-        <p class="section-label">Career Journey</p>
-        <h2 class="section-heading">Work</h2>
-        <p class="section-subtitle">
-          Building technology teams and products that make a difference.
-        </p>
-
-        {/* Work Item: Firsthand */}
         <div class="work-card">
           <div class="work-card-header">
             <time class="work-card-date">2022–2025</time>
@@ -153,7 +212,6 @@ const jsonLd = {
           </p>
         </div>
 
-        {/* Work Item: Kelp */}
         <div class="work-card">
           <div class="work-card-header">
             <time class="work-card-date">2022–2026</time>
@@ -169,10 +227,8 @@ const jsonLd = {
             an AI assistant focused on helping executives stay current on industry, technology, and
             cultural shifts.
           </p>
-          <a href="https://www.kelp.nyc/" class="cta-button mt-4">Try Kelp</a>
         </div>
 
-        {/* Work Item: Cityblock Health */}
         <div class="work-card">
           <div class="work-card-header">
             <time class="work-card-date">2017–2021</time>
@@ -190,7 +246,6 @@ const jsonLd = {
           </p>
         </div>
 
-        {/* Work Item: More */}
         <div class="work-card">
           <div class="work-card-header">
             <time class="work-card-date">2009–2015</time>
@@ -206,110 +261,7 @@ const jsonLd = {
             visualizations for Ars Electronica.
           </p>
         </div>
-      </div>
-    </article>
-
-    {/* Writing Section */}
-    {
-      posts.length > 0 && (
-        <section class="section-wrapper section-wrapper--warm" id="writing">
-          <div class="section-wrapper-inner">
-            <p class="section-label">Thoughts & Reflections</p>
-            <h2 class="section-heading">Writing</h2>
-            <p class="section-subtitle">
-              Essays on engineering leadership, startups, and building teams.
-            </p>
-            <div class="section-rule" />
-            {posts.map((post) => (
-              <PostCard post={post.data} />
-            ))}
-          </div>
-        </section>
-      )
-    }
-
-    {/* VBC Section */}
-    {
-      vbcPosts.length > 0 && (
-        <section class="section-wrapper section-wrapper--accent" id="vbc">
-          <div class="section-wrapper-inner">
-            <p class="section-label">VBC Deep Dive</p>
-            <h2 class="section-heading">{VBC_TITLE}</h2>
-            <p class="section-subtitle">{VBC_DESCRIPTION}</p>
-            <div class="section-rule" />
-            {vbcPosts.map((post) => (
-              <SeriesPostCard post={post.data} isPast={false} isCurrent={false} isNext={false} />
-            ))}
-          </div>
-        </section>
-      )
-    }
-
-    {/* Photography Section */}
-    {
-      photos.length > 0 && (
-        <section class="section-wrapper section-wrapper--muted" id="photography">
-          <div class="section-wrapper-inner">
-            <p class="section-label">Visual Stories</p>
-            <h2 class="section-heading">Photography</h2>
-            <p class="section-subtitle">Capturing moments from travels and everyday life.</p>
-            <div class="section-rule" />
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {photos.map((post) => (
-                <PhotoCard post={post.data} />
-              ))}
-            </div>
-          </div>
-        </section>
-      )
-    }
-
-    {/* Publications Section */}
-    <section class="section-wrapper section-wrapper--warm" id="publications">
-      <div class="section-wrapper-inner">
-        <p class="section-label">Academic Research</p>
-        <h2 class="section-heading">Publications</h2>
-        <p class="section-subtitle">Peer-reviewed work on personal informatics and automation.</p>
-        <div class="section-rule"></div>
-        <ul>
-          <li>
-            <h4>
-              <a
-                href="https://v1.personalinformatics.org/docs/chi2010/moore_assisted_self_reflection.pdf"
-              >
-                Assisted Self Reflection: Combining Lifetracking, Sensemaking, & Personal
-                Information Management
-              </a>
-            </h4>
-            <p>
-              <i>Brennan Moore, Max Van Kleek, David R. Karger, mc schraefel</i>
-            </p>
-            <p>
-              In this paper, we present an ongoing project designed to make self-reflection an
-              integral part of daily personal information management activity, and to provide
-              facilities for fostering greater self-understanding through exploration of captured
-              personal activity logs.
-            </p>
-          </li>
-          <li>
-            <h4>
-              <a href="https://dl.acm.org/doi/10.1145/1772690.1772787">
-                Atomate it! end-user context-sensitive automation using heterogeneous information
-                sources on the web
-              </a>
-            </h4>
-            <p>
-              <i>Max Van Kleek, Brennan Moore, David R Karger, Paul André, M C Schraefe</i>
-            </p>
-            <p>
-              Our system, Atomate, treats RSS/ATOM feeds from social networking and life-tracking
-              sites as sensor streams, integrating information from such feeds into a simple unified
-              RDF world model representing people, places and things and their timevarying states
-              and activities.
-            </p>
-          </li>
-        </ul>
-      </div>
-    </section>
+      </section>
+    </div>
   </div>
 </BaseLayout>
