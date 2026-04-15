@@ -764,13 +764,11 @@
     margin-bottom: 1.5rem;
     background: transparent;
   }
-}
 
-/* ==========================================================================
-   6. RESUME LAYOUT & HOMEPAGE STYLES
-   ========================================================================== */
+  /* ==========================================================================
+     6. RESUME LAYOUT & HOMEPAGE STYLES
+     ========================================================================== */
 
-@layer components {
   /* Hide desktop nav when resume header serves as identity */
   @media (min-width: 768px) {
     .hide-nav-desktop {
@@ -1014,5 +1012,11 @@
 
   .view-all-link:hover {
     color: var(--accent);
+  }
+
+  .view-all-link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
   }
 }

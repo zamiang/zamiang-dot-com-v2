@@ -120,9 +120,15 @@ const canonical = canonicalUrl || Astro.url.href;
           Using client:load for iOS Safari compatibility.
           iOS Safari requires immediate hydration for reliable touch events. */
       }
-      <div class:list={[{ 'hide-nav-desktop': hideDesktopNav }]}>
-        <Header client:load />
-      </div>
+      {
+        hideDesktopNav ? (
+          <div class="hide-nav-desktop">
+            <Header client:load />
+          </div>
+        ) : (
+          <Header client:load />
+        )
+      }
 
       {/* Main content */}
       <main
