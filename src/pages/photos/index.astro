@@ -1,0 +1,31 @@
+---
+/**
+ * Photos index page
+ * Displays all photos in a responsive grid
+ */
+
+import { getCollection } from 'astro:content';
+
+import PhotoCard from '../../components/PhotoCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const photos = await getCollection('photos');
+---
+
+<BaseLayout title="Photography" description="Photography by Brennan Moore.">
+  <div class="max-w-[960px] mx-auto">
+    <header class="mb-8">
+      <h1 class="font-serif text-3xl font-semibold mb-2">Photography</h1>
+    </header>
+
+    {
+      photos.length > 0 && (
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {photos.map((post) => (
+            <PhotoCard post={post.data} />
+          ))}
+        </div>
+      )
+    }
+  </div>
+</BaseLayout>

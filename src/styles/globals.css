@@ -588,6 +588,37 @@
     @apply mb-4;
   }
 
+  .photo-card img {
+    transition: opacity var(--transition-normal) var(--ease-out);
+  }
+
+  .photo-card:hover img {
+    opacity: 0.85;
+  }
+
+  /* Remove bottom margin when used in homepage grid (shouldHideText) */
+  .homepage-photo-grid .photo-card {
+    margin-bottom: 0;
+  }
+
+  /* Tighter post cards in homepage primary section */
+  .homepage-primary .post {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(209, 213, 219, 0.3);
+  }
+
+  .homepage-primary .post:last-of-type {
+    border-bottom: none;
+  }
+
+  .homepage-primary .truncated-text {
+    -webkit-line-clamp: 2;
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
+  }
+
   .photo-card-date {
     @apply mt-2 mb-0 bg-transparent text-muted-foreground text-sm;
   }
@@ -737,6 +768,13 @@
    ========================================================================== */
 
 @layer components {
+  /* Hide desktop nav when resume header serves as identity */
+  @media (min-width: 768px) {
+    .hide-nav-desktop {
+      display: none;
+    }
+  }
+
   /* Two-column resume layout */
   .resume-layout {
     display: grid;
@@ -748,8 +786,38 @@
 
   @media (min-width: 1024px) {
     .resume-layout {
-      grid-template-columns: 240px 1fr;
+      grid-template-columns: 260px 1fr;
       gap: 4rem;
+    }
+  }
+
+  /* Primary content area: Writing + Photography side by side */
+  .homepage-primary {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    max-width: var(--resume-max-width);
+    margin: 0 auto;
+  }
+
+  @media (min-width: 768px) {
+    .homepage-primary {
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+  }
+
+  /* Photo grid for homepage — more columns at full width */
+  .homepage-photo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .homepage-photo-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.375rem;
     }
   }
 
@@ -757,16 +825,16 @@
   .resume-header {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding-top: 2rem;
+    gap: 1.25rem;
+    padding-top: 3rem;
     padding-bottom: 1.5rem;
     max-width: var(--resume-max-width);
     margin: 0 auto;
   }
 
   .resume-header-photo {
-    width: 48px;
-    height: 48px;
+    width: 84px;
+    height: 84px;
     border-radius: 50%;
     object-fit: cover;
     flex-shrink: 0;
@@ -845,7 +913,7 @@
     height: 1px;
     border: none;
     border-top: 1px solid rgba(209, 213, 219, 0.5);
-    margin: 1.5rem 0;
+    margin: 2rem 0;
   }
 
   /* Work Cards - Career timeline items */

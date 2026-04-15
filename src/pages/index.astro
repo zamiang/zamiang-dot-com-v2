@@ -31,7 +31,7 @@ if (posts.length === 0 && vbcPosts.length === 0 && photos.length === 0) {
 const siteUrl = config.site.url;
 
 // Limit posts shown on homepage
-const recentPosts = posts.slice(0, 6);
+const recentPosts = posts.slice(0, 5);
 
 // Schema.org JSON-LD for homepage
 const jsonLd = {
@@ -68,7 +68,7 @@ const jsonLd = {
 };
 ---
 
-<BaseLayout>
+<BaseLayout hideDesktopNav>
   <Fragment slot="json-ld">
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </Fragment>
@@ -78,8 +78,8 @@ const jsonLd = {
     <img
       src="/about.jpg"
       alt="Brennan Moore"
-      width="48"
-      height="48"
+      width="84"
+      height="84"
       class="resume-header-photo"
       loading="eager"
     />
@@ -102,7 +102,46 @@ const jsonLd = {
 
   <div class="section-rule resume-rule"></div>
 
-  {/* Two-Column Body */}
+  {/* Primary Content: Writing + Photography */}
+  <div class="homepage-primary">
+    {
+      posts.length > 0 && (
+        <section id="writing">
+          <h2 class="resume-section-heading">Writing</h2>
+          {recentPosts.map((post) => (
+            <PostCard post={post.data} />
+          ))}
+          {posts.length > recentPosts.length && (
+            <a href="/writing" class="view-all-link">
+              View all writing →
+            </a>
+          )}
+        </section>
+      )
+    }
+
+    {
+      photos.length > 0 && (
+        <section id="photography">
+          <h2 class="resume-section-heading">Photography</h2>
+          <div class="homepage-photo-grid">
+            {photos.slice(0, 8).map((post) => (
+              <PhotoCard post={post.data} shouldHideText />
+            ))}
+          </div>
+          {photos.length > 8 && (
+            <a href="/photos" class="view-all-link">
+              View all photos →
+            </a>
+          )}
+        </section>
+      )
+    }
+  </div>
+
+  <div class="section-rule resume-rule"></div>
+
+  {/* Secondary Content: Experience + Sidebar */}
   <div class="resume-layout">
     {/* Left Sidebar */}
     <aside class="resume-sidebar">
@@ -149,24 +188,6 @@ const jsonLd = {
               <a href={`/writing/${vbcPosts[0].data.slug}`}>{VBC_TITLE}</a>
             </p>
             <p class="text-xs text-muted-foreground mt-1">{vbcPosts.length} parts</p>
-          </section>
-        )
-      }
-
-      {
-        photos.length > 0 && (
-          <section id="photography">
-            <h2 class="resume-section-heading">Photography</h2>
-            <div class="grid grid-cols-2 gap-2">
-              {photos.slice(0, 2).map((post) => (
-                <PhotoCard post={post.data} shouldHideText />
-              ))}
-            </div>
-            {photos.length > 2 && (
-              <a href="/photos" class="view-all-link">
-                View all photos →
-              </a>
-            )}
           </section>
         )
       }
@@ -244,22 +265,6 @@ const jsonLd = {
           </p>
         </div>
       </section>
-
-      {
-        posts.length > 0 && (
-          <section id="writing" class="mt-8">
-            <h2 class="resume-section-heading">Writing</h2>
-            {recentPosts.map((post) => (
-              <PostCard post={post.data} compact />
-            ))}
-            {posts.length > recentPosts.length && (
-              <a href="/writing" class="view-all-link">
-                View all writing →
-              </a>
-            )}
-          </section>
-        )
-      }
     </div>
   </div>
 </BaseLayout>

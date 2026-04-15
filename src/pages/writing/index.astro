@@ -1,0 +1,49 @@
+---
+/**
+ * Writing index page
+ * Lists all writing posts sorted by date
+ */
+
+import { getCollection } from 'astro:content';
+
+import PostCard from '../../components/PostCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const posts = await getCollection('posts');
+const vbcPosts = (await getCollection('vbcPosts')).sort((a, b) =>
+  a.data.title > b.data.title ? 1 : -1,
+);
+
+const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
+---
+
+<BaseLayout title="Writing" description="Writing by Brennan Moore on engineering leadership, value-based care, and building products.">
+  <div class="max-w-[680px] mx-auto">
+    <header class="mb-8">
+      <h1 class="font-serif text-3xl font-semibold mb-2">Writing</h1>
+      <p class="text-muted-foreground">On engineering leadership, building products, and value-based care.</p>
+    </header>
+
+    {
+      posts.length > 0 && (
+        <section class="mb-12">
+          {posts.map((post) => (
+            <PostCard post={post.data} />
+          ))}
+        </section>
+      )
+    }
+
+    {
+      vbcPosts.length > 0 && (
+        <section>
+          <h2 class="resume-section-heading">{VBC_TITLE}</h2>
+          <p class="text-sm text-muted-foreground mb-4">{vbcPosts.length}-part series</p>
+          {vbcPosts.map((post) => (
+            <PostCard post={post.data} />
+          ))}
+        </section>
+      )
+    }
+  </div>
+</BaseLayout>

@@ -17,6 +17,7 @@ interface Props {
   image?: string;
   article?: boolean;
   canonicalUrl?: string;
+  hideDesktopNav?: boolean;
 }
 
 const {
@@ -25,6 +26,7 @@ const {
   image = '/about.jpg',
   article = false,
   canonicalUrl,
+  hideDesktopNav = false,
 } = Astro.props;
 
 const siteUrl = config.site.url;
@@ -118,7 +120,9 @@ const canonical = canonicalUrl || Astro.url.href;
           Using client:load for iOS Safari compatibility.
           iOS Safari requires immediate hydration for reliable touch events. */
       }
-      <Header client:load />
+      <div class:list={[{ 'hide-nav-desktop': hideDesktopNav }]}>
+        <Header client:load />
+      </div>
 
       {/* Main content */}
       <main
