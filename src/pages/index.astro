@@ -108,17 +108,19 @@ const jsonLd = {
       posts.length > 0 && (
         <section id="writing">
           <h2 class="resume-section-heading">Writing</h2>
+          {vbcPosts.length > 0 && (
+            <PostCard
+              post={{
+                slug: vbcPosts[0].data.slug,
+                title: VBC_TITLE,
+                date: vbcPosts[0].data.date,
+                excerpt: `${vbcPosts.length}-part series on healthcare technology`,
+              }}
+            />
+          )}
           {recentPosts.map((post) => (
             <PostCard post={post.data} />
           ))}
-          {vbcPosts.length > 0 && (
-            <div class="vbc-callout">
-              <h3 class="vbc-callout-title">
-                <a href={`/writing/${vbcPosts[0].data.slug}`}>{VBC_TITLE}</a>
-              </h3>
-              <p class="vbc-callout-meta">{vbcPosts.length}-part series on healthcare technology</p>
-            </div>
-          )}
           {posts.length > recentPosts.length && (
             <a href="/writing" class="view-all-link">
               View all writing →
