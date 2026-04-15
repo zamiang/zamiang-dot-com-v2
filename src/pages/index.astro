@@ -9,15 +9,12 @@ import { getCollection } from 'astro:content';
 import PhotoCard from '../components/PhotoCard.astro';
 import PostCard from '../components/PostCard.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { config } from '../lib/config';
-
-// VBC constants
-const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
+import { VBC_TITLE, config } from '../lib/config';
 
 // Load content from collections - fail the build if content is unavailable
 const posts = await getCollection('posts');
 const vbcPosts = (await getCollection('vbcPosts')).sort((a, b) =>
-  a.data.title > b.data.title ? 1 : -1,
+  a.data.title.localeCompare(b.data.title),
 );
 const photos = await getCollection('photos');
 
@@ -30,8 +27,10 @@ if (posts.length === 0 && vbcPosts.length === 0 && photos.length === 0) {
 
 const siteUrl = config.site.url;
 
-// Limit posts shown on homepage
-const recentPosts = posts.slice(0, 5);
+// Limit posts shown on homepage, sorted newest first
+const recentPosts = posts
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 5);
 
 // Schema.org JSON-LD for homepage
 const jsonLd = {

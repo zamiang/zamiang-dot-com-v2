@@ -8,13 +8,14 @@ import { getCollection } from 'astro:content';
 
 import PostCard from '../../components/PostCard.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { VBC_TITLE } from '../../lib/config';
 
-const posts = await getCollection('posts');
-const vbcPosts = (await getCollection('vbcPosts')).sort((a, b) =>
-  a.data.title > b.data.title ? 1 : -1,
+const posts = (await getCollection('posts')).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
 );
-
-const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
+const vbcPosts = (await getCollection('vbcPosts')).sort((a, b) =>
+  a.data.title.localeCompare(b.data.title),
+);
 ---
 
 <BaseLayout
