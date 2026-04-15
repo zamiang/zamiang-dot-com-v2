@@ -619,7 +619,6 @@
     line-height: 1.5;
   }
 
-
   .photo-card-date {
     @apply mt-2 mb-0 bg-transparent text-muted-foreground text-sm;
   }
