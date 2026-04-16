@@ -46,14 +46,14 @@ npm run preview  # Preview build locally
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
+| Command           | Description              |
+| ----------------- | ------------------------ |
+| `npm run dev`     | Start development server |
+| `npm run build`   | Build for production     |
 | `npm run preview` | Preview production build |
-| `npm test` | Run tests |
-| `npm run lint` | Run ESLint |
-| `npm run check` | Astro type checking |
+| `npm test`        | Run tests                |
+| `npm run lint`    | Run ESLint               |
+| `npm run check`   | Astro type checking      |
 
 ## License
 
