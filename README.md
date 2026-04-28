@@ -2,7 +2,7 @@
 
 A personal blog built with [Astro](https://astro.build/) using [Notion](https://developers.notion.com) as a headless CMS. Static site generation with React islands for interactivity.
 
-**Live Site:** [brennanmoore.com](https://brennanmoore.com)
+**Live Site:** [www.zamiang.com](https://www.zamiang.com/)
 
 ## Tech Stack
 
