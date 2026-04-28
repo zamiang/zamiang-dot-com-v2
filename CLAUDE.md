@@ -1,6 +1,6 @@
 # Project Guide
 
-Personal homepage/blog for Brennan Moore — [brennanmoore.com](https://brennanmoore.com)
+Personal homepage/blog for Brennan Moore — [www.zamiang.com](https://www.zamiang.com/) (`brennanmoore.com` 301-redirects here)
 
 ---
 
@@ -125,7 +125,7 @@ Two type-check commands exist because Astro virtual modules can't be resolved by
 NOTION_TOKEN=secret_xxx                    # Notion API integration token
 NOTION_DATA_SOURCE_ID=xxx                  # Posts data source ID
 NOTION_PHOTOS_DATA_SOURCE_ID=xxx           # Photos data source ID
-SITE_URL=https://brennanmoore.com          # Site URL for absolute links
+SITE_URL=https://www.zamiang.com           # Site URL for absolute links
 ```
 
 ---
