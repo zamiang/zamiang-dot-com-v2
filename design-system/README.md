@@ -195,6 +195,7 @@ Logos / brand marks:
 
 ## Caveats
 
+- **Favicon emoji.** `assets/favicon.svg` is a single `<text>` glyph rendering the 🐣 chick emoji. This is the one intentional exception to the system's "no emoji" rule — the favicon is a playful brand mark embedded as a vector, not content or UI. The rule still holds everywhere else.
 - **Fonts.** EB Garamond and Lato are pulled from Google Fonts at runtime via `colors_and_type.css`. This matches what the live site does — there are no self-hosted `.ttf`/`.woff2` files in the repo. If you need offline fidelity, download both families from Google Fonts and replace the `@import` with `@font-face` declarations in `fonts/`. **No font substitution was made; both are the originals.**
 - **Dark mode.** The site is light-mode-only by design. The particle system has dark-mode colors prepped, but no other tokens, components, or layouts are dark-aware.
 - **Logo.** There is no wordmark, no monogram. The "Brennan Moore" text in the header *is* the logo, set in Lato Regular at `text-sm`.
