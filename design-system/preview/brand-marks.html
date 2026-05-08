@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Card</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html, body { margin: 0; padding: 0; background: var(--background); }
+  body { font-family: var(--font-sans); color: var(--foreground); padding: 24px; box-sizing: border-box; }
+  .row { display: flex; gap: 18px; align-items: center; }
+  .fav-lg { width: 64px; height: 64px; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #fff; border: 1px solid var(--border); }
+  .fav-lg img { width: 100%; height: 100%; object-fit: cover; }
+  .fav-md { width: 40px; height: 40px; border-radius: 8px; overflow: hidden; }
+  .fav-md img { width: 100%; height: 100%; object-fit: cover; }
+  .fav-sm { width: 20px; height: 20px; border-radius: 4px; overflow: hidden; }
+  .fav-sm img { width: 100%; height: 100%; object-fit: cover; }
+  .label { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); margin-top: 8px; }
+  .stack { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+</style>
+</head>
+<body>
+<div class="row">
+  <div class="stack"><div class="fav-lg"><img src="../assets/apple-touch-icon.png" alt="" /></div><div class="label">apple-touch · 180</div></div>
+  <div class="stack"><div class="fav-md"><img src="../assets/apple-touch-icon.png" alt="" /></div><div class="label">android · 64</div></div>
+  <div class="stack"><div class="fav-sm"><img src="../assets/favicon-32x32.png" alt="" /></div><div class="label">favicon · 32</div></div>
+  <div class="stack" style="font-family: var(--font-serif); font-size: 28px; color: var(--foreground); letter-spacing: -0.01em;">Brennan Moore<div class="label">wordmark · serif inline</div></div>
+</div>
+</body>
+</html>

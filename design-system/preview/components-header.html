@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Card</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html, body { margin: 0; padding: 0; background: var(--background); }
+  body { font-family: var(--font-sans); color: var(--foreground); padding: 22px 24px; box-sizing: border-box; }
+  nav { display: flex; justify-content: space-between; align-items: center; max-width: 920px; margin: 0 auto; padding-bottom: 16px; border-bottom: 1px solid rgba(209,213,219,0.5); }
+  .brand { font-family: var(--font-sans); font-size: 14px; color: var(--foreground); text-decoration: none; border: none; }
+  .links { display: flex; gap: 18px; }
+  .links a { font-family: var(--font-sans); font-size: 14px; color: var(--foreground); text-decoration: none; border: none; display: inline-flex; align-items: center; gap: 4px; transition: color 150ms; }
+  .links a:hover { color: var(--accent); }
+  .ext { width: 11px; height: 11px; opacity: 0.5; }
+</style>
+</head>
+<body>
+<nav>
+  <a class="brand" href="#">Brennan Moore</a>
+  <div class="links">
+    <a href="#">Work</a>
+    <a href="#">Writing</a>
+    <a href="#">Photography</a>
+    <a href="#">Resume <svg class="ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 19.5l15-15M8.25 4.5h11.25v11.25"/></svg></a>
+  </div>
+</nav>
+</body>
+</html>

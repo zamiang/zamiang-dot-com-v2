@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Card</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html, body { margin: 0; padding: 0; background: var(--background); }
+  body { font-family: var(--font-sans); color: var(--foreground); }
+  .card { padding: 24px; box-sizing: border-box; }
+  .swatch { height: 80px; border-radius: 6px; border: 1px solid rgba(44,51,58,0.06); }
+  .label { margin-top: 8px; font-size: 12px; font-weight: 600; }
+  .hex { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div style="display:grid; grid-template-columns: repeat(5, 1fr); gap: 12px;">
+    <div><div class="swatch" style="background:#e3e7eb;"></div><div class="label">Secondary</div><div class="hex">#e3e7eb</div></div>
+    <div><div class="swatch" style="background:#e8eaed;"></div><div class="label">Muted</div><div class="hex">#e8eaed</div></div>
+    <div><div class="swatch" style="background:#d1d5db;"></div><div class="label">Border</div><div class="hex">#d1d5db</div></div>
+    <div><div class="swatch" style="background:#4a5560;"></div><div class="label" style="color:#2c333a;">Muted FG</div><div class="hex">#4a5560</div></div>
+    <div><div class="swatch" style="background:#ffffff;"></div><div class="label">Card</div><div class="hex">#ffffff</div></div>
+  </div>
+</div>
+</body>
+</html>

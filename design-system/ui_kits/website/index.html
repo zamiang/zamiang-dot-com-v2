@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>zamiang.com — UI kit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" href="../../assets/favicon-32x32.png" />
+<style>
+  /* Tabbed switcher chrome — sits outside the recreated page */
+  .uikit-bar {
+    position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
+    z-index: 1000;
+    display: flex; gap: 4px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(209,213,219,0.5);
+    border-radius: 9999px;
+    padding: 4px;
+    font-family: 'Lato', system-ui, sans-serif;
+    font-size: 12px;
+  }
+  .uikit-bar button {
+    border: none; background: transparent; padding: 6px 14px;
+    border-radius: 9999px; cursor: pointer; color: #4a5560; font: inherit;
+  }
+  .uikit-bar button.active { background: #2c333a; color: #f0f2f5; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="Tokens.jsx"></script>
+<script type="text/babel" src="Chrome.jsx"></script>
+<script type="text/babel" src="Cards.jsx"></script>
+<script type="text/babel" src="Screens.jsx"></script>
+
+<script type="text/babel" data-presets="react">
+function App() {
+  const [screen, setScreen] = React.useState('home');
+  const [activePost, setActivePost] = React.useState(POSTS[0]);
+
+  const goPost = (post) => { setActivePost(post); setScreen('post'); };
+  const goNav  = (id)   => setScreen(id);
+
+  return (
+    <React.Fragment>
+      <Tokens />
+      <div className="uikit-bar" data-screen-label="UI Kit Switcher">
+        {['home','post','photos'].map(s => (
+          <button key={s} className={screen === s ? 'active' : ''} onClick={() => setScreen(s)}>
+            {s === 'home' ? 'Homepage' : s === 'post' ? 'Post detail' : 'Photos index'}
+          </button>
+        ))}
+      </div>
+      <Header onNav={goNav} current={screen} />
+      <main style={{ maxWidth: '80rem', margin: '0 auto', padding: '0 16px', minHeight: 'calc(100vh - 220px)' }} data-screen-label={screen}>
+        {screen === 'home'   && <HomeScreen   onNav={goNav} onOpenPost={goPost} onOpenPhoto={() => setScreen('photos')} />}
+        {screen === 'post'   && <PostScreen   post={activePost} onNav={goNav} />}
+        {screen === 'photos' && <PhotosScreen onOpenPhoto={() => {}} />}
+      </main>
+      <Footer />
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

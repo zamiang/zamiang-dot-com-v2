@@ -20,7 +20,9 @@ Engineering peers and the technical community — fellow engineers, CTOs, and te
 
 ### Aesthetic Direction
 
-"Slate Executive" palette — sophisticated minimalism with warmth. Light mode only, serif typography (EB Garamond), 680px content width. See Serena memory `design/color-palette` for full color tokens and visual language details.
+"Slate Executive" palette — sophisticated minimalism with warmth. Light mode only, serif typography (EB Garamond), 680px content width.
+
+**Design system reference**: `design-system/` documents the full spec — palette, type scale, spacing, motion, content rules, iconography, and a UI-kit recreation. `design-system/preview/` has one HTML card per concept for visual reference. `src/styles/globals.css` is the canonical source for tokens; `design-system/colors_and_type.css` mirrors it. Run `npm run check:design-tokens` to verify they haven't drifted. Do not import the design-system CSS into the app.
 
 ### Design Principles
 
@@ -79,6 +81,7 @@ npm run test:watch       # Watch mode
 npm run test:coverage    # Coverage report
 
 npm run check            # Astro type check (includes virtual modules)
+npm run check:design-tokens  # Verify design-system mirror matches globals.css
 npm run typecheck        # TypeScript validation (non-Astro files)
 npm run lint             # ESLint
 ```

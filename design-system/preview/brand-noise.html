@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Card</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html, body { margin: 0; padding: 0; background: var(--background); }
+  body { font-family: var(--font-sans); color: var(--foreground); padding: 24px; box-sizing: border-box; position: relative; }
+  body::after {
+    content: '';
+    position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.06;
+  }
+  .label { font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); margin-bottom: 14px; }
+  .demo { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .pane { padding: 16px; height: 80px; }
+  .warm { background: rgba(245, 240, 232, 0.85); }
+  .cool { background: rgba(235, 238, 242, 0.85); }
+  .label-inner { font-family: var(--font-serif); font-size: 18px; }
+  .sub { font-family: var(--font-sans); font-size: 12px; color: var(--muted-foreground); margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="label">Subtle paper grain (opacity 0.025 in production, 0.06 here for visibility) sits over translucent section tints.</div>
+<div class="demo">
+  <div class="pane warm">
+    <div class="label-inner">Warm wrapper</div>
+    <div class="sub">rgba(245, 240, 232, 0.85)</div>
+  </div>
+  <div class="pane cool">
+    <div class="label-inner">Cool wrapper</div>
+    <div class="sub">rgba(235, 238, 242, 0.85)</div>
+  </div>
+</div>
+</body>
+</html>

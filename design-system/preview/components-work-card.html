@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Card</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html, body { margin: 0; padding: 0; background: var(--background); }
+  body { font-family: var(--font-sans); color: var(--foreground); padding: 22px 24px; box-sizing: border-box; }
+  .work-card { padding: 12px 0; border-bottom: 1px solid rgba(209,213,219,0.3); }
+  .work-card:last-child { border-bottom: none; }
+  .header-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .date { font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: #749ca8; letter-spacing: 0.05em; }
+  .sep { color: rgba(74,85,96,0.4); }
+  .role { font-family: var(--font-sans); font-size: 12px; font-weight: 500; color: var(--muted-foreground); }
+  .title { font-family: var(--font-serif); font-size: 19px; font-weight: 500; margin: 0 0 2px 0; }
+  .title a { color: inherit; text-decoration: none; border-bottom: 1px solid color-mix(in srgb, #749ca8 50%, transparent); }
+  .desc { font-family: var(--font-sans); font-size: 14px; line-height: 1.6; color: var(--muted-foreground); margin: 0; }
+</style>
+</head>
+<body>
+<div class="work-card">
+  <div class="header-row"><span class="date">2022 — Present</span><span class="sep">·</span><span class="role">Co-founder &amp; CTO</span></div>
+  <div class="title"><a href="#">Stellate</a></div>
+  <p class="desc">Edge-cached GraphQL infrastructure. Built the core platform from zero with a small founding team.</p>
+</div>
+<div class="work-card">
+  <div class="header-row"><span class="date">2018 — 2021</span><span class="sep">·</span><span class="role">VP Engineering</span></div>
+  <div class="title"><a href="#">Cedar</a></div>
+  <p class="desc">Patient financial experience. Scaled the engineering org through Series C.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Card</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html, body { margin: 0; padding: 0; background: var(--background); }
+  body { font-family: var(--font-sans); color: var(--foreground); padding: 24px; box-sizing: border-box; }
+  .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: end; }
+  .item { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+  .surf { width: 100%; height: 80px; background: #ffffff; border-radius: 8px; }
+  .label { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); text-align: center; }
+  .strong { color: var(--foreground); font-family: var(--font-sans); font-weight: 600; font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="row">
+  <div class="item">
+    <div class="surf"></div>
+    <div class="strong">none — default</div>
+    <div class="label">depth comes from noise + tints,<br>not lift</div>
+  </div>
+  <div class="item">
+    <div class="surf" style="box-shadow: 0 1px 2px rgba(44,51,58,0.04), 0 2px 8px rgba(44,51,58,0.04);"></div>
+    <div class="strong">soft — escape hatch</div>
+    <div class="label">0 1px 2px rgba(44,51,58,.04)<br>0 2px 8px rgba(44,51,58,.04)</div>
+  </div>
+  <div class="item">
+    <div class="surf" style="box-shadow: 0 1px 3px rgba(44,51,58,0.06), 0 4px 16px rgba(44,51,58,0.05);"></div>
+    <div class="strong">card — escape hatch</div>
+    <div class="label">0 1px 3px rgba(44,51,58,.06)<br>0 4px 16px rgba(44,51,58,.05)</div>
+  </div>
+</div>
+</body>
+</html>
