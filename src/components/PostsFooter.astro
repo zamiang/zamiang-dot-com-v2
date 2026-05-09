@@ -20,9 +20,12 @@ const { currentSlug } = Astro.props;
 let posts: CollectionEntry<'posts'>[] = [];
 let photos: CollectionEntry<'photos'>[] = [];
 
+const byDateDesc = (a: { data: { date: string } }, b: { data: { date: string } }) =>
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
+
 try {
-  posts = await getCollection('posts');
-  photos = await getCollection('photos');
+  posts = (await getCollection('posts')).sort(byDateDesc);
+  photos = (await getCollection('photos')).sort(byDateDesc);
 } catch {
   console.warn('Could not load collections for PostsFooter');
 }

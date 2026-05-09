@@ -38,7 +38,7 @@ Engineering peers and the technical community — fellow engineers, CTOs, and te
 
 | Component   | Technology                     | Notes                                                 |
 | ----------- | ------------------------------ | ----------------------------------------------------- |
-| Framework   | Astro 5                        | Static site generation with islands architecture      |
+| Framework   | Astro 6                        | Static site generation with islands architecture      |
 | Interactive | React 19                       | Island components only (Header, FloatingParticles)    |
 | Language    | TypeScript (strict)            | Dual check: `npm run check` + `npm run typecheck`     |
 | CMS         | Notion via @notion/client v5   | Custom content loader; uses `dataSources.query()` API |
@@ -143,4 +143,4 @@ SITE_URL=https://www.zamiang.com           # Site URL for absolute links
 
 ---
 
-**Last Updated**: 2026-04-14
+**Last Updated**: 2026-05-09
