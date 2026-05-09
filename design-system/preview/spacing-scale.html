@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Card</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html, body { margin: 0; padding: 0; background: var(--background); }
+  body { font-family: var(--font-sans); color: var(--foreground); padding: 24px; box-sizing: border-box; }
+  .row { display:flex; gap: 24px; align-items: flex-end; }
+  .col { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .bar { background: var(--accent); border-radius: 2px; width: 24px; }
+  .label { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+</style>
+</head>
+<body>
+<div class="row">
+  <div class="col"><div class="bar" style="height: 4px;"></div><div class="label">2px · radius-sm</div></div>
+  <div class="col"><div class="bar" style="height: 8px;"></div><div class="label">8px · 0.5</div></div>
+  <div class="col"><div class="bar" style="height: 16px;"></div><div class="label">16px · 1</div></div>
+  <div class="col"><div class="bar" style="height: 24px;"></div><div class="label">24px · 1.5</div></div>
+  <div class="col"><div class="bar" style="height: 32px;"></div><div class="label">32px · 2</div></div>
+  <div class="col"><div class="bar" style="height: 48px;"></div><div class="label">48px · 3</div></div>
+  <div class="col"><div class="bar" style="height: 64px;"></div><div class="label">64px · 4 · section</div></div>
+</div>
+<div style="font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); margin-top: 14px;">Tailwind 4 default scale (rem-based) — section-wrappers pad 4rem; paragraph spacing 1.5em.</div>
+</body>
+</html>

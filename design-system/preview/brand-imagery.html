@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Card</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html, body { margin: 0; padding: 0; background: var(--background); }
+  body { font-family: var(--font-sans); color: var(--foreground); padding: 24px; box-sizing: border-box; }
+  .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .photo { aspect-ratio: 1/1; border-radius: 2px; overflow: hidden; }
+  .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .label { margin-top: 10px; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
+</style>
+</head>
+<body>
+<div class="row">
+  <div class="photo"><img src="../assets/photos/portrait-bw.jpg" alt="" /></div>
+  <div class="photo"><img src="../assets/photos/landscape-warm.jpg" alt="" /></div>
+  <div class="photo"><img src="../assets/photos/architectural.jpg" alt="" /></div>
+  <div class="photo"><img src="../assets/photos/quiet-detail.jpg" alt="" /></div>
+</div>
+<div class="label">Reference photography — warm-leaning colour, b&amp;w portraits, architectural moments. No overlays, no captions burnt in.</div>
+</body>
+</html>

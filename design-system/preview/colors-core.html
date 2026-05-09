@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Card</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html, body { margin: 0; padding: 0; background: var(--background); }
+  body { font-family: var(--font-sans); color: var(--foreground); }
+  .card { padding: 24px; box-sizing: border-box; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+    <div>
+      <div style="height:80px; border-radius:6px; background:#f0f2f5; border:1px solid #d1d5db;"></div>
+      <div style="margin-top:8px; font-size:12px; font-weight:600;">Background</div>
+      <div style="font-family:var(--font-mono); font-size:11px; color:var(--muted-foreground);">#f0f2f5 · cool mist</div>
+    </div>
+    <div>
+      <div style="height:80px; border-radius:6px; background:#2c333a;"></div>
+      <div style="margin-top:8px; font-size:12px; font-weight:600;">Foreground</div>
+      <div style="font-family:var(--font-mono); font-size:11px; color:var(--muted-foreground);">#2c333a · charcoal</div>
+    </div>
+    <div>
+      <div style="height:80px; border-radius:6px; background:#5a7684;"></div>
+      <div style="margin-top:8px; font-size:12px; font-weight:600;">Primary</div>
+      <div style="font-family:var(--font-mono); font-size:11px; color:var(--muted-foreground);">#5a7684 · steel blue</div>
+    </div>
+    <div>
+      <div style="height:80px; border-radius:6px; background:#749ca8;"></div>
+      <div style="margin-top:8px; font-size:12px; font-weight:600;">Accent</div>
+      <div style="font-family:var(--font-mono); font-size:11px; color:var(--muted-foreground);">#749ca8 · dusty teal</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

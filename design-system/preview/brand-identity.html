@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Card</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html, body { margin: 0; padding: 0; background: var(--background); }
+  body { font-family: var(--font-sans); color: var(--foreground); padding: 24px; box-sizing: border-box; }
+  .row { display: grid; grid-template-columns: 84px 1fr; gap: 18px; align-items: center; max-width: 540px; }
+  .photo { width: 84px; height: 84px; border-radius: 50%; object-fit: cover; }
+  h1 { font-family: var(--font-serif); font-size: 30px; font-weight: 600; margin: 0 0 4px 0; line-height: 1.15; color: var(--foreground); }
+  .role { font-family: var(--font-sans); font-size: 14px; color: var(--muted-foreground); margin: 0; line-height: 1.4; }
+  .links { display: flex; gap: 8px; align-items: center; margin-top: 6px; }
+  .links a { font-family: var(--font-sans); font-size: 13px; color: var(--muted-foreground); text-decoration: none; border: none; }
+  .links a:hover { color: var(--accent); }
+  .links .sep { color: var(--border); font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="row">
+  <img class="photo" src="../assets/about.jpg" alt="" />
+  <div>
+    <h1>Brennan Moore</h1>
+    <p class="role">Engineering leader, writer, photographer · Brooklyn, NY</p>
+    <div class="links">
+      <a href="#">brennanmoore.com</a><span class="sep">·</span>
+      <a href="#">@zamiang</a><span class="sep">·</span>
+      <a href="#">linkedin</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

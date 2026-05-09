@@ -5,6 +5,7 @@
   "scripts": {
     "build": "astro build",
     "check": "astro check",
+    "check:design-tokens": "node scripts/check-design-tokens.mjs",
     "dev": "astro dev",
     "preview": "astro preview",
     "audit-dependencies": "npm audit --audit-level=high --production",

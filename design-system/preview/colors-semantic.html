@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Card</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html, body { margin: 0; padding: 0; background: var(--background); }
+  body { font-family: var(--font-sans); color: var(--foreground); }
+  .card { padding: 24px; box-sizing: border-box; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+    <div>
+      <div style="height:80px; border-radius:6px; background:#c17f59;"></div>
+      <div style="margin-top:8px; font-size:12px; font-weight:600;">Accent Bold</div>
+      <div style="font-family:var(--font-mono); font-size:11px; color:var(--muted-foreground);">#c17f59 · warm copper</div>
+    </div>
+    <div>
+      <div style="height:80px; border-radius:6px; background:#d4906a;"></div>
+      <div style="margin-top:8px; font-size:12px; font-weight:600;">Bold Hover</div>
+      <div style="font-family:var(--font-mono); font-size:11px; color:var(--muted-foreground);">#d4906a</div>
+    </div>
+    <div>
+      <div style="height:80px; border-radius:6px; background:#b44d4d;"></div>
+      <div style="margin-top:8px; font-size:12px; font-weight:600;">Destructive</div>
+      <div style="font-family:var(--font-mono); font-size:11px; color:var(--muted-foreground);">#b44d4d</div>
+    </div>
+    <div>
+      <div style="height:80px; border-radius:6px; background:#5a8a6b;"></div>
+      <div style="margin-top:8px; font-size:12px; font-weight:600;">Success</div>
+      <div style="font-family:var(--font-mono); font-size:11px; color:var(--muted-foreground);">#5a8a6b</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

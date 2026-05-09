@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Card</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html, body { margin: 0; padding: 0; background: var(--background); }
+  body { font-family: var(--font-sans); color: var(--foreground); }
+  .card { padding: 24px; box-sizing: border-box; }
+  .row { display:flex; height:88px; border-radius:6px; overflow:hidden; border:1px solid rgba(44,51,58,0.06); }
+  .row > div { flex:1; display:flex; align-items:flex-end; padding:8px 10px; font-family:var(--font-mono); font-size:10px; }
+  .label { margin-top: 6px; font-size: 11px; color: var(--muted-foreground); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div style="display:grid; grid-template-rows: auto auto auto auto; gap: 10px;">
+    <div>
+      <div class="row">
+        <div style="background:rgba(245,240,232,0.85); color:#5a4b2a;">warm</div>
+        <div style="background:rgba(235,238,242,0.85); color:#3a4555;">cool</div>
+        <div style="background:rgba(229,232,236,0.85); color:#4a5560;">muted</div>
+        <div style="background:rgba(232,239,242,0.85); color:#3d6b76;">accent</div>
+      </div>
+      <div class="label">Section-wrapper tints — full-bleed strips that tint a section against the noise overlay.</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

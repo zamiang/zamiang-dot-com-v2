@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Card</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html, body { margin: 0; padding: 0; background: var(--background); }
+  body { font-family: var(--font-sans); color: var(--foreground); padding: 22px 24px; box-sizing: border-box; }
+  .hairline { width: 64px; height: 1px; background: rgba(209,213,219,0.5); margin: 0 auto 16px; }
+  .footer-nav { display: flex; justify-content: center; gap: 4px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+  .footer-nav a { font-family: var(--font-sans); font-size: 13px; color: var(--muted-foreground); text-decoration: none; border: none; padding: 6px 10px; }
+  .footer-nav a:hover { color: var(--accent); }
+  .dot { color: rgba(74,85,96,0.4); font-size: 13px; }
+  .copy { text-align: center; font-family: var(--font-sans); font-size: 11px; color: rgba(74,85,96,0.7); margin: 0; }
+  .copy a { color: inherit; border-bottom: none; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="hairline"></div>
+<nav class="footer-nav">
+  <a href="#">Resume</a><span class="dot">·</span>
+  <a href="#">Instagram</a><span class="dot">·</span>
+  <a href="#">RSS</a><span class="dot">·</span>
+  <a href="#">Source</a>
+</nav>
+<p class="copy">© <a href="#">Brennan Moore</a> 2026</p>
+</body>
+</html>
