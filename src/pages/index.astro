@@ -16,7 +16,9 @@ const posts = await getCollection('posts');
 const vbcPosts = (await getCollection('vbcPosts')).sort((a, b) =>
   a.data.title.localeCompare(b.data.title),
 );
-const photos = await getCollection('photos');
+const photos = (await getCollection('photos')).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+);
 
 // Fail the build if no content is available (indicates Notion API issue)
 if (posts.length === 0 && vbcPosts.length === 0 && photos.length === 0) {
