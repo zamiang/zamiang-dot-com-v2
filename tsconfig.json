@@ -23,7 +23,7 @@
     "node_modules",
     ".astro",
     "dist",
-    "src/content/config.ts",
+    "src/content.config.ts",
     "src/lib/notion-loader.ts",
     "src/pages/feed.json.ts",
     "src/pages/rss.xml.ts",
