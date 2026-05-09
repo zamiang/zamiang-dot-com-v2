@@ -7,7 +7,7 @@
 import { defineCollection, z } from 'astro:content';
 import { NOTION_DATA_SOURCE_ID, NOTION_PHOTOS_DATA_SOURCE_ID } from 'astro:env/server';
 
-import { notionLoader } from '../lib/notion-loader';
+import { notionLoader } from './lib/notion-loader';
 
 // Schema shared by all content types
 const postSchema = z.object({
