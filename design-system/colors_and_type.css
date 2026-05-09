@@ -70,8 +70,8 @@
   --tint-accent:  rgba(232, 239, 242, 0.85);
 
   /* ---------- Layout ---------- */
-  --content-max:  680px;   /* article + section width */
-  --resume-max:   960px;   /* homepage two-column grid */
+  --content-max:       680px;   /* article + section width (mirror-only) */
+  --resume-max-width:  960px;   /* homepage two-column grid (matches globals.css) */
 
   /* ---------- Motion ---------- */
   --transition-fast:   150ms;

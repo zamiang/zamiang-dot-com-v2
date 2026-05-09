@@ -35,6 +35,9 @@ function extractRootBlock(css) {
 
 function extractRootTokens(css) {
   const tokens = new Map();
+  // Per-line match: only single-line `--name: value;` declarations are
+  // captured. Values that span multiple lines would be skipped — current
+  // tokens are all single-line, so this is acceptable.
   for (const line of extractRootBlock(css).split('\n')) {
     const m = line.match(/^\s*(--[A-Za-z0-9-]+)\s*:\s*([^;]+);/);
     if (m) tokens.set(m[1], normalize(m[2]));
@@ -66,9 +69,18 @@ for (const [key, value] of mirror) {
 }
 
 if (mismatches.length === 0) {
-  console.log(
-    `design tokens in sync (${[...mirror.keys()].filter((k) => canonical.has(k)).length} shared keys)`,
-  );
+  const shared = [...mirror.keys()].filter((k) => canonical.has(k)).length;
+  const unmirrored = [...canonical.keys()].filter((k) => !mirror.has(k));
+  console.log(`design tokens in sync (${shared} shared keys)`);
+  if (unmirrored.length > 0) {
+    console.log(
+      `  note: ${unmirrored.length} token(s) in globals.css are not yet in the mirror —`,
+    );
+    console.log(
+      `        update design-system/colors_and_type.css to keep documentation complete.`,
+    );
+    console.log(`        missing: ${unmirrored.join(', ')}`);
+  }
   process.exit(0);
 }
 

@@ -1,4 +1,11 @@
-/* Tokens + global element styles for the UI kit. Mirrors ../../colors_and_type.css. */
+/*
+ * Tokens + global element styles for the UI kit. Mirrors a subset of
+ * ../../colors_and_type.css for prototype self-containment.
+ *
+ * NOTE: this is a third copy of the tokens (after src/styles/globals.css and
+ * design-system/colors_and_type.css) and is NOT covered by the
+ * `npm run check:design-tokens` drift check. Update by hand if tokens change.
+ */
 const TOKENS_CSS = `
 @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Lato:wght@400;700&display=swap');
 

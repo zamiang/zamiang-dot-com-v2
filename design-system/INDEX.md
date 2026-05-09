@@ -13,4 +13,4 @@ This folder is a self-contained design system extracted from the live site, inte
 
 ## Status
 
-The token values in `colors_and_type.css` are byte-for-byte identical to the repo's `:root` block as of `main`. This folder documents and showcases them; it does not introduce new values.
+The shared token values in `colors_and_type.css` are kept in sync with the repo's `:root` block in `src/styles/globals.css` (the canonical source). Whitespace, comments, and trailing-zero formatting may differ; semantic values are verified by `npm run check:design-tokens`. This folder documents and showcases the tokens; it does not introduce new values.
