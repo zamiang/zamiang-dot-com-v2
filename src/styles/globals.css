@@ -1087,7 +1087,7 @@
     border-bottom-color: var(--accent);
   }
 
-  .post-title {
+  .post-header .post-title {
     font-family: var(--font-serif);
     font-size: clamp(2.25rem, 1.6rem + 2.2vw, 3.25rem);
     font-weight: 500;
