@@ -27,19 +27,6 @@ function getTextContent(children: ReactNode): string {
   return '';
 }
 
-// Decorative coordinate string — deterministic from caption text.
-// Values stay inside a plausible North America bounding box; this is
-// purely visual flavour, the values aren't meaningful.
-function fauxCoords(seed: string): string {
-  let hash = 0;
-  for (let i = 0; i < seed.length; i++) {
-    hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
-  }
-  const lat = 24 + (hash % 2500) / 100; // 24.00 – 49.00 N
-  const lon = 66 + ((hash >>> 8) % 5900) / 100; // 66.00 – 125.00 W
-  return `N ${lat.toFixed(2)} · W ${lon.toFixed(2)}`;
-}
-
 const baseComponents = {
   p: ({ children }: { children?: React.ReactNode }) => <p>{children}</p>,
   a: ({ children, href }: { children?: React.ReactNode; href?: string }) => (
@@ -118,50 +105,15 @@ const baseComponents = {
   ),
 };
 
-const galleryFigcaption = ({ children }: { children?: React.ReactNode }) => {
-  const text = getTextContent(children);
-  return (
-    <figcaption className="photos-cap">
-      {text ? <span className="cap-title">{children}</span> : <span className="cap-title" />}
-      <span className="cap-coords" aria-hidden="true">
-        {fauxCoords(text || 'frame')}
-      </span>
-    </figcaption>
-  );
-};
-
-// In gallery mode, wrap figures so figures without a markdown caption still
-// get the decorative right-side coords. The figcaption itself is added as a
-// sibling and styled by .photos-cap.
-const galleryFigure = ({ children }: { children?: React.ReactNode }) => {
-  const childArray = React.Children.toArray(children);
-  const hasCaption = childArray.some(
-    (c) => isValidElement(c) && (c as React.ReactElement).type === 'figcaption',
-  );
-
-  if (hasCaption) return <figure>{children}</figure>;
-
-  // Derive a stable seed from any img src/alt found inside.
-  const img = childArray.find((c) => isValidElement(c) && (c as React.ReactElement).type === 'img');
-  const props = (isValidElement(img) ? (img.props as { src?: string; alt?: string }) : {}) || {};
-  const seed = props.alt || props.src || 'frame';
-
-  return (
-    <figure>
-      {children}
-      <figcaption className="photos-cap">
-        <span className="cap-title" />
-        <span className="cap-coords" aria-hidden="true">
-          {fauxCoords(seed)}
-        </span>
-      </figcaption>
-    </figure>
-  );
-};
+const galleryFigcaption = ({ children }: { children?: React.ReactNode }) => (
+  <figcaption className="photos-cap">
+    <span className="cap-title">{children}</span>
+  </figcaption>
+);
 
 export default function ContentRenderer({ content, gallery = false }: ContentRendererProps) {
   const components = gallery
-    ? { ...baseComponents, figure: galleryFigure, figcaption: galleryFigcaption }
+    ? { ...baseComponents, figcaption: galleryFigcaption }
     : baseComponents;
 
   return (
