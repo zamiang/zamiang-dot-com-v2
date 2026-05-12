@@ -1023,4 +1023,107 @@
     outline-offset: 2px;
     border-radius: 2px;
   }
+
+  /* --------------------------------------------------------------------------
+     Post header — "Recent Frames" treatment
+     Copper eyebrow (§ NN · CATEGORY), serif title, italic muted subtitle,
+     monospace meta strip bracketed by hairline rules.
+     -------------------------------------------------------------------------- */
+  .post-header {
+    margin-bottom: 3rem;
+  }
+
+  .post-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent-bold);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .post-eyebrow-mark {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.95rem;
+    letter-spacing: 0;
+    line-height: 1;
+    color: var(--accent-bold);
+  }
+
+  .post-eyebrow-num {
+    font-weight: 700;
+  }
+
+  .post-eyebrow-sep {
+    color: color-mix(in srgb, var(--accent-bold) 45%, transparent);
+  }
+
+  .post-eyebrow-label {
+    color: var(--accent-bold);
+  }
+
+  .post-series-link {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: var(--font-size-sm);
+    color: var(--muted-foreground);
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    margin-bottom: 1.25rem;
+    transition: color var(--transition-fast) var(--ease-out),
+      border-color var(--transition-normal) var(--ease-out);
+  }
+
+  .post-series-link em {
+    font-family: var(--font-serif);
+    font-style: italic;
+  }
+
+  .post-series-link:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .post-title {
+    font-family: var(--font-serif);
+    font-size: clamp(2.25rem, 1.6rem + 2.2vw, 3.25rem);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    color: var(--foreground);
+    margin: 0 0 1rem 0;
+  }
+
+  .post-subtitle {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.125rem, 1rem + 0.4vw, 1.35rem);
+    line-height: 1.5;
+    color: var(--muted-foreground);
+    margin: 0 0 2rem 0;
+    max-width: 60ch;
+  }
+
+  .post-meta-strip {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.875rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .post-meta-strip .sep {
+    color: color-mix(in srgb, var(--muted-foreground) 40%, transparent);
+  }
 }

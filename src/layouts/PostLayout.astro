@@ -4,8 +4,6 @@
  * Includes header, TOC, content, and footer sections
  */
 
-import { format } from 'date-fns';
-
 import ContentRenderer from '../components/islands/ContentRenderer';
 import type { TocItem } from '../components/TableOfContents.astro';
 import TableOfContents from '../components/TableOfContents.astro';
@@ -37,6 +35,27 @@ const { post, type = 'writing' } = Astro.props;
 
 const postDate = new Date(post.date);
 const siteUrl = config.site.url;
+
+// Decorative section number derived deterministically from the slug.
+function sectionNumber(slug: string): string {
+  let hash = 0;
+  for (let i = 0; i < slug.length; i++) {
+    hash = (hash * 31 + slug.charCodeAt(i)) >>> 0;
+  }
+  return String((hash % 99) + 1).padStart(2, '0');
+}
+
+const eyebrowLabel =
+  type === 'photos' ? 'Photography' : post.section === 'VBC' ? 'VBC Series' : 'Essay';
+const eyebrowNumber = sectionNumber(post.slug);
+const datePublishedLabel = postDate
+  .toISOString()
+  .split('T')[0]
+  .replace(/-/g, '.');
+const lastUpdatedLabel = (post.dateModified ? new Date(post.dateModified) : postDate)
+  .toISOString()
+  .split('T')[0]
+  .replace(/-/g, '.');
 
 // Calculate reading time
 const wordCount = post.content
@@ -118,56 +137,50 @@ const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
   </Fragment>
 
   <article class="max-w-2xl mx-auto">
-    <header class="mb-8">
-      {/* VBC Badge */}
+    <header class="post-header">
+      {/* Eyebrow: § NN · CATEGORY */}
+      <div class="post-eyebrow" aria-label={`Section ${eyebrowNumber}, ${eyebrowLabel}`}>
+        <span class="post-eyebrow-mark" aria-hidden="true">&sect;</span>
+        <span class="post-eyebrow-num">{eyebrowNumber}</span>
+        <span class="post-eyebrow-sep" aria-hidden="true">&middot;</span>
+        <span class="post-eyebrow-label">{eyebrowLabel}</span>
+      </div>
+
+      {/* Optional VBC series tie-in — quieter than the old pill */}
       {
         post.section === 'VBC' && (
-          <div class="mb-4">
-            <a
-              href="/#vbc"
-              class="inline-block text-xs font-semibold uppercase tracking-wider text-accent bg-accent/15 px-3 py-1 rounded hover:bg-accent/25 transition-colors duration-150 !border-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-            >
-              {VBC_TITLE}
-            </a>
-          </div>
+          <a href="/#vbc" class="post-series-link">
+            From the series: <em>{VBC_TITLE}</em>
+          </a>
         )
       }
 
-      {/* Date and reading time */}
-      <div class="section-label flex items-center gap-2 mb-3">
-        <time datetime={postDate.toISOString().split('T')[0]}>
-          {format(postDate, 'MMMM d, yyyy')}
-        </time>
+      {/* Title */}
+      <h1 class="post-title">{post.title}</h1>
+
+      {/* Subtitle — italic serif, like the screenshot */}
+      {post.excerpt && <p class="post-subtitle">{post.excerpt}</p>}
+
+      {/* Meta strip — monospace, hairline-bracketed */}
+      <div class="post-meta-strip" role="group" aria-label="Post details">
+        <span>{eyebrowLabel}</span>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <span>
+          <time datetime={postDate.toISOString().split('T')[0]}>{datePublishedLabel}</time>
+        </span>
         {
           type === 'writing' && (
             <>
-              <span class="text-border" aria-hidden="true">
-                ·
+              <span class="sep" aria-hidden="true">
+                &middot;
               </span>
-              <span>{readingTime}</span>
+              <span>{readingTime.toUpperCase()}</span>
             </>
           )
         }
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <span>Last updated {lastUpdatedLabel}</span>
       </div>
-
-      {/* Title */}
-      <h1
-        class="font-serif font-medium leading-tight mb-4 text-foreground"
-        style="font-size: var(--font-size-4xl)"
-      >
-        {post.title}
-      </h1>
-
-      {/* Excerpt */}
-      {
-        post.excerpt && (
-          <p class="section-subtitle" style="font-size: var(--font-size-lg)">
-            {post.excerpt}
-          </p>
-        )
-      }
-
-      <div class="section-rule mt-6" aria-hidden="true"></div>
     </header>
 
     {/* Table of Contents */}
