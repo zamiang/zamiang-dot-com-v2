@@ -1089,7 +1089,7 @@
 
   .post-header .post-title {
     font-family: var(--font-serif);
-    font-size: clamp(2.25rem, 1.6rem + 2.2vw, 3.25rem);
+    font-size: var(--font-size-4xl);
     font-weight: 500;
     line-height: 1.08;
     letter-spacing: -0.01em;
