@@ -377,7 +377,7 @@ body.bm-prose {
   left: 18px; right: 18px; bottom: 18px;
   display: flex;
   justify-content: space-between;
-  align-items: end;
+  align-items: flex-end;
   gap: 16px;
   opacity: 0;
   transform: translateY(4px);
@@ -385,7 +385,7 @@ body.bm-prose {
               transform var(--transition-slow) var(--ease-out) 250ms;
 }
 .bm-hud-col { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-.bm-hud-col--right { text-align: right; align-items: end; }
+.bm-hud-col--right { text-align: right; align-items: flex-end; }
 .bm-hud-lbl {
   color: color-mix(in srgb, var(--hud) 60%, transparent);
   font-size: 8.5px;

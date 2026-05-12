@@ -834,7 +834,7 @@
     bottom: 18px;
     display: flex;
     justify-content: space-between;
-    align-items: end;
+    align-items: flex-end;
     gap: 16px;
     opacity: 0;
     transform: translateY(4px);
@@ -850,7 +850,7 @@
   }
   .bm-hud-col--right {
     text-align: right;
-    align-items: end;
+    align-items: flex-end;
   }
   .bm-hud-lbl {
     color: color-mix(in srgb, var(--hud) 60%, transparent);
