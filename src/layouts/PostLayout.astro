@@ -188,7 +188,7 @@ const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
     {
       type === 'photos' ? (
         <div class="photos-content">
-          <ContentRenderer content={post.content} client:load />
+          <ContentRenderer content={post.content} gallery client:load />
         </div>
       ) : (
         <ContentRenderer content={post.content} client:load />

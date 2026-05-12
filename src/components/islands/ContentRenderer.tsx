@@ -14,6 +14,7 @@ import { cn } from '../../lib/utils';
 
 interface ContentRendererProps {
   content: string;
+  gallery?: boolean;
 }
 
 function getTextContent(children: ReactNode): string {
@@ -26,7 +27,20 @@ function getTextContent(children: ReactNode): string {
   return '';
 }
 
-const components = {
+// Decorative coordinate string — deterministic from caption text.
+// Values stay inside a plausible North America bounding box; this is
+// purely visual flavour, the values aren't meaningful.
+function fauxCoords(seed: string): string {
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
+  }
+  const lat = 24 + (hash % 2500) / 100; // 24.00 – 49.00 N
+  const lon = 66 + ((hash >>> 8) % 5900) / 100; // 66.00 – 125.00 W
+  return `N ${lat.toFixed(2)} · W ${lon.toFixed(2)}`;
+}
+
+const baseComponents = {
   p: ({ children }: { children?: React.ReactNode }) => <p>{children}</p>,
   a: ({ children, href }: { children?: React.ReactNode; href?: string }) => (
     <a href={href}>{children}</a>
@@ -104,7 +118,23 @@ const components = {
   ),
 };
 
-export default function ContentRenderer({ content }: ContentRendererProps) {
+const galleryFigcaption = ({ children }: { children?: React.ReactNode }) => {
+  const text = getTextContent(children);
+  return (
+    <figcaption className="photos-cap">
+      <span className="cap-title">{children}</span>
+      <span className="cap-coords" aria-hidden="true">
+        {fauxCoords(text)}
+      </span>
+    </figcaption>
+  );
+};
+
+export default function ContentRenderer({ content, gallery = false }: ContentRendererProps) {
+  const components = gallery
+    ? { ...baseComponents, figcaption: galleryFigcaption }
+    : baseComponents;
+
   return (
     <div className="prose prose-slate max-w-none mb-12 prose-headings:font-serif prose-headings:font-medium prose-headings:text-foreground prose-p:text-foreground/90 prose-a:text-accent prose-a:no-underline hover:prose-a:text-accent/80 prose-strong:text-foreground prose-strong:font-semibold prose-blockquote:border-accent prose-blockquote:text-muted-foreground">
       <ReactMarkdown
