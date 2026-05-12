@@ -1,7 +1,12 @@
 ---
 /**
  * PhotoCard Component (Astro)
- * Displays a photo preview with image, date, and title
+ * Displays a photo preview with image, date, and title.
+ *
+ * variant="inspect" opts into the scoped photo-inspect treatment:
+ * cross-fades to an edge-detected line-art layer with a copper HUD on hover.
+ * Used only on the photos index — never on inline article images or the
+ * homepage photo grid. Requires the `#bm-edge` SVG filter on the page.
  */
 
 import { format } from 'date-fns';
@@ -15,41 +20,112 @@ interface Props {
   };
   shouldHideText?: boolean;
   priority?: boolean;
+  variant?: 'default' | 'inspect';
 }
 
-const { post, shouldHideText = false, priority = false } = Astro.props;
+const { post, shouldHideText = false, priority = false, variant = 'default' } = Astro.props;
+
 const postDate = new Date(post.date);
+const isoDate = postDate.toISOString().split('T')[0];
+const imgSrc = `/images/photos/${post.coverImage}`;
+const href = `/photos/${post.slug}`;
+const ariaLabel = shouldHideText ? post.title : `View photo: ${post.title}`;
+
+// Decorative telemetry — deterministic 4-digit faux file id from the slug.
+function telemetryId(slug: string): string {
+  let hash = 0;
+  for (let i = 0; i < slug.length; i++) {
+    hash = (hash * 31 + slug.charCodeAt(i)) >>> 0;
+  }
+  return `IMG_${String(hash % 10000).padStart(4, '0')}`;
+}
+
+const fileId = telemetryId(post.slug);
+const dateLabel = format(postDate, 'yyyy.MM.dd');
 ---
 
 <div class="photo-card group">
-  <div class="relative aspect-[1/1] w-full overflow-hidden rounded-sm">
-    <a
-      href={`/photos/${post.slug}`}
-      aria-label={shouldHideText ? post.title : `View photo: ${post.title}`}
-      class="block border-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-    >
-      <img
-        src={`/images/photos/${post.coverImage}`}
-        alt={post.title}
-        loading={priority ? 'eager' : 'lazy'}
-        decoding="async"
-        class="w-full h-full object-cover"
-      />
-    </a>
-  </div>
+  {
+    variant === 'inspect' ? (
+      <div class="bm-photo bm-photo--inspect">
+        <a
+          href={href}
+          aria-label={ariaLabel}
+          class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+        >
+          <img
+            class="bm-photo-base"
+            src={imgSrc}
+            alt={post.title}
+            loading={priority ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+          <img
+            class="bm-photo-line"
+            src={imgSrc}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+        <div class="bm-hud" aria-hidden="true">
+          <div class="bm-hud-brackets">
+            <b class="tl" />
+            <b class="tr" />
+            <b class="bl" />
+            <b class="br" />
+          </div>
+          <div class="bm-hud-reticle">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor">
+              <circle class="ring" cx="24" cy="24" r="18" stroke-width="1" />
+              <circle cx="24" cy="24" r="3" stroke-width="1" />
+              <line x1="24" y1="2" x2="24" y2="14" stroke-width="1" />
+              <line x1="24" y1="34" x2="24" y2="46" stroke-width="1" />
+              <line x1="2" y1="24" x2="14" y2="24" stroke-width="1" />
+              <line x1="34" y1="24" x2="46" y2="24" stroke-width="1" />
+            </svg>
+          </div>
+          <div class="bm-hud-telemetry">
+            <div class="col">
+              <span class="lbl">File</span>
+              <span class="val">{fileId}</span>
+            </div>
+            <div class="col r">
+              <span class="lbl">Date</span>
+              <span class="val">{dateLabel}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    ) : (
+      <div class="bm-photo">
+        <a
+          href={href}
+          aria-label={ariaLabel}
+          class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+        >
+          <img
+            src={imgSrc}
+            alt={post.title}
+            loading={priority ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+        </a>
+      </div>
+    )
+  }
   {
     !shouldHideText && (
       <p class="photo-card-date">
-        <time datetime={postDate.toISOString().split('T')[0]}>
-          {format(postDate, 'MMM d, yyyy')}
-        </time>
+        <time datetime={isoDate}>{format(postDate, 'MMM d, yyyy')}</time>
       </p>
     )
   }
   {
     !shouldHideText && (
       <h3 class="photo-card-title font-serif font-medium">
-        <a href={`/photos/${post.slug}`}>{post.title}</a>
+        <a href={href}>{post.title}</a>
       </h3>
     )
   }

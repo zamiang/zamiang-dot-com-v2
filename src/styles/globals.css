@@ -73,7 +73,14 @@
   --transition-fast: 150ms; /* Micro-interactions: focus, color changes */
   --transition-normal: 200ms; /* Standard UI: hovers, state changes */
   --transition-slow: 300ms; /* Transforms: scale, position, complex animations */
+  --transition-reveal: 700ms; /* Multi-element reveals (photo inspect treatment) */
   --ease-out: cubic-bezier(0.33, 1, 0.68, 1); /* Quart ease-out for natural deceleration */
+
+  /* HUD / inspect treatment */
+  --hud: var(--accent-bold);
+  --hud-stroke: 1.5px;
+  --focal-x: 50%;
+  --focal-y: 50%;
 
   /* Core Colors - "The Slate Executive" Palette */
   --background: #f0f2f5; /* Cool Mist - pale grey-white */
@@ -592,17 +599,273 @@
     @apply mb-4;
   }
 
-  .photo-card img {
-    transition: opacity var(--transition-normal) var(--ease-out);
-  }
-
-  .photo-card:hover img {
-    opacity: 0.85;
-  }
-
   /* Remove bottom margin when used in homepage grid (shouldHideText) */
   .homepage-photo-grid .photo-card {
     margin-bottom: 0;
+  }
+
+  /* --------------------------------------------------------------------------
+     Photo container — default & inspect treatment
+     `.bm-photo` is the base container. `.bm-photo--inspect` is a scoped
+     exception to the system's hover rules used on photo-index cards only.
+     Requires `#bm-edge` SVG filter to be present on the page.
+     -------------------------------------------------------------------------- */
+  .bm-photo {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--radius-sm, 2px);
+    overflow: hidden;
+    background: var(--muted);
+    isolation: isolate;
+  }
+
+  .bm-photo > a {
+    position: absolute;
+    inset: 0;
+    display: block;
+    border-bottom: none;
+  }
+
+  .bm-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity var(--transition-normal) var(--ease-out);
+  }
+
+  .bm-photo:not(.bm-photo--inspect):hover img {
+    opacity: 0.85;
+  }
+
+  .bm-photo--inspect {
+    cursor: pointer;
+  }
+
+  .bm-photo--inspect .bm-photo-base,
+  .bm-photo--inspect .bm-photo-line {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition:
+      opacity var(--transition-reveal) var(--ease-out),
+      filter var(--transition-reveal) var(--ease-out);
+  }
+
+  .bm-photo--inspect:hover .bm-photo-base {
+    filter: saturate(0.35) brightness(0.92) contrast(0.95);
+  }
+
+  .bm-photo--inspect .bm-photo-line {
+    opacity: 0;
+    filter: url(#bm-edge);
+  }
+
+  .bm-photo--inspect:hover .bm-photo-line {
+    opacity: 0.78;
+  }
+
+  .bm-photo--inspect::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--accent) 32%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--accent) 32%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 32px 32px;
+    transition: opacity var(--transition-reveal) var(--ease-out);
+    z-index: 2;
+  }
+
+  .bm-photo--inspect:hover::before {
+    opacity: 0.7;
+  }
+
+  /* HUD overlay — copper chrome that reveals on hover of .bm-photo--inspect */
+  .bm-hud {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    color: var(--hud);
+    z-index: 5;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+
+  .bm-hud-brackets b {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    opacity: 0;
+    transition:
+      opacity var(--transition-normal) var(--ease-out) 120ms,
+      transform var(--transition-slow) var(--ease-out) 120ms;
+  }
+  .bm-hud-brackets b::before,
+  .bm-hud-brackets b::after {
+    content: '';
+    position: absolute;
+    background: currentColor;
+  }
+  .bm-hud-brackets b::before {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: var(--hud-stroke);
+  }
+  .bm-hud-brackets b::after {
+    left: 0;
+    top: 0;
+    width: var(--hud-stroke);
+    height: 100%;
+  }
+  .bm-hud-brackets b.tl {
+    top: 10px;
+    left: 10px;
+    transform: translate(-6px, -6px);
+  }
+  .bm-hud-brackets b.tr {
+    top: 10px;
+    right: 10px;
+    transform: translate(6px, -6px);
+  }
+  .bm-hud-brackets b.tr::before {
+    right: 0;
+    left: auto;
+  }
+  .bm-hud-brackets b.tr::after {
+    right: 0;
+    left: auto;
+  }
+  .bm-hud-brackets b.bl {
+    bottom: 10px;
+    left: 10px;
+    transform: translate(-6px, 6px);
+  }
+  .bm-hud-brackets b.bl::before {
+    bottom: 0;
+    top: auto;
+  }
+  .bm-hud-brackets b.bl::after {
+    bottom: 0;
+    top: auto;
+  }
+  .bm-hud-brackets b.br {
+    bottom: 10px;
+    right: 10px;
+    transform: translate(6px, 6px);
+  }
+  .bm-hud-brackets b.br::before {
+    bottom: 0;
+    top: auto;
+    right: 0;
+    left: auto;
+  }
+  .bm-hud-brackets b.br::after {
+    bottom: 0;
+    top: auto;
+    right: 0;
+    left: auto;
+  }
+
+  .bm-photo--inspect:hover .bm-hud-brackets b,
+  .bm-hud.is-revealed .bm-hud-brackets b {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+
+  .bm-hud-reticle {
+    position: absolute;
+    left: var(--focal-x);
+    top: var(--focal-y);
+    width: 48px;
+    height: 48px;
+    transform: translate(-50%, -50%) scale(0.6);
+    opacity: 0;
+    transition:
+      opacity var(--transition-slow) var(--ease-out) 200ms,
+      transform var(--transition-slow) var(--ease-out) 200ms;
+  }
+  .bm-hud-reticle svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .bm-photo--inspect:hover .bm-hud-reticle,
+  .bm-hud.is-revealed .bm-hud-reticle {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .bm-photo--inspect:hover .bm-hud-reticle .ring,
+  .bm-hud.is-revealed .bm-hud-reticle .ring {
+    animation: bm-hud-pulse 2.2s var(--ease-out) infinite 400ms;
+    transform-origin: center;
+  }
+  @keyframes bm-hud-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
+    }
+  }
+
+  .bm-hud-telemetry {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 16px;
+    opacity: 0;
+    transform: translateY(4px);
+    transition:
+      opacity var(--transition-normal) var(--ease-out) 250ms,
+      transform var(--transition-slow) var(--ease-out) 250ms;
+  }
+  .bm-hud-telemetry .col {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+  .bm-hud-telemetry .col.r {
+    text-align: right;
+    align-items: end;
+  }
+  .bm-hud-telemetry .lbl {
+    color: color-mix(in srgb, var(--hud) 60%, transparent);
+    font-size: 8.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .bm-hud-telemetry .val {
+    color: var(--hud);
+    font-weight: 700;
+    font-size: 10px;
+    white-space: nowrap;
+  }
+  .bm-photo--inspect:hover .bm-hud-telemetry,
+  .bm-hud.is-revealed .bm-hud-telemetry {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   /* Tighter post cards in homepage primary section */

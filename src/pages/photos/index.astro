@@ -1,7 +1,7 @@
 ---
 /**
  * Photos index page
- * Displays all photos in a responsive grid
+ * Displays all photos in a responsive grid with the scoped inspect treatment.
  */
 
 import { getCollection } from 'astro:content';
@@ -15,6 +15,46 @@ const photos = (await getCollection('photos')).sort(
 ---
 
 <BaseLayout title="Photography" description="Photography by Brennan Moore.">
+  {/* Inline #bm-edge filter — required by .bm-photo--inspect on this page. */}
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <filter
+        id="bm-edge"
+        x="0%"
+        y="0%"
+        width="100%"
+        height="100%"
+        color-interpolation-filters="sRGB"
+      >
+        <feColorMatrix
+          in="SourceGraphic"
+          type="matrix"
+          values="0.33 0.34 0.33 0 0  0.33 0.34 0.33 0 0  0.33 0.34 0.33 0 0  0 0 0 1 0"
+          result="g"></feColorMatrix>
+        <feConvolveMatrix
+          in="g"
+          order="3"
+          preserveAlpha="true"
+          kernelMatrix="-1 -1 -1 -1 8 -1 -1 -1 -1"
+          result="edge"></feConvolveMatrix>
+        <feComponentTransfer in="edge" result="boost">
+          <feFuncR type="linear" slope="3.2"></feFuncR>
+          <feFuncG type="linear" slope="3.2"></feFuncG>
+          <feFuncB type="linear" slope="3.2"></feFuncB>
+        </feComponentTransfer>
+        <feColorMatrix
+          in="boost"
+          type="matrix"
+          values="-1 0 0 0 0.94  0 -1 0 0 0.95  0 0 -1 0 0.96  0 0 0 1 0"
+          result="inv"></feColorMatrix>
+        <feColorMatrix
+          in="inv"
+          type="matrix"
+          values="0.70 0 0 0 0.10  0 0.74 0 0 0.12  0 0 0.78 0 0.14  0 0 0 1 0"></feColorMatrix>
+      </filter>
+    </defs>
+  </svg>
+
   <div class="max-w-[960px] mx-auto">
     <header class="mb-8">
       <h1 class="font-serif text-3xl font-semibold mb-2">Photography</h1>
@@ -24,7 +64,7 @@ const photos = (await getCollection('photos')).sort(
       photos.length > 0 && (
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {photos.map((post) => (
-            <PhotoCard post={post.data} />
+            <PhotoCard post={post.data} variant="inspect" />
           ))}
         </div>
       )
