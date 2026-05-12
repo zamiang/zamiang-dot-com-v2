@@ -1045,20 +1045,10 @@
     }
   }
 
-  /* Two-column resume layout */
+  /* Single-column resume layout */
   .resume-layout {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-    max-width: var(--resume-max-width);
+    max-width: var(--article-max-width);
     margin: 0 auto;
-  }
-
-  @media (min-width: 1024px) {
-    .resume-layout {
-      grid-template-columns: 260px 1fr;
-      gap: 4rem;
-    }
   }
 
   /* Primary content area: Writing + Photography side by side */
@@ -1176,6 +1166,37 @@
     margin-top: 0;
   }
 
+  /* Stacked resume sections in single-column layout */
+  .resume-layout > div > section + section {
+    margin-top: 2.5rem;
+  }
+
+  /* Currently — long-form intro paragraph block above Experience */
+  .currently-section {
+    margin-bottom: 0;
+  }
+  .currently-section p {
+    font-family: var(--font-serif);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-body);
+    margin: 0 0 1em 0;
+    color: var(--foreground);
+  }
+  .currently-section p:last-child {
+    margin-bottom: 0;
+  }
+  .currently-section a {
+    color: var(--foreground);
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 60%, transparent);
+    transition:
+      color var(--transition-fast) var(--ease-out),
+      border-color var(--transition-normal) var(--ease-out);
+  }
+  .currently-section a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
   /* Section divider line */
   .section-rule {
     width: 100%;
@@ -1290,7 +1311,7 @@
   }
 
   /* --------------------------------------------------------------------------
-     Post header — "Recent Frames" treatment
+     Post header — "Recent Photos" treatment
      Copper eyebrow (§ NN · CATEGORY), serif title, italic muted subtitle,
      monospace meta strip bracketed by hairline rules.
      -------------------------------------------------------------------------- */
@@ -1361,7 +1382,7 @@
   }
 
   /* --------------------------------------------------------------------------
-     Section header — reusable "Recent Frames" treatment for homepage sections
+     Section header — reusable "Recent Photos" treatment for homepage sections
      and anywhere we want the copper § NN · LABEL eyebrow + italic tagline.
      -------------------------------------------------------------------------- */
   .bm-section-header {
@@ -1402,9 +1423,9 @@
 
   .bm-section-display-title {
     font-family: var(--font-serif);
-    font-size: var(--font-size-3xl);
+    font-size: var(--font-size-2xl);
     font-weight: 500;
-    line-height: 1.1;
+    line-height: 1.15;
     letter-spacing: -0.005em;
     color: var(--foreground);
     margin: 0 0 0.5rem 0;
