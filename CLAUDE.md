@@ -20,7 +20,7 @@ Engineering peers and the technical community — fellow engineers, CTOs, and te
 
 ### Aesthetic Direction
 
-"Slate Executive" palette — sophisticated minimalism with warmth. Light mode only, serif typography (EB Garamond), 680px content width.
+"Slate Executive" palette — sophisticated minimalism with warmth. Light mode only, serif typography (EB Garamond), 600px article width (`--article-max-width`).
 
 **Design system reference**: `design-system/` documents the full spec — palette, type scale, spacing, motion, content rules, iconography, and a UI-kit recreation. `design-system/preview/` has one HTML card per concept for visual reference. `src/styles/globals.css` is the canonical source for tokens; `design-system/colors_and_type.css` mirrors it. Run `npm run check:design-tokens` to verify they haven't drifted. Do not import the design-system CSS into the app.
 

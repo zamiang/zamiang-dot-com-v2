@@ -10,6 +10,7 @@
  */
 
 import { format } from 'date-fns';
+import { photoFileId } from '../lib/telemetry';
 
 interface Props {
   post: {
@@ -31,16 +32,7 @@ const imgSrc = `/images/photos/${post.coverImage}`;
 const href = `/photos/${post.slug}`;
 const ariaLabel = shouldHideText ? post.title : `View photo: ${post.title}`;
 
-// Decorative telemetry — deterministic 4-digit faux file id from the slug.
-function telemetryId(slug: string): string {
-  let hash = 0;
-  for (let i = 0; i < slug.length; i++) {
-    hash = (hash * 31 + slug.charCodeAt(i)) >>> 0;
-  }
-  return `IMG_${String(hash % 10000).padStart(4, '0')}`;
-}
-
-const fileId = telemetryId(post.slug);
+const fileId = photoFileId(post.slug);
 const dateLabel = format(postDate, 'yyyy.MM.dd');
 ---
 
@@ -71,10 +63,10 @@ const dateLabel = format(postDate, 'yyyy.MM.dd');
         </a>
         <div class="bm-hud" aria-hidden="true">
           <div class="bm-hud-brackets">
-            <b class="tl" />
-            <b class="tr" />
-            <b class="bl" />
-            <b class="br" />
+            <span class="tl" />
+            <span class="tr" />
+            <span class="bl" />
+            <span class="br" />
           </div>
           <div class="bm-hud-reticle">
             <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-linecap="round">
@@ -83,13 +75,13 @@ const dateLabel = format(postDate, 'yyyy.MM.dd');
             </svg>
           </div>
           <div class="bm-hud-telemetry">
-            <div class="col">
-              <span class="lbl">File</span>
-              <span class="val">{fileId}</span>
+            <div class="bm-hud-col">
+              <span class="bm-hud-lbl">File</span>
+              <span class="bm-hud-val">{fileId}</span>
             </div>
-            <div class="col r">
-              <span class="lbl">Date</span>
-              <span class="val">{dateLabel}</span>
+            <div class="bm-hud-col bm-hud-col--right">
+              <span class="bm-hud-lbl">Date</span>
+              <span class="bm-hud-val">{dateLabel}</span>
             </div>
           </div>
         </div>

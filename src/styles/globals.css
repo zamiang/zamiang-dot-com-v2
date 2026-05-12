@@ -158,6 +158,28 @@
     overflow-x: hidden; /* Prevent horizontal scroll from 100vw elements */
   }
 
+  /* Subtle technical grid underlay — echoes the photo inspect treatment */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--accent) 22%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--accent) 22%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 32px 32px;
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+  }
+
   /* Subtle noise texture overlay for depth */
   body::after {
     content: '';
@@ -606,6 +628,9 @@
   .homepage-photo-grid .photo-card {
     margin-bottom: 0;
   }
+  .homepage-photo-grid .bm-photo {
+    border-radius: 0;
+  }
 
   /* --------------------------------------------------------------------------
      Photo container — default & inspect treatment
@@ -659,7 +684,7 @@
   }
 
   .bm-photo--inspect:hover .bm-photo-base {
-    filter: saturate(0.35) brightness(0.92) contrast(0.95);
+    filter: saturate(0.35) brightness(1.18) contrast(0.92);
   }
 
   .bm-photo--inspect .bm-photo-line {
@@ -709,7 +734,7 @@
     letter-spacing: 0.06em;
   }
 
-  .bm-hud-brackets b {
+  .bm-hud-brackets span {
     position: absolute;
     width: 22px;
     height: 22px;
@@ -718,75 +743,75 @@
       opacity var(--transition-normal) var(--ease-out) 120ms,
       transform var(--transition-slow) var(--ease-out) 120ms;
   }
-  .bm-hud-brackets b::before,
-  .bm-hud-brackets b::after {
+  .bm-hud-brackets span::before,
+  .bm-hud-brackets span::after {
     content: '';
     position: absolute;
     background: currentColor;
   }
-  .bm-hud-brackets b::before {
+  .bm-hud-brackets span::before {
     left: 0;
     top: 0;
     width: 100%;
     height: var(--hud-stroke);
   }
-  .bm-hud-brackets b::after {
+  .bm-hud-brackets span::after {
     left: 0;
     top: 0;
     width: var(--hud-stroke);
     height: 100%;
   }
-  .bm-hud-brackets b.tl {
+  .bm-hud-brackets span.tl {
     top: 10px;
     left: 10px;
     transform: translate(-6px, -6px);
   }
-  .bm-hud-brackets b.tr {
+  .bm-hud-brackets span.tr {
     top: 10px;
     right: 10px;
     transform: translate(6px, -6px);
   }
-  .bm-hud-brackets b.tr::before {
+  .bm-hud-brackets span.tr::before {
     right: 0;
     left: auto;
   }
-  .bm-hud-brackets b.tr::after {
+  .bm-hud-brackets span.tr::after {
     right: 0;
     left: auto;
   }
-  .bm-hud-brackets b.bl {
+  .bm-hud-brackets span.bl {
     bottom: 10px;
     left: 10px;
     transform: translate(-6px, 6px);
   }
-  .bm-hud-brackets b.bl::before {
+  .bm-hud-brackets span.bl::before {
     bottom: 0;
     top: auto;
   }
-  .bm-hud-brackets b.bl::after {
+  .bm-hud-brackets span.bl::after {
     bottom: 0;
     top: auto;
   }
-  .bm-hud-brackets b.br {
+  .bm-hud-brackets span.br {
     bottom: 10px;
     right: 10px;
     transform: translate(6px, 6px);
   }
-  .bm-hud-brackets b.br::before {
+  .bm-hud-brackets span.br::before {
     bottom: 0;
     top: auto;
     right: 0;
     left: auto;
   }
-  .bm-hud-brackets b.br::after {
+  .bm-hud-brackets span.br::after {
     bottom: 0;
     top: auto;
     right: 0;
     left: auto;
   }
 
-  .bm-photo--inspect:hover .bm-hud-brackets b,
-  .bm-hud.is-revealed .bm-hud-brackets b {
+  .bm-photo--inspect:hover .bm-hud-brackets span,
+  .bm-hud.is-revealed .bm-hud-brackets span {
     opacity: 1;
     transform: translate(0, 0);
   }
@@ -829,23 +854,23 @@
       opacity var(--transition-normal) var(--ease-out) 250ms,
       transform var(--transition-slow) var(--ease-out) 250ms;
   }
-  .bm-hud-telemetry .col {
+  .bm-hud-col {
     display: flex;
     flex-direction: column;
     gap: 3px;
     min-width: 0;
   }
-  .bm-hud-telemetry .col.r {
+  .bm-hud-col--right {
     text-align: right;
     align-items: end;
   }
-  .bm-hud-telemetry .lbl {
+  .bm-hud-lbl {
     color: color-mix(in srgb, var(--hud) 60%, transparent);
     font-size: 8.5px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
   }
-  .bm-hud-telemetry .val {
+  .bm-hud-val {
     color: var(--hud);
     font-weight: 700;
     font-size: 10px;

@@ -9,6 +9,7 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
+import { photoFileId } from '../../lib/telemetry';
 import { slugify } from '../../lib/toc';
 import { cn } from '../../lib/utils';
 
@@ -111,20 +112,9 @@ const galleryFigcaption = ({ children }: { children?: React.ReactNode }) => (
   </figcaption>
 );
 
-// Deterministic 4-digit faux file id from the image src filename — mirrors
-// PhotoCard.astro's telemetry so gallery cards share the same HUD treatment.
-function galleryFileId(src: string): string {
-  const name = src.split('/').pop() || src;
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
-  }
-  return `IMG_${String(hash % 10000).padStart(4, '0')}`;
-}
-
 const galleryImg = ({ src, alt }: { src?: string; alt?: string }) => {
   if (!src) return null;
-  const fileId = galleryFileId(src);
+  const fileId = photoFileId(src.split('/').pop() || src);
   return (
     <div className="bm-photo bm-photo--inspect">
       <img className="bm-photo-base" src={src} alt={alt || ''} loading="lazy" decoding="async" />
@@ -138,10 +128,10 @@ const galleryImg = ({ src, alt }: { src?: string; alt?: string }) => {
       />
       <div className="bm-hud" aria-hidden="true">
         <div className="bm-hud-brackets">
-          <b className="tl" />
-          <b className="tr" />
-          <b className="bl" />
-          <b className="br" />
+          <span className="tl" />
+          <span className="tr" />
+          <span className="bl" />
+          <span className="br" />
         </div>
         <div className="bm-hud-reticle">
           <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeLinecap="round">
@@ -150,9 +140,9 @@ const galleryImg = ({ src, alt }: { src?: string; alt?: string }) => {
           </svg>
         </div>
         <div className="bm-hud-telemetry">
-          <div className="col">
-            <span className="lbl">File</span>
-            <span className="val">{fileId}</span>
+          <div className="bm-hud-col">
+            <span className="bm-hud-lbl">File</span>
+            <span className="bm-hud-val">{fileId}</span>
           </div>
         </div>
       </div>

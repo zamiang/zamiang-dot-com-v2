@@ -330,30 +330,30 @@ body.bm-prose {
 }
 
 /* Corner brackets — four crops at .tl .tr .bl .br */
-.bm-hud-brackets b {
+.bm-hud-brackets span {
   position: absolute;
   width: 22px; height: 22px;
   opacity: 0;
   transition: opacity var(--transition-normal) var(--ease-out) 120ms,
               transform var(--transition-slow) var(--ease-out) 120ms;
 }
-.bm-hud-brackets b::before,
-.bm-hud-brackets b::after { content: ""; position: absolute; background: currentColor; }
-.bm-hud-brackets b::before { left: 0; top: 0; width: 100%; height: var(--hud-stroke); }
-.bm-hud-brackets b::after  { left: 0; top: 0; width: var(--hud-stroke); height: 100%; }
-.bm-hud-brackets b.tl { top: 10px; left: 10px;  transform: translate(-6px,-6px); }
-.bm-hud-brackets b.tr { top: 10px; right: 10px; transform: translate( 6px,-6px); }
-.bm-hud-brackets b.tr::before { right: 0; left: auto; }
-.bm-hud-brackets b.tr::after  { right: 0; left: auto; }
-.bm-hud-brackets b.bl { bottom: 10px; left: 10px;  transform: translate(-6px, 6px); }
-.bm-hud-brackets b.bl::before { bottom: 0; top: auto; }
-.bm-hud-brackets b.bl::after  { bottom: 0; top: auto; }
-.bm-hud-brackets b.br { bottom: 10px; right: 10px; transform: translate( 6px, 6px); }
-.bm-hud-brackets b.br::before { bottom: 0; top: auto; right: 0; left: auto; }
-.bm-hud-brackets b.br::after  { bottom: 0; top: auto; right: 0; left: auto; }
+.bm-hud-brackets span::before,
+.bm-hud-brackets span::after { content: ""; position: absolute; background: currentColor; }
+.bm-hud-brackets span::before { left: 0; top: 0; width: 100%; height: var(--hud-stroke); }
+.bm-hud-brackets span::after  { left: 0; top: 0; width: var(--hud-stroke); height: 100%; }
+.bm-hud-brackets span.tl { top: 10px; left: 10px;  transform: translate(-6px,-6px); }
+.bm-hud-brackets span.tr { top: 10px; right: 10px; transform: translate( 6px,-6px); }
+.bm-hud-brackets span.tr::before { right: 0; left: auto; }
+.bm-hud-brackets span.tr::after  { right: 0; left: auto; }
+.bm-hud-brackets span.bl { bottom: 10px; left: 10px;  transform: translate(-6px, 6px); }
+.bm-hud-brackets span.bl::before { bottom: 0; top: auto; }
+.bm-hud-brackets span.bl::after  { bottom: 0; top: auto; }
+.bm-hud-brackets span.br { bottom: 10px; right: 10px; transform: translate( 6px, 6px); }
+.bm-hud-brackets span.br::before { bottom: 0; top: auto; right: 0; left: auto; }
+.bm-hud-brackets span.br::after  { bottom: 0; top: auto; right: 0; left: auto; }
 
-.bm-photo--inspect:hover .bm-hud-brackets b,
-.bm-hud.is-revealed .bm-hud-brackets b { opacity: 1; transform: translate(0,0); }
+.bm-photo--inspect:hover .bm-hud-brackets span,
+.bm-hud.is-revealed .bm-hud-brackets span { opacity: 1; transform: translate(0,0); }
 
 /* Reticle — focal-point indicator. Position with --focal-x / --focal-y. */
 .bm-hud-reticle {
@@ -384,15 +384,15 @@ body.bm-prose {
   transition: opacity var(--transition-normal) var(--ease-out) 250ms,
               transform var(--transition-slow) var(--ease-out) 250ms;
 }
-.bm-hud-telemetry .col { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-.bm-hud-telemetry .col.r { text-align: right; align-items: end; }
-.bm-hud-telemetry .lbl {
+.bm-hud-col { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.bm-hud-col--right { text-align: right; align-items: end; }
+.bm-hud-lbl {
   color: color-mix(in srgb, var(--hud) 60%, transparent);
   font-size: 8.5px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
-.bm-hud-telemetry .val {
+.bm-hud-val {
   color: var(--hud);
   font-weight: 700;
   font-size: 10px;
