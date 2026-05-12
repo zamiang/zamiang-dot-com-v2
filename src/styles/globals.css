@@ -1441,7 +1441,10 @@
     margin-bottom: 3rem;
   }
 
-  .photos-content .prose > * {
+  .photos-content .prose > *,
+  .photos-content .prose figure,
+  .photos-content .prose .bm-photo,
+  .photos-content .prose .bm-photo img {
     margin: 0 !important;
     max-width: none;
   }
