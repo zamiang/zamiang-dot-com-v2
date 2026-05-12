@@ -813,9 +813,9 @@
 
   .bm-hud-telemetry {
     position: absolute;
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
     display: flex;
     justify-content: space-between;
     align-items: end;
