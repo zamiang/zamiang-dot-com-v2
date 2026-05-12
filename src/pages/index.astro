@@ -29,12 +29,15 @@ if (posts.length === 0 && vbcPosts.length === 0 && photos.length === 0) {
 
 const siteUrl = config.site.url;
 
-// Limit posts shown on homepage to 5 total cards (reserves one slot for the
-// VBC series entry when present).
-const HOMEPAGE_POST_LIMIT = 5;
+// Limit homepage writing to 5 total cards. When the VBC series card is
+// rendered above the post list, it claims one of those slots — so the
+// number of individual posts shown drops to 4.
+const HOMEPAGE_WRITING_CARDS = 5;
+const hasVbcCard = vbcPosts.length > 0;
+const recentPostsLimit = HOMEPAGE_WRITING_CARDS - (hasVbcCard ? 1 : 0);
 const recentPosts = posts
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, HOMEPAGE_POST_LIMIT - (vbcPosts.length > 0 ? 1 : 0));
+  .slice(0, recentPostsLimit);
 
 // Schema.org JSON-LD for homepage
 const jsonLd = {

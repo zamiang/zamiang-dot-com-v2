@@ -103,7 +103,11 @@ const canonical = canonicalUrl || Astro.url.href;
     <slot name="head" />
   </head>
   <body class="font-sans bg-background text-foreground">
-    {/* #bm-edge filter — required by .bm-photo--inspect, used on all photo cards. */}
+    {
+      /* #bm-edge filter — required by .bm-photo--inspect, used on all photo cards.
+        Canonical source: design-system/bm-filters.svg. Keep this block in sync
+        with that file when tuning the edge-detection pipeline. */
+    }
     <svg width="0" height="0" style="position:absolute" aria-hidden="true">
       <defs>
         <filter
