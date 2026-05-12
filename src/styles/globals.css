@@ -1208,18 +1208,27 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 0.375rem;
+    max-width: none;
     margin-bottom: 3rem;
   }
 
-  .photos-content > .prose > p {
+  .photos-content > .prose > * {
     margin: 0;
     max-width: none;
+  }
+
+  /* Unwrap paragraph/figure wrappers so their image children become direct
+     grid items — markdown can pack several images into one <p>. */
+  .photos-content > .prose > p,
+  .photos-content > .prose > figure {
+    display: contents;
   }
 
   .photos-content img {
     width: 100%;
     height: auto;
     display: block;
+    margin: 0;
     border-radius: var(--radius-sm, 2px);
   }
 }
