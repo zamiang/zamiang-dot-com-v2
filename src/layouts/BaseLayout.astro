@@ -103,6 +103,50 @@ const canonical = canonicalUrl || Astro.url.href;
     <slot name="head" />
   </head>
   <body class="font-sans bg-background text-foreground">
+    {/* #bm-edge filter — required by .bm-photo--inspect, used on all photo cards. */}
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <defs>
+        <filter
+          id="bm-edge"
+          x="0%"
+          y="0%"
+          width="100%"
+          height="100%"
+          color-interpolation-filters="sRGB"
+        >
+          <feColorMatrix
+            in="SourceGraphic"
+            type="matrix"
+            values="0.33 0.34 0.33 0 0  0.33 0.34 0.33 0 0  0.33 0.34 0.33 0 0  0 0 0 1 0"
+            result="g"
+          />
+          <feConvolveMatrix
+            in="g"
+            order="3"
+            preserveAlpha="true"
+            kernelMatrix="-1 -1 -1 -1 8 -1 -1 -1 -1"
+            result="edge"
+          />
+          <feComponentTransfer in="edge" result="boost">
+            <feFuncR type="linear" slope="3.2" />
+            <feFuncG type="linear" slope="3.2" />
+            <feFuncB type="linear" slope="3.2" />
+          </feComponentTransfer>
+          <feColorMatrix
+            in="boost"
+            type="matrix"
+            values="-1 0 0 0 0.94  0 -1 0 0 0.95  0 0 -1 0 0.96  0 0 0 1 0"
+            result="inv"
+          />
+          <feColorMatrix
+            in="inv"
+            type="matrix"
+            values="0.70 0 0 0 0.10  0 0.74 0 0 0.12  0 0 0.78 0 0.14  0 0 0 1 0"
+          />
+        </filter>
+      </defs>
+    </svg>
+
     {/* Floating particles background (React island - only desktop) */}
     <FloatingParticles client:visible />
 

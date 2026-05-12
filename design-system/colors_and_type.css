@@ -367,12 +367,6 @@ body.bm-prose {
 .bm-hud.is-revealed .bm-hud-reticle {
   opacity: 1; transform: translate(-50%,-50%) scale(1);
 }
-.bm-photo--inspect:hover .bm-hud-reticle .ring,
-.bm-hud.is-revealed .bm-hud-reticle .ring {
-  animation: bm-hud-pulse 2.2s var(--ease-out) infinite 400ms;
-  transform-origin: center;
-}
-@keyframes bm-hud-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 
 /* Telemetry — monospace caption strip, two columns */
 .bm-hud-telemetry {

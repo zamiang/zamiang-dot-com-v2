@@ -3,10 +3,10 @@
  * PhotoCard Component (Astro)
  * Displays a photo preview with image, date, and title.
  *
- * variant="inspect" opts into the scoped photo-inspect treatment:
+ * variant="inspect" (default) renders the photo with the inspect treatment:
  * cross-fades to an edge-detected line-art layer with a copper HUD on hover.
- * Used only on the photos index — never on inline article images or the
- * homepage photo grid. Requires the `#bm-edge` SVG filter on the page.
+ * Requires the `#bm-edge` SVG filter on the page (inlined in BaseLayout).
+ * variant="default" disables the treatment for contexts that need a quiet image.
  */
 
 import { format } from 'date-fns';
@@ -23,7 +23,7 @@ interface Props {
   variant?: 'default' | 'inspect';
 }
 
-const { post, shouldHideText = false, priority = false, variant = 'default' } = Astro.props;
+const { post, shouldHideText = false, priority = false, variant = 'inspect' } = Astro.props;
 
 const postDate = new Date(post.date);
 const isoDate = postDate.toISOString().split('T')[0];
@@ -77,13 +77,9 @@ const dateLabel = format(postDate, 'yyyy.MM.dd');
             <b class="br" />
           </div>
           <div class="bm-hud-reticle">
-            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor">
-              <circle class="ring" cx="24" cy="24" r="18" stroke-width="1" />
-              <circle cx="24" cy="24" r="3" stroke-width="1" />
-              <line x1="24" y1="2" x2="24" y2="14" stroke-width="1" />
-              <line x1="24" y1="34" x2="24" y2="46" stroke-width="1" />
-              <line x1="2" y1="24" x2="14" y2="24" stroke-width="1" />
-              <line x1="34" y1="24" x2="46" y2="24" stroke-width="1" />
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-linecap="round">
+              <line x1="24" y1="6" x2="24" y2="42" stroke-width="1.25" />
+              <line x1="6" y1="24" x2="42" y2="24" stroke-width="1.25" />
             </svg>
           </div>
           <div class="bm-hud-telemetry">
