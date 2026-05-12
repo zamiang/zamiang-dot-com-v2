@@ -40,11 +40,10 @@ const dateLabel = format(postDate, 'yyyy.MM.dd');
   {
     variant === 'inspect' ? (
       <div class="bm-photo bm-photo--inspect">
-        <a
-          href={href}
-          aria-label={ariaLabel}
-          class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-        >
+        <a href={href} aria-label={ariaLabel}>
+          {/* Two <img>s with identical src are intentional: the second is the
+              source for the #bm-edge line-art layer that cross-fades on hover.
+              Cache hit on the network; doubles GPU texture cost per card. */}
           <img
             class="bm-photo-base"
             src={imgSrc}
@@ -88,11 +87,7 @@ const dateLabel = format(postDate, 'yyyy.MM.dd');
       </div>
     ) : (
       <div class="bm-photo">
-        <a
-          href={href}
-          aria-label={ariaLabel}
-          class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-        >
+        <a href={href} aria-label={ariaLabel}>
           <img
             src={imgSrc}
             alt={post.title}

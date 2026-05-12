@@ -281,7 +281,7 @@ body.bm-prose {
               filter var(--transition-reveal) var(--ease-out);
 }
 .bm-photo--inspect:hover .bm-photo-base {
-  filter: saturate(0.35) brightness(0.92) contrast(0.95);
+  filter: saturate(0.35) brightness(1.18) contrast(0.92);
 }
 .bm-photo--inspect .bm-photo-line {
   opacity: 0;

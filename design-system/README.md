@@ -146,7 +146,7 @@ No bounces, no springs, no slide-ins. Hover states fade in colour. The particle 
 
 The one place the system breaks its own "fade colour on hover" rule: photo cards may opt into an *inspect treatment* via `.bm-photo--inspect`, which cross-fades the photo to an edge-detected line-art layer with a dotted coordinate grid and a small copper HUD (corner brackets, focal-point reticle, monospace telemetry strip).
 
-**Scope.** Used only on photo cards — typically the photos index. Inline article images, header portraits, and any other photographic surface use the base `.bm-photo`. The chrome must not appear around work cards, post cards, or non-photographic elements.
+**Scope.** Used only on photo cards: the photos index, the homepage photo grid, the recommended-photos footer, and inline images within photo posts (gated by `ContentRenderer`'s `gallery` prop). Inline images in writing posts, header portraits, and any other photographic surface use the base `.bm-photo`. The chrome must not appear around work cards, post cards, or non-photographic elements.
 
 **Composition.** Two parts, intentionally separable:
 - `.bm-photo--inspect` — the photo treatment (base → line-art cross-fade + grid)
