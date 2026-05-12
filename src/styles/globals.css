@@ -1168,7 +1168,11 @@
   }
 
   .post-article--photos {
-    max-width: 960px;
+    max-width: 1200px;
+  }
+
+  .photos-content {
+    margin-top: 2rem;
   }
 
   /* Photo post body — flow inline markdown images into a 2-column grid.
@@ -1184,16 +1188,28 @@
   }
 
   .photos-content .prose > * {
-    margin: 0;
+    margin: 0 !important;
     max-width: none;
+  }
+
+  /* Hoist figures out of any stray <p>/<br> wrappers ReactMarkdown may insert
+     between blocks — those would otherwise occupy their own grid rows and
+     create big visual gaps between photo rows. */
+  .photos-content .prose > p {
+    display: contents;
+  }
+  .photos-content .prose > br,
+  .photos-content .prose > p:empty {
+    display: none;
   }
 
   /* Each <figure> is one grid cell; cropped to a uniform square frame so
      rows align horizontally regardless of source aspect ratio. */
-  .photos-content .prose > figure {
+  .photos-content .prose figure {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.375rem;
+    margin: 0 !important;
   }
 
   .photos-content .prose > figure > img,

@@ -12,6 +12,9 @@ import { NotionToMarkdown } from 'notion-to-md';
 
 import { downloadImage, getFilename } from './download-image';
 
+const escapeHtml = (s: string) =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
 export interface NotionLoaderOptions {
   /** Notion data source ID (database ID) */
   dataSourceId: string;
@@ -85,15 +88,9 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
           .map((rt) => rt.plain_text)
           .join('')
           .trim();
-        const escape = (s: string) =>
-          s
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;');
-        const caption = captionText ? `<figcaption>${escape(captionText)}</figcaption>` : '';
+        const caption = captionText ? `<figcaption>${escapeHtml(captionText)}</figcaption>` : '';
 
-        return `<figure><img src="/images/${filename}" alt="${escape(captionText)}" />${caption}</figure>`;
+        return `<figure><img src="/images/${filename}" alt="${escapeHtml(captionText)}" />${caption}</figure>`;
       });
 
       // Custom transformer for column layouts

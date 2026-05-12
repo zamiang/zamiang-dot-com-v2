@@ -168,7 +168,7 @@ const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
         <span>{eyebrowLabel}</span>
         <span class="sep" aria-hidden="true">&middot;</span>
         <span>
-          <time datetime={postDate.toISOString().split('T')[0]}>{datePublishedLabel}</time>
+          <time datetime={post.date.split('T')[0]}>{datePublishedLabel}</time>
         </span>
         {
           type === 'writing' && (
