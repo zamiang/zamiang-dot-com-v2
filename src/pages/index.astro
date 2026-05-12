@@ -108,7 +108,22 @@ const jsonLd = {
     {
       posts.length > 0 && (
         <section id="writing">
-          <h2 class="resume-section-heading">Writing</h2>
+          <header class="bm-section-header">
+            <div class="bm-eyebrow" aria-label="Section 01, Writing">
+              <span class="bm-eyebrow-mark" aria-hidden="true">
+                &sect;
+              </span>
+              <span class="bm-eyebrow-num">01</span>
+              <span class="bm-eyebrow-sep" aria-hidden="true">
+                &middot;
+              </span>
+              <span class="bm-eyebrow-label">Writing</span>
+            </div>
+            <h2 class="bm-section-display-title">Recent Essays</h2>
+            <p class="bm-section-tagline">
+              Essays on engineering leadership, value-based care, and the craft of building.
+            </p>
+          </header>
           {vbcPosts.length > 0 && (
             <PostCard
               post={{
@@ -134,7 +149,23 @@ const jsonLd = {
     {
       photos.length > 0 && (
         <section id="photography">
-          <h2 class="resume-section-heading">Photography</h2>
+          <header class="bm-section-header">
+            <div class="bm-eyebrow" aria-label="Section 02, Photography">
+              <span class="bm-eyebrow-mark" aria-hidden="true">
+                &sect;
+              </span>
+              <span class="bm-eyebrow-num">02</span>
+              <span class="bm-eyebrow-sep" aria-hidden="true">
+                &middot;
+              </span>
+              <span class="bm-eyebrow-label">Photography</span>
+            </div>
+            <h2 class="bm-section-display-title">Recent Frames</h2>
+            <p class="bm-section-tagline">
+              A scanning analysis on hover &mdash; the photograph holds its quiet by default; the
+              system reveals itself when you lean in.
+            </p>
+          </header>
           <div class="homepage-photo-grid">
             {photos.slice(0, 8).map((post) => (
               <PhotoCard post={post.data} shouldHideText />

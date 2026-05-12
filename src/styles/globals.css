@@ -1023,4 +1023,228 @@
     outline-offset: 2px;
     border-radius: 2px;
   }
+
+  /* --------------------------------------------------------------------------
+     Post header — "Recent Frames" treatment
+     Copper eyebrow (§ NN · CATEGORY), serif title, italic muted subtitle,
+     monospace meta strip bracketed by hairline rules.
+     -------------------------------------------------------------------------- */
+  .post-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .post-series-link {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: var(--font-size-sm);
+    color: var(--muted-foreground);
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    margin-bottom: 1.25rem;
+    transition:
+      color var(--transition-fast) var(--ease-out),
+      border-color var(--transition-normal) var(--ease-out);
+  }
+
+  .post-series-link em {
+    font-family: var(--font-serif);
+    font-style: italic;
+  }
+
+  .post-series-link:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .post-header .post-title {
+    font-family: var(--font-serif);
+    font-size: var(--font-size-4xl);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    color: var(--foreground);
+    margin: 0 0 0.625rem 0;
+  }
+
+  .post-subtitle {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.125rem, 1rem + 0.4vw, 1.35rem);
+    line-height: 1.5;
+    color: var(--muted-foreground);
+    margin: 0 0 1.5rem 0;
+    max-width: 60ch;
+  }
+
+  .post-meta-strip {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.875rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .post-meta-strip .sep {
+    color: color-mix(in srgb, var(--muted-foreground) 40%, transparent);
+  }
+
+  /* --------------------------------------------------------------------------
+     Section header — reusable "Recent Frames" treatment for homepage sections
+     and anywhere we want the copper § NN · LABEL eyebrow + italic tagline.
+     -------------------------------------------------------------------------- */
+  .bm-section-header {
+    margin-bottom: 1.75rem;
+  }
+
+  .bm-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent-bold);
+    margin-bottom: 0.625rem;
+  }
+
+  .bm-eyebrow > * {
+    color: var(--accent-bold);
+  }
+
+  .bm-eyebrow-mark {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  .bm-eyebrow-num {
+    font-weight: 700;
+  }
+
+  .bm-eyebrow-sep {
+    color: color-mix(in srgb, var(--accent-bold) 45%, transparent);
+  }
+
+  .bm-section-display-title {
+    font-family: var(--font-serif);
+    font-size: var(--font-size-3xl);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.005em;
+    color: var(--foreground);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .bm-section-tagline {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: var(--font-size-lg);
+    line-height: 1.5;
+    color: var(--muted-foreground);
+    margin: 0;
+    max-width: 60ch;
+  }
+
+  /* --------------------------------------------------------------------------
+     Post article wrapper — narrow column for writing, wider for photo galleries.
+     Overrides the base `article { max-width: 680px }` rule via class specificity.
+     -------------------------------------------------------------------------- */
+  .post-article {
+    width: 100%;
+    max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .post-article--photos {
+    max-width: 1200px;
+  }
+
+  .photos-content {
+    margin-top: 2rem;
+  }
+
+  /* Photo post body — flow inline markdown images into a 2-column grid.
+     ContentRenderer hydrates inside an <astro-island> so we use descendant
+     combinators instead of direct-child to span that wrapper. */
+  .photos-content .prose {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem 0.5rem;
+    align-items: start;
+    max-width: none;
+    margin-bottom: 3rem;
+  }
+
+  .photos-content .prose > * {
+    margin: 0 !important;
+    max-width: none;
+  }
+
+  /* Hoist figures out of any stray <p>/<br> wrappers ReactMarkdown may insert
+     between blocks — those would otherwise occupy their own grid rows and
+     create big visual gaps between photo rows. */
+  .photos-content .prose > p {
+    display: contents;
+  }
+  .photos-content .prose > br,
+  .photos-content .prose > p:empty {
+    display: none;
+  }
+
+  /* Each <figure> is one grid cell; cropped to a uniform square frame so
+     rows align horizontally regardless of source aspect ratio. */
+  .photos-content .prose figure {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    margin: 0 !important;
+  }
+
+  .photos-content .prose > figure > img,
+  .photos-content .prose > p > img,
+  .photos-content .prose > img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    margin: 0;
+    border-radius: var(--radius-sm, 2px);
+  }
+
+  /* Caption row: italic serif title beneath each photo */
+  .photos-content .photos-cap {
+    text-align: left;
+    padding: 0;
+    color: var(--foreground);
+  }
+
+  .photos-content .photos-cap .cap-title {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: var(--font-size-base);
+    color: var(--foreground);
+    line-height: 1.3;
+  }
+
+  /* Collapse the photo-post grid to a single column on narrow viewports. */
+  @media (max-width: 640px) {
+    .photos-content .prose {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
 }

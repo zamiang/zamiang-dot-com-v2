@@ -4,8 +4,6 @@
  * Includes header, TOC, content, and footer sections
  */
 
-import { format } from 'date-fns';
-
 import ContentRenderer from '../components/islands/ContentRenderer';
 import type { TocItem } from '../components/TableOfContents.astro';
 import TableOfContents from '../components/TableOfContents.astro';
@@ -37,6 +35,29 @@ const { post, type = 'writing' } = Astro.props;
 
 const postDate = new Date(post.date);
 const siteUrl = config.site.url;
+
+// Decorative section number derived deterministically from the slug.
+function sectionNumber(slug: string): string {
+  let hash = 0;
+  for (let i = 0; i < slug.length; i++) {
+    hash = (hash * 31 + slug.charCodeAt(i)) >>> 0;
+  }
+  return String((hash % 99) + 1).padStart(2, '0');
+}
+
+const eyebrowLabel =
+  type === 'photos' ? 'Photography' : post.section === 'VBC' ? 'VBC Series' : 'Essay';
+const eyebrowNumber = sectionNumber(post.slug);
+// Format the raw ISO date string directly to avoid a Date round-trip that
+// could shift the displayed day across timezones. `post.date` is the source
+// of truth — strip any time component and swap separators. Notion loader
+// guarantees a non-empty YYYY-MM-DD; an empty input yields an empty string.
+const formatIsoDate = (iso: string | undefined) =>
+  iso ? iso.split('T')[0].replace(/-/g, '.') : '';
+const datePublishedLabel = formatIsoDate(post.date);
+const hasMeaningfulModified =
+  !!post.dateModified && post.dateModified.split('T')[0] !== post.date.split('T')[0];
+const lastUpdatedLabel = hasMeaningfulModified ? formatIsoDate(post.dateModified) : '';
 
 // Calculate reading time
 const wordCount = post.content
@@ -117,64 +138,74 @@ const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </Fragment>
 
-  <article class="max-w-2xl mx-auto">
-    <header class="mb-8">
-      {/* VBC Badge */}
+  <article class:list={['post-article', { 'post-article--photos': type === 'photos' }]}>
+    <header class="post-header">
+      {/* Eyebrow: § NN · CATEGORY */}
+      <div class="bm-eyebrow" aria-label={`Section ${eyebrowNumber}, ${eyebrowLabel}`}>
+        <span class="bm-eyebrow-mark" aria-hidden="true">&sect;</span>
+        <span class="bm-eyebrow-num">{eyebrowNumber}</span>
+        <span class="bm-eyebrow-sep" aria-hidden="true">&middot;</span>
+        <span class="bm-eyebrow-label">{eyebrowLabel}</span>
+      </div>
+
+      {/* Optional VBC series tie-in — quieter than the old pill */}
       {
         post.section === 'VBC' && (
-          <div class="mb-4">
-            <a
-              href="/#vbc"
-              class="inline-block text-xs font-semibold uppercase tracking-wider text-accent bg-accent/15 px-3 py-1 rounded hover:bg-accent/25 transition-colors duration-150 !border-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-            >
-              {VBC_TITLE}
-            </a>
-          </div>
+          <a href="/#vbc" class="post-series-link">
+            From the series: <em>{VBC_TITLE}</em>
+          </a>
         )
       }
 
-      {/* Date and reading time */}
-      <div class="section-label flex items-center gap-2 mb-3">
-        <time datetime={postDate.toISOString().split('T')[0]}>
-          {format(postDate, 'MMMM d, yyyy')}
-        </time>
+      {/* Title */}
+      <h1 class="post-title">{post.title}</h1>
+
+      {/* Subtitle — italic serif, like the screenshot */}
+      {post.excerpt && <p class="post-subtitle">{post.excerpt}</p>}
+
+      {/* Meta strip — monospace, hairline-bracketed */}
+      <div class="post-meta-strip" role="group" aria-label="Post details">
+        <span>{eyebrowLabel}</span>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <span>
+          <time datetime={post.date.split('T')[0]}>{datePublishedLabel}</time>
+        </span>
         {
           type === 'writing' && (
             <>
-              <span class="text-border" aria-hidden="true">
-                ·
+              <span class="sep" aria-hidden="true">
+                &middot;
               </span>
-              <span>{readingTime}</span>
+              <span>{readingTime.toUpperCase()}</span>
+            </>
+          )
+        }
+        {
+          hasMeaningfulModified && (
+            <>
+              <span class="sep" aria-hidden="true">
+                &middot;
+              </span>
+              <span>Last updated {lastUpdatedLabel}</span>
             </>
           )
         }
       </div>
-
-      {/* Title */}
-      <h1
-        class="font-serif font-medium leading-tight mb-4 text-foreground"
-        style="font-size: var(--font-size-4xl)"
-      >
-        {post.title}
-      </h1>
-
-      {/* Excerpt */}
-      {
-        post.excerpt && (
-          <p class="section-subtitle" style="font-size: var(--font-size-lg)">
-            {post.excerpt}
-          </p>
-        )
-      }
-
-      <div class="section-rule mt-6" aria-hidden="true"></div>
     </header>
 
     {/* Table of Contents */}
     {showToc && <TableOfContents items={tocItems} />}
 
     {/* Content - React island for markdown rendering */}
-    <ContentRenderer content={post.content} client:load />
+    {
+      type === 'photos' ? (
+        <div class="photos-content">
+          <ContentRenderer content={post.content} gallery client:load />
+        </div>
+      ) : (
+        <ContentRenderer content={post.content} client:load />
+      )
+    }
 
     {/* Footer slot for VBCFooter and PostsFooter */}
     <slot name="footer" />
