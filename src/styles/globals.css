@@ -1203,8 +1203,10 @@
     max-width: 960px;
   }
 
-  /* Photo post body — flow inline markdown images into a 2-column grid. */
-  .photos-content > .prose {
+  /* Photo post body — flow inline markdown images into a 2-column grid.
+     ContentRenderer hydrates inside an <astro-island> so we use descendant
+     combinators instead of direct-child to span that wrapper. */
+  .photos-content .prose {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 0.375rem;
@@ -1212,21 +1214,21 @@
     margin-bottom: 3rem;
   }
 
-  .photos-content > .prose > * {
+  .photos-content .prose > * {
     margin: 0;
     max-width: none;
   }
 
   /* Each <figure> (or stray <p> wrapping an image) is one grid cell. */
-  .photos-content > .prose > figure,
-  .photos-content > .prose > p {
+  .photos-content .prose > figure,
+  .photos-content .prose > p {
     overflow: hidden;
     border-radius: var(--radius-sm, 2px);
   }
 
-  .photos-content > .prose > figure > img,
-  .photos-content > .prose > p > img,
-  .photos-content > .prose > img {
+  .photos-content .prose > figure > img,
+  .photos-content .prose > p > img,
+  .photos-content .prose > img {
     width: 100%;
     height: auto;
     display: block;
