@@ -27,6 +27,9 @@
   --font-size-3xl:   clamp(1.875rem, 1.50rem + 1.20vw, 2.500rem);
   --font-size-4xl:   clamp(2.25rem,  1.75rem + 1.50vw, 3.000rem);
 
+  --article-max-width: 600px;
+  --article-font-size: clamp(1rem, 0.95rem + 0.15vw, 1.0625rem); /* 16-17px */
+
   --line-height-tight:   1.30;
   --line-height-body:    1.70;
   --line-height-relaxed: 1.80;

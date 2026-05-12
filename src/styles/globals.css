@@ -68,6 +68,8 @@
 
   /* Layout */
   --resume-max-width: 960px;
+  --article-max-width: 600px;
+  --article-font-size: clamp(1rem, 0.95rem + 0.15vw, 1.0625rem); /* 16-17px */
 
   /* Transition Timing Scale - Consistent across all interactions */
   --transition-fast: 150ms; /* Micro-interactions: focus, color changes */
@@ -480,11 +482,12 @@
 
   article {
     width: 100%;
-    max-width: 680px;
+    max-width: var(--article-max-width);
     margin-left: auto;
     margin-right: auto;
     margin-top: 0px;
     margin-bottom: 0px;
+    font-size: var(--article-font-size);
   }
 
   /* --------------------------------------------------------------------------

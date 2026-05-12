@@ -1,7 +1,7 @@
 ---
 /**
  * Photos index page
- * Two-column grid with the inspect treatment, matching the homepage photo grid.
+ * Displays all photos in a responsive grid with the inspect treatment.
  */
 
 import { getCollection } from 'astro:content';
@@ -30,9 +30,9 @@ const photos = (await getCollection('photos')).sort(
 
     {
       photos.length > 0 && (
-        <div class="homepage-photo-grid">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {photos.map((post) => (
-            <PhotoCard post={post.data} shouldHideText />
+            <PhotoCard post={post.data} />
           ))}
         </div>
       )
