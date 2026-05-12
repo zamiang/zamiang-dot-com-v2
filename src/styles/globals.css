@@ -1126,4 +1126,65 @@
   .post-meta-strip .sep {
     color: color-mix(in srgb, var(--muted-foreground) 40%, transparent);
   }
+
+  /* --------------------------------------------------------------------------
+     Section header — reusable "Recent Frames" treatment for homepage sections
+     and anywhere we want the copper § NN · LABEL eyebrow + italic tagline.
+     -------------------------------------------------------------------------- */
+  .bm-section-header {
+    margin-bottom: 1.75rem;
+  }
+
+  .bm-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent-bold);
+    margin-bottom: 0.625rem;
+  }
+
+  .bm-eyebrow > * {
+    color: var(--accent-bold);
+  }
+
+  .bm-eyebrow-mark {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  .bm-eyebrow-num {
+    font-weight: 700;
+  }
+
+  .bm-eyebrow-sep {
+    color: color-mix(in srgb, var(--accent-bold) 45%, transparent);
+  }
+
+  .bm-section-display-title {
+    font-family: var(--font-serif);
+    font-size: var(--font-size-3xl);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.005em;
+    color: var(--foreground);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .bm-section-tagline {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: var(--font-size-lg);
+    line-height: 1.5;
+    color: var(--muted-foreground);
+    margin: 0;
+    max-width: 60ch;
+  }
 }
