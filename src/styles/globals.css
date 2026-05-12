@@ -1188,7 +1188,8 @@
     max-width: none;
   }
 
-  /* Each <figure> is one grid cell; image fills natively, caption below. */
+  /* Each <figure> is one grid cell; cropped to a uniform 3:2 frame so
+     rows align horizontally regardless of source aspect ratio. */
   .photos-content .prose > figure {
     display: flex;
     flex-direction: column;
@@ -1199,7 +1200,9 @@
   .photos-content .prose > p > img,
   .photos-content .prose > img {
     width: 100%;
+    aspect-ratio: 3 / 2;
     height: auto;
+    object-fit: cover;
     display: block;
     margin: 0;
     border-radius: var(--radius-sm, 2px);
