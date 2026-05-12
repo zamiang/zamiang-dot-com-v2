@@ -48,14 +48,16 @@ function sectionNumber(slug: string): string {
 const eyebrowLabel =
   type === 'photos' ? 'Photography' : post.section === 'VBC' ? 'VBC Series' : 'Essay';
 const eyebrowNumber = sectionNumber(post.slug);
-const datePublishedLabel = postDate
-  .toISOString()
-  .split('T')[0]
-  .replace(/-/g, '.');
-const lastUpdatedLabel = (post.dateModified ? new Date(post.dateModified) : postDate)
-  .toISOString()
-  .split('T')[0]
-  .replace(/-/g, '.');
+// Format the raw ISO date string directly to avoid a Date round-trip that
+// could shift the displayed day across timezones. `post.date` is the source
+// of truth — strip any time component and swap separators. Notion loader
+// guarantees a non-empty YYYY-MM-DD; an empty input yields an empty string.
+const formatIsoDate = (iso: string | undefined) =>
+  iso ? iso.split('T')[0].replace(/-/g, '.') : '';
+const datePublishedLabel = formatIsoDate(post.date);
+const hasMeaningfulModified =
+  !!post.dateModified && post.dateModified.split('T')[0] !== post.date.split('T')[0];
+const lastUpdatedLabel = hasMeaningfulModified ? formatIsoDate(post.dateModified) : '';
 
 // Calculate reading time
 const wordCount = post.content
@@ -136,14 +138,14 @@ const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </Fragment>
 
-  <article class="max-w-2xl mx-auto">
+  <article class:list={['post-article', { 'post-article--photos': type === 'photos' }]}>
     <header class="post-header">
       {/* Eyebrow: § NN · CATEGORY */}
-      <div class="post-eyebrow" aria-label={`Section ${eyebrowNumber}, ${eyebrowLabel}`}>
-        <span class="post-eyebrow-mark" aria-hidden="true">&sect;</span>
-        <span class="post-eyebrow-num">{eyebrowNumber}</span>
-        <span class="post-eyebrow-sep" aria-hidden="true">&middot;</span>
-        <span class="post-eyebrow-label">{eyebrowLabel}</span>
+      <div class="bm-eyebrow" aria-label={`Section ${eyebrowNumber}, ${eyebrowLabel}`}>
+        <span class="bm-eyebrow-mark" aria-hidden="true">&sect;</span>
+        <span class="bm-eyebrow-num">{eyebrowNumber}</span>
+        <span class="bm-eyebrow-sep" aria-hidden="true">&middot;</span>
+        <span class="bm-eyebrow-label">{eyebrowLabel}</span>
       </div>
 
       {/* Optional VBC series tie-in — quieter than the old pill */}
@@ -166,7 +168,7 @@ const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
         <span>{eyebrowLabel}</span>
         <span class="sep" aria-hidden="true">&middot;</span>
         <span>
-          <time datetime={postDate.toISOString().split('T')[0]}>{datePublishedLabel}</time>
+          <time datetime={post.date.split('T')[0]}>{datePublishedLabel}</time>
         </span>
         {
           type === 'writing' && (
@@ -178,8 +180,16 @@ const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
             </>
           )
         }
-        <span class="sep" aria-hidden="true">&middot;</span>
-        <span>Last updated {lastUpdatedLabel}</span>
+        {
+          hasMeaningfulModified && (
+            <>
+              <span class="sep" aria-hidden="true">
+                &middot;
+              </span>
+              <span>Last updated {lastUpdatedLabel}</span>
+            </>
+          )
+        }
       </div>
     </header>
 
@@ -187,7 +197,15 @@ const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
     {showToc && <TableOfContents items={tocItems} />}
 
     {/* Content - React island for markdown rendering */}
-    <ContentRenderer content={post.content} client:load />
+    {
+      type === 'photos' ? (
+        <div class="photos-content">
+          <ContentRenderer content={post.content} gallery client:load />
+        </div>
+      ) : (
+        <ContentRenderer content={post.content} client:load />
+      )
+    }
 
     {/* Footer slot for VBCFooter and PostsFooter */}
     <slot name="footer" />

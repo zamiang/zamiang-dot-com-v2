@@ -14,6 +14,7 @@ import { cn } from '../../lib/utils';
 
 interface ContentRendererProps {
   content: string;
+  gallery?: boolean;
 }
 
 function getTextContent(children: ReactNode): string {
@@ -26,7 +27,7 @@ function getTextContent(children: ReactNode): string {
   return '';
 }
 
-const components = {
+const baseComponents = {
   p: ({ children }: { children?: React.ReactNode }) => <p>{children}</p>,
   a: ({ children, href }: { children?: React.ReactNode; href?: string }) => (
     <a href={href}>{children}</a>
@@ -104,7 +105,17 @@ const components = {
   ),
 };
 
-export default function ContentRenderer({ content }: ContentRendererProps) {
+const galleryFigcaption = ({ children }: { children?: React.ReactNode }) => (
+  <figcaption className="photos-cap">
+    <span className="cap-title">{children}</span>
+  </figcaption>
+);
+
+export default function ContentRenderer({ content, gallery = false }: ContentRendererProps) {
+  const components = gallery
+    ? { ...baseComponents, figcaption: galleryFigcaption }
+    : baseComponents;
+
   return (
     <div className="prose prose-slate max-w-none mb-12 prose-headings:font-serif prose-headings:font-medium prose-headings:text-foreground prose-p:text-foreground/90 prose-a:text-accent prose-a:no-underline hover:prose-a:text-accent/80 prose-strong:text-foreground prose-strong:font-semibold prose-blockquote:border-accent prose-blockquote:text-muted-foreground">
       <ReactMarkdown
