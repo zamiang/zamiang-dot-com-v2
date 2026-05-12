@@ -111,9 +111,58 @@ const galleryFigcaption = ({ children }: { children?: React.ReactNode }) => (
   </figcaption>
 );
 
+// Deterministic 4-digit faux file id from the image src filename — mirrors
+// PhotoCard.astro's telemetry so gallery cards share the same HUD treatment.
+function galleryFileId(src: string): string {
+  const name = src.split('/').pop() || src;
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
+  }
+  return `IMG_${String(hash % 10000).padStart(4, '0')}`;
+}
+
+const galleryImg = ({ src, alt }: { src?: string; alt?: string }) => {
+  if (!src) return null;
+  const fileId = galleryFileId(src);
+  return (
+    <div className="bm-photo bm-photo--inspect">
+      <img className="bm-photo-base" src={src} alt={alt || ''} loading="lazy" decoding="async" />
+      <img
+        className="bm-photo-line"
+        src={src}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+      />
+      <div className="bm-hud" aria-hidden="true">
+        <div className="bm-hud-brackets">
+          <b className="tl" />
+          <b className="tr" />
+          <b className="bl" />
+          <b className="br" />
+        </div>
+        <div className="bm-hud-reticle">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeLinecap="round">
+            <line x1="24" y1="6" x2="24" y2="42" strokeWidth="1.25" />
+            <line x1="6" y1="24" x2="42" y2="24" strokeWidth="1.25" />
+          </svg>
+        </div>
+        <div className="bm-hud-telemetry">
+          <div className="col">
+            <span className="lbl">File</span>
+            <span className="val">{fileId}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function ContentRenderer({ content, gallery = false }: ContentRendererProps) {
   const components = gallery
-    ? { ...baseComponents, figcaption: galleryFigcaption }
+    ? { ...baseComponents, figcaption: galleryFigcaption, img: galleryImg }
     : baseComponents;
 
   return (
