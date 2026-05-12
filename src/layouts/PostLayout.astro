@@ -134,7 +134,7 @@ const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </Fragment>
 
-  <article class="max-w-2xl mx-auto">
+  <article class:list={['post-article', { 'post-article--photos': type === 'photos' }]}>
     <header class="post-header">
       {/* Eyebrow: § NN · CATEGORY */}
       <div class="post-eyebrow" aria-label={`Section ${eyebrowNumber}, ${eyebrowLabel}`}>
@@ -185,7 +185,15 @@ const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
     {showToc && <TableOfContents items={tocItems} />}
 
     {/* Content - React island for markdown rendering */}
-    <ContentRenderer content={post.content} client:load />
+    {
+      type === 'photos' ? (
+        <div class="photos-content">
+          <ContentRenderer content={post.content} client:load />
+        </div>
+      ) : (
+        <ContentRenderer content={post.content} client:load />
+      )
+    }
 
     {/* Footer slot for VBCFooter and PostsFooter */}
     <slot name="footer" />
