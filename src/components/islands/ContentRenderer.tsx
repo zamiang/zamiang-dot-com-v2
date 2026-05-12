@@ -122,17 +122,46 @@ const galleryFigcaption = ({ children }: { children?: React.ReactNode }) => {
   const text = getTextContent(children);
   return (
     <figcaption className="photos-cap">
-      <span className="cap-title">{children}</span>
+      {text ? <span className="cap-title">{children}</span> : <span className="cap-title" />}
       <span className="cap-coords" aria-hidden="true">
-        {fauxCoords(text)}
+        {fauxCoords(text || 'frame')}
       </span>
     </figcaption>
   );
 };
 
+// In gallery mode, wrap figures so figures without a markdown caption still
+// get the decorative right-side coords. The figcaption itself is added as a
+// sibling and styled by .photos-cap.
+const galleryFigure = ({ children }: { children?: React.ReactNode }) => {
+  const childArray = React.Children.toArray(children);
+  const hasCaption = childArray.some(
+    (c) => isValidElement(c) && (c as React.ReactElement).type === 'figcaption',
+  );
+
+  if (hasCaption) return <figure>{children}</figure>;
+
+  // Derive a stable seed from any img src/alt found inside.
+  const img = childArray.find((c) => isValidElement(c) && (c as React.ReactElement).type === 'img');
+  const props = (isValidElement(img) ? (img.props as { src?: string; alt?: string }) : {}) || {};
+  const seed = props.alt || props.src || 'frame';
+
+  return (
+    <figure>
+      {children}
+      <figcaption className="photos-cap">
+        <span className="cap-title" />
+        <span className="cap-coords" aria-hidden="true">
+          {fauxCoords(seed)}
+        </span>
+      </figcaption>
+    </figure>
+  );
+};
+
 export default function ContentRenderer({ content, gallery = false }: ContentRendererProps) {
   const components = gallery
-    ? { ...baseComponents, figcaption: galleryFigcaption }
+    ? { ...baseComponents, figure: galleryFigure, figcaption: galleryFigcaption }
     : baseComponents;
 
   return (

@@ -78,7 +78,22 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
           logger.warn(`Failed to download image: ${src}`);
         }
 
-        return `<figure><img src="/images/${filename}" /></figure>`;
+        // Notion image blocks carry an optional rich-text caption — surface it
+        // as a <figcaption> so gallery layouts can render a title beneath each
+        // photo. HTML-escape to keep the raw markdown string safe.
+        const captionText = image.caption
+          .map((rt) => rt.plain_text)
+          .join('')
+          .trim();
+        const escape = (s: string) =>
+          s
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+        const caption = captionText ? `<figcaption>${escape(captionText)}</figcaption>` : '';
+
+        return `<figure><img src="/images/${filename}" alt="${escape(captionText)}" />${caption}</figure>`;
       });
 
       // Custom transformer for column layouts
