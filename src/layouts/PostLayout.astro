@@ -48,11 +48,12 @@ function sectionNumber(slug: string): string {
 const eyebrowLabel =
   type === 'photos' ? 'Photography' : post.section === 'VBC' ? 'VBC Series' : 'Essay';
 const eyebrowNumber = sectionNumber(post.slug);
-const datePublishedLabel = postDate.toISOString().split('T')[0].replace(/-/g, '.');
-const lastUpdatedLabel = (post.dateModified ? new Date(post.dateModified) : postDate)
-  .toISOString()
-  .split('T')[0]
-  .replace(/-/g, '.');
+// Format the raw ISO date string directly to avoid a Date round-trip that
+// could shift the displayed day across timezones. `post.date` is the source
+// of truth — strip any time component and swap separators.
+const formatIsoDate = (iso: string) => iso.split('T')[0].replace(/-/g, '.');
+const datePublishedLabel = formatIsoDate(post.date);
+const lastUpdatedLabel = formatIsoDate(post.dateModified ?? post.date);
 
 // Calculate reading time
 const wordCount = post.content
