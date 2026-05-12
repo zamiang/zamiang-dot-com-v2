@@ -48,10 +48,7 @@ function sectionNumber(slug: string): string {
 const eyebrowLabel =
   type === 'photos' ? 'Photography' : post.section === 'VBC' ? 'VBC Series' : 'Essay';
 const eyebrowNumber = sectionNumber(post.slug);
-const datePublishedLabel = postDate
-  .toISOString()
-  .split('T')[0]
-  .replace(/-/g, '.');
+const datePublishedLabel = postDate.toISOString().split('T')[0].replace(/-/g, '.');
 const lastUpdatedLabel = (post.dateModified ? new Date(post.dateModified) : postDate)
   .toISOString()
   .split('T')[0]

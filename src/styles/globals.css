@@ -1072,7 +1072,8 @@
     color: var(--muted-foreground);
     border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
     margin-bottom: 1.25rem;
-    transition: color var(--transition-fast) var(--ease-out),
+    transition:
+      color var(--transition-fast) var(--ease-out),
       border-color var(--transition-normal) var(--ease-out);
   }
 
