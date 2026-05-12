@@ -64,14 +64,17 @@
     "prettier": "3.8.3",
     "prettier-plugin-astro": "0.14.1",
     "react-syntax-highlighter": "16.1.1",
-    "typescript": "5.9.3",
-    "typescript-eslint": "8.59.2",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.59.3",
     "vite-tsconfig-paths": "6.1.1",
     "vitest": "4.1.5"
   },
   "overrides": {
     "minimatch": ">=10.2.1",
-    "lodash": ">=4.17.22"
+    "lodash": ">=4.17.22",
+    "tsconfck": {
+      "typescript": "$typescript"
+    }
   },
   "engines": {
     "node": "24.x"
