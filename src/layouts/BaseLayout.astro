@@ -118,31 +118,27 @@ const canonical = canonicalUrl || Astro.url.href;
             in="SourceGraphic"
             type="matrix"
             values="0.33 0.34 0.33 0 0  0.33 0.34 0.33 0 0  0.33 0.34 0.33 0 0  0 0 0 1 0"
-            result="g"
-          />
+            result="g"></feColorMatrix>
           <feConvolveMatrix
             in="g"
             order="3"
             preserveAlpha="true"
             kernelMatrix="-1 -1 -1 -1 8 -1 -1 -1 -1"
-            result="edge"
-          />
+            result="edge"></feConvolveMatrix>
           <feComponentTransfer in="edge" result="boost">
-            <feFuncR type="linear" slope="3.2" />
-            <feFuncG type="linear" slope="3.2" />
-            <feFuncB type="linear" slope="3.2" />
+            <feFuncR type="linear" slope="3.2"></feFuncR>
+            <feFuncG type="linear" slope="3.2"></feFuncG>
+            <feFuncB type="linear" slope="3.2"></feFuncB>
           </feComponentTransfer>
           <feColorMatrix
             in="boost"
             type="matrix"
             values="-1 0 0 0 0.94  0 -1 0 0 0.95  0 0 -1 0 0.96  0 0 0 1 0"
-            result="inv"
-          />
+            result="inv"></feColorMatrix>
           <feColorMatrix
             in="inv"
             type="matrix"
-            values="0.70 0 0 0 0.10  0 0.74 0 0 0.12  0 0 0.78 0 0.14  0 0 0 1 0"
-          />
+            values="0.70 0 0 0 0.10  0 0.74 0 0 0.12  0 0 0.78 0 0.14  0 0 0 1 0"></feColorMatrix>
         </filter>
       </defs>
     </svg>
