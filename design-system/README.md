@@ -35,7 +35,8 @@ A design system distilled from the personal website of **Brennan Moore** — eng
 | --- | --- |
 | `README.md` | This document. Brand context, visual foundations, content rules, iconography. |
 | `SKILL.md` | Skill manifest — makes this folder portable to Claude Code. |
-| `colors_and_type.css` | Tokens (CSS custom properties) + semantic class hooks (`.bm-prose`, `.bm-section-label`, etc). Includes Google Fonts import for EB Garamond + Lato. |
+| `colors_and_type.css` | Tokens (CSS custom properties) + semantic class hooks (`.bm-prose`, `.bm-section-label`, `.bm-photo`, `.bm-hud`, etc). Includes Google Fonts import for EB Garamond + Lato. |
+| `bm-filters.svg` | SVG filter definitions (currently `#bm-edge` for the photo inspect treatment). Inline once per page that uses `.bm-photo--inspect`. |
 | `assets/` | Logos, favicons, profile photo, sample photography. |
 | `assets/photos/` | Four representative photographs (portrait, landscape, architectural, detail) — copy these in when you need realistic imagery. |
 | `preview/` | One HTML card per design-system concept. Powers the Design System tab. |
@@ -141,6 +142,28 @@ No bounces, no springs, no slide-ins. Hover states fade in colour. The particle 
 - **Section cards (`.next-post`):** background opacity steps from `secondary/80` → `secondary`, border from `accent/20` → `accent/40`.
 - **No press states beyond colour** — no shrink, no shadow change. The system trusts the user to feel the click.
 
+#### Inspect treatment (scoped exception)
+
+The one place the system breaks its own "fade colour on hover" rule: photo cards may opt into an *inspect treatment* via `.bm-photo--inspect`, which cross-fades the photo to an edge-detected line-art layer with a dotted coordinate grid and a small copper HUD (corner brackets, focal-point reticle, monospace telemetry strip).
+
+**Scope.** Used only on photo cards: the photos index, the homepage photo grid, the recommended-photos footer, and inline images within photo posts (gated by `ContentRenderer`'s `gallery` prop). Inline images in writing posts, header portraits, and any other photographic surface use the base `.bm-photo`. The chrome must not appear around work cards, post cards, or non-photographic elements.
+
+**Composition.** Two parts, intentionally separable:
+- `.bm-photo--inspect` — the photo treatment (base → line-art cross-fade + grid)
+- `.bm-hud` + `.bm-hud-brackets` / `.bm-hud-reticle` / `.bm-hud-telemetry` — the overlay primitives, reusable on other positioned containers when paired with `.bm-hud.is-revealed`
+
+**Tokens.** `--hud` (defaults to `--accent-bold`), `--transition-reveal: 700ms` (the 4th motion duration, scoped to multi-element reveals), `--focal-x` / `--focal-y` (per-card reticle position).
+
+**Asset.** Requires `bm-filters.svg` (provides the `#bm-edge` SVG filter) inline or referenced once per page.
+
+**Motion.** Single cross-fade over `--transition-reveal`. No sweep, no scan beam, no slide-ins. HUD parts stagger by 120 / 200 / 250ms within the same window. Honors `prefers-reduced-motion` by collapsing the reveal to instant.
+
+**Accessibility.** The HUD is purely decorative; the overlay carries `aria-hidden="true"` and the underlying `<img>` retains the real `alt` text. Telemetry values are visual flavour — nothing functional is conveyed there alone.
+
+**Mobile.** No hover on touch — cards revert to the default `.bm-photo` behaviour. Don't wire a tap-to-toggle; the chrome is dense and rewards a pointing device.
+
+See `preview/components-photo-grid.html` for both states side by side.
+
 ### Borders, Radii, Shadow
 - **Borders.** Hairline (1px) `--border` for dividers, hairlines under section headings. Section cards: `border-color` from `accent/20`.
 - **Radii.** Headings get `border-radius: 4px` so highlight backgrounds (e.g. for selected text) look intentional. Cards: `rounded-lg` (8px). Photo cards: `rounded-sm` (2px) — almost square. Pill: only on the VBC badge (`px-3 py-1 rounded`).
@@ -202,4 +225,4 @@ Logos / brand marks:
 
 ---
 
-*Last updated 2026-05-08.*
+*Last updated 2026-05-12.*

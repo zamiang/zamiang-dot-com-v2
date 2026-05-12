@@ -20,7 +20,7 @@ export interface UseParticlesResult {
 }
 
 export function useParticles(): UseParticlesResult {
-  const [particles, setParticles] = useState<Particle[]>(initializeParticles);
+  const [particles, setParticles] = useState<Particle[]>([]);
   const particlesRef = useRef<Particle[]>(particles);
   const circlesRef = useRef<SVGCircleElement[]>([]);
   const animationFrameRef = useRef<number>(0);
@@ -61,6 +61,12 @@ export function useParticles(): UseParticlesResult {
     const newParticles = initializeParticles(window.innerWidth, window.innerHeight);
     setParticles(newParticles);
   }, []);
+
+  // Populate particles after mount so SSR and first client render match (avoids
+  // a hydration mismatch that left the SVG empty in production).
+  useEffect(() => {
+    handleResize();
+  }, [handleResize]);
 
   useEffect(() => {
     // Check for reduced motion preference

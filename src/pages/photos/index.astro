@@ -1,7 +1,7 @@
 ---
 /**
  * Photos index page
- * Two-column grid matching the homepage photo treatment.
+ * Displays all photos in a responsive grid with the inspect treatment.
  */
 
 import { getCollection } from 'astro:content';
@@ -21,18 +21,15 @@ const photos = (await getCollection('photos')).sort(
         <span class="bm-eyebrow-mark" aria-hidden="true">&sect;</span>
         <span class="bm-eyebrow-label">Photography</span>
       </div>
-      <h1 class="bm-section-display-title">Recent Frames</h1>
-      <p class="bm-section-tagline">
-        A scanning analysis on hover &mdash; the photograph holds its quiet by default; the system
-        reveals itself when you lean in.
-      </p>
+      <h1 class="bm-section-display-title">Recent Photos</h1>
+      <p class="bm-section-tagline">The system reveals itself when you lean in.</p>
     </header>
 
     {
       photos.length > 0 && (
-        <div class="homepage-photo-grid">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {photos.map((post) => (
-            <PhotoCard post={post.data} shouldHideText />
+            <PhotoCard post={post.data} />
           ))}
         </div>
       )

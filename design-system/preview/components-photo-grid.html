@@ -8,18 +8,92 @@
   html, body { margin: 0; padding: 0; background: var(--background); }
   body { font-family: var(--font-sans); color: var(--foreground); padding: 22px 24px; box-sizing: border-box; }
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-  .photo { aspect-ratio: 1/1; border-radius: 2px; overflow: hidden; background: #e8eaed; position: relative; }
-  .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .label { font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); margin-top: 8px; }
+  .stack { display: flex; flex-direction: column; gap: 28px; }
+  .stack h3 {
+    font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted-foreground); font-weight: 600;
+    margin: 0 0 6px;
+  }
 </style>
 </head>
 <body>
-<div class="grid">
-  <div class="photo"><img src="../assets/photos/portrait-bw.jpg" alt="" /></div>
-  <div class="photo"><img src="../assets/photos/landscape-warm.jpg" alt="" /></div>
-  <div class="photo"><img src="../assets/photos/architectural.jpg" alt="" /></div>
-  <div class="photo"><img src="../assets/photos/quiet-detail.jpg" alt="" /></div>
+
+<!-- Inline #bm-edge so the preview is standalone. Real pages reference bm-filters.svg. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="bm-edge" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feColorMatrix in="SourceGraphic" type="matrix"
+        values="0.33 0.34 0.33 0 0  0.33 0.34 0.33 0 0  0.33 0.34 0.33 0 0  0 0 0 1 0" result="g" />
+      <feConvolveMatrix in="g" order="3" preserveAlpha="true"
+        kernelMatrix="-1 -1 -1 -1 8 -1 -1 -1 -1" result="edge" />
+      <feComponentTransfer in="edge" result="boost">
+        <feFuncR type="linear" slope="3.2" /><feFuncG type="linear" slope="3.2" /><feFuncB type="linear" slope="3.2" />
+      </feComponentTransfer>
+      <feColorMatrix in="boost" type="matrix"
+        values="-1 0 0 0 0.94  0 -1 0 0 0.95  0 0 -1 0 0.96  0 0 0 1 0" result="inv" />
+      <feColorMatrix in="inv" type="matrix"
+        values="0.70 0 0 0 0.10  0 0.74 0 0 0.12  0 0 0.78 0 0.14  0 0 0 1 0" />
+    </filter>
+  </defs>
+</svg>
+
+<div class="stack">
+
+  <!-- Default state: .bm-photo -->
+  <div>
+    <h3>Default · .bm-photo</h3>
+    <div class="grid">
+      <div class="bm-photo"><img src="../assets/photos/portrait-bw.jpg" alt="" /></div>
+      <div class="bm-photo"><img src="../assets/photos/landscape-warm.jpg" alt="" /></div>
+      <div class="bm-photo"><img src="../assets/photos/architectural.jpg" alt="" /></div>
+      <div class="bm-photo"><img src="../assets/photos/quiet-detail.jpg" alt="" /></div>
+    </div>
+    <div class="label">PhotoCard grid — square crop · 2px radius · 6px gap · hover opacity 0.85</div>
+  </div>
+
+  <!-- Inspect state: .bm-photo--inspect -->
+  <div>
+    <h3>Inspect treatment · .bm-photo.bm-photo--inspect</h3>
+    <div class="grid">
+      <div class="bm-photo bm-photo--inspect" style="--focal-x:50%;--focal-y:42%">
+        <img class="bm-photo-base" src="../assets/photos/architectural.jpg" alt="" />
+        <img class="bm-photo-line" src="../assets/photos/architectural.jpg" alt="" aria-hidden="true" />
+        <div class="bm-hud" aria-hidden="true">
+          <div class="bm-hud-brackets"><span class="tl"></span><span class="tr"></span><span class="bl"></span><span class="br"></span></div>
+          <div class="bm-hud-reticle">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-linecap="round">
+              <line x1="24" y1="6"  x2="24" y2="42" stroke-width="1.25" />
+              <line x1="6"  y1="24" x2="42" y2="24" stroke-width="1.25" />
+            </svg>
+          </div>
+          <div class="bm-hud-telemetry">
+            <div class="bm-hud-col"><span class="bm-hud-lbl">File</span><span class="bm-hud-val">IMG_0247</span></div>
+            <div class="bm-hud-col bm-hud-col--right"><span class="bm-hud-lbl">Exposure</span><span class="bm-hud-val">f/2.8 · 1/250</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="bm-photo bm-photo--inspect" style="--focal-x:58%;--focal-y:50%">
+        <img class="bm-photo-base" src="../assets/photos/landscape-warm.jpg" alt="" />
+        <img class="bm-photo-line" src="../assets/photos/landscape-warm.jpg" alt="" aria-hidden="true" />
+        <div class="bm-hud" aria-hidden="true">
+          <div class="bm-hud-brackets"><span class="tl"></span><span class="tr"></span><span class="bl"></span><span class="br"></span></div>
+          <div class="bm-hud-reticle">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-linecap="round">
+              <line x1="24" y1="6"  x2="24" y2="42" stroke-width="1.25" />
+              <line x1="6"  y1="24" x2="42" y2="24" stroke-width="1.25" />
+            </svg>
+          </div>
+          <div class="bm-hud-telemetry">
+            <div class="bm-hud-col"><span class="bm-hud-lbl">File</span><span class="bm-hud-val">IMG_0391</span></div>
+            <div class="bm-hud-col bm-hud-col--right"><span class="bm-hud-lbl">Exposure</span><span class="bm-hud-val">f/8 · 1/60</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="label">Hover · cross-fade to edge-detected line-art + 32px grid · copper HUD · 700ms reveal</div>
+  </div>
+
 </div>
-<div class="label">PhotoCard grid — square crop · 2px radius · 6px gap · hover opacity 0.85</div>
 </body>
 </html>

@@ -27,6 +27,9 @@
   --font-size-3xl:   clamp(1.875rem, 1.50rem + 1.20vw, 2.500rem);
   --font-size-4xl:   clamp(2.25rem,  1.75rem + 1.50vw, 3.000rem);
 
+  --article-max-width: 600px;
+  --article-font-size: clamp(1rem, 0.95rem + 0.15vw, 1.0625rem); /* 16-17px */
+
   --line-height-tight:   1.30;
   --line-height-body:    1.70;
   --line-height-relaxed: 1.80;
@@ -70,13 +73,13 @@
   --tint-accent:  rgba(232, 239, 242, 0.85);
 
   /* ---------- Layout ---------- */
-  --content-max:       680px;   /* article + section width (mirror-only) */
   --resume-max-width:  960px;   /* homepage two-column grid (matches globals.css) */
 
   /* ---------- Motion ---------- */
   --transition-fast:   150ms;
   --transition-normal: 200ms;
   --transition-slow:   300ms;
+  --transition-reveal: 700ms;                          /* multi-element reveals (photo inspect) */
   --ease-out:          cubic-bezier(0.33, 1, 0.68, 1); /* Quart out */
 
   /* ---------- Radii / elevation ---------- */
@@ -91,6 +94,12 @@
   --shadow-soft: 0 1px 2px rgba(44, 51, 58, 0.04), 0 2px 8px rgba(44, 51, 58, 0.04);
   --shadow-card: 0 1px 3px rgba(44, 51, 58, 0.06), 0 4px 16px rgba(44, 51, 58, 0.05);
   --shadow-pop:  0 8px 24px rgba(44, 51, 58, 0.10);
+
+  /* ---------- HUD / inspect treatment ---------- */
+  --hud:           var(--accent-bold);           /* copper — inspect/HUD color */
+  --hud-stroke:    1.5px;
+  --focal-x:       50%;                          /* default reticle position */
+  --focal-y:       50%;
 }
 
 /* ==========================================================================
@@ -226,4 +235,179 @@ body.bm-prose {
   opacity: 0.025;
   pointer-events: none;
   z-index: 9999;
+}
+
+/* ==========================================================================
+   Photo card — default & inspect treatment
+   --------------------------------------------------------------------------
+   `.bm-photo` is the base photo container. Default hover is the system
+   standard (opacity 0.85).
+
+   `.bm-photo--inspect` is a SCOPED EXCEPTION to the system's hover rules —
+   the only place where hover does more than fade colour. Restricted to
+   photo cards (typically the photos index). Inline article images must use
+   the base `.bm-photo`, never `--inspect`.
+
+   Requires `bm-filters.svg` (or inline equivalent) on the page providing
+   the `#bm-edge` SVG filter.
+   ========================================================================== */
+
+.bm-photo {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--muted);
+  isolation: isolate;
+}
+.bm-photo > img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity var(--transition-normal) var(--ease-out);
+}
+.bm-photo:not(.bm-photo--inspect):hover > img { opacity: 0.85; }
+
+/* ── Inspect modifier ── */
+.bm-photo--inspect { cursor: pointer; }
+.bm-photo--inspect .bm-photo-base,
+.bm-photo--inspect .bm-photo-line {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity var(--transition-reveal) var(--ease-out),
+              filter var(--transition-reveal) var(--ease-out);
+}
+.bm-photo--inspect:hover .bm-photo-base {
+  filter: saturate(0.35) brightness(1.18) contrast(0.92);
+}
+.bm-photo--inspect .bm-photo-line {
+  opacity: 0;
+  filter: url(#bm-edge);
+}
+.bm-photo--inspect:hover .bm-photo-line { opacity: 0.78; }
+
+/* Dotted coordinate grid that fades in with the line-art layer */
+.bm-photo--inspect::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--accent) 32%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--accent) 32%, transparent) 1px, transparent 1px);
+  background-size: 32px 32px;
+  transition: opacity var(--transition-reveal) var(--ease-out);
+  z-index: 2;
+}
+.bm-photo--inspect:hover::before { opacity: 0.7; }
+
+/* ==========================================================================
+   HUD primitive
+   --------------------------------------------------------------------------
+   Decorative overlay for inspect-style states. Three composable parts:
+   `.bm-hud-brackets`, `.bm-hud-reticle`, `.bm-hud-telemetry`. The parent
+   `.bm-hud` is `aria-hidden` by convention — nothing inside should carry
+   meaning that's not also in the underlying content.
+
+   By default the HUD reveals on `:hover` of the nearest ancestor that sets
+   `position: relative` (i.e. `.bm-photo--inspect`). On other containers,
+   add `.is-revealed` to force the revealed state.
+   ========================================================================== */
+
+.bm-hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: var(--hud);
+  z-index: 5;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+
+/* Corner brackets — four crops at .tl .tr .bl .br */
+.bm-hud-brackets span {
+  position: absolute;
+  width: 22px; height: 22px;
+  opacity: 0;
+  transition: opacity var(--transition-normal) var(--ease-out) 120ms,
+              transform var(--transition-slow) var(--ease-out) 120ms;
+}
+.bm-hud-brackets span::before,
+.bm-hud-brackets span::after { content: ""; position: absolute; background: currentColor; }
+.bm-hud-brackets span::before { left: 0; top: 0; width: 100%; height: var(--hud-stroke); }
+.bm-hud-brackets span::after  { left: 0; top: 0; width: var(--hud-stroke); height: 100%; }
+.bm-hud-brackets span.tl { top: 10px; left: 10px;  transform: translate(-6px,-6px); }
+.bm-hud-brackets span.tr { top: 10px; right: 10px; transform: translate( 6px,-6px); }
+.bm-hud-brackets span.tr::before { right: 0; left: auto; }
+.bm-hud-brackets span.tr::after  { right: 0; left: auto; }
+.bm-hud-brackets span.bl { bottom: 10px; left: 10px;  transform: translate(-6px, 6px); }
+.bm-hud-brackets span.bl::before { bottom: 0; top: auto; }
+.bm-hud-brackets span.bl::after  { bottom: 0; top: auto; }
+.bm-hud-brackets span.br { bottom: 10px; right: 10px; transform: translate( 6px, 6px); }
+.bm-hud-brackets span.br::before { bottom: 0; top: auto; right: 0; left: auto; }
+.bm-hud-brackets span.br::after  { bottom: 0; top: auto; right: 0; left: auto; }
+
+.bm-photo--inspect:hover .bm-hud-brackets span,
+.bm-hud.is-revealed .bm-hud-brackets span { opacity: 1; transform: translate(0,0); }
+
+/* Reticle — focal-point indicator. Position with --focal-x / --focal-y. */
+.bm-hud-reticle {
+  position: absolute;
+  left: var(--focal-x); top: var(--focal-y);
+  width: 48px; height: 48px;
+  transform: translate(-50%,-50%) scale(0.6);
+  opacity: 0;
+  transition: opacity var(--transition-slow) var(--ease-out) 200ms,
+              transform var(--transition-slow) var(--ease-out) 200ms;
+}
+.bm-hud-reticle svg { width: 100%; height: 100%; display: block; }
+.bm-photo--inspect:hover .bm-hud-reticle,
+.bm-hud.is-revealed .bm-hud-reticle {
+  opacity: 1; transform: translate(-50%,-50%) scale(1);
+}
+
+/* Telemetry — monospace caption strip, two columns */
+.bm-hud-telemetry {
+  position: absolute;
+  left: 18px; right: 18px; bottom: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity var(--transition-normal) var(--ease-out) 250ms,
+              transform var(--transition-slow) var(--ease-out) 250ms;
+}
+.bm-hud-col { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.bm-hud-col--right { text-align: right; align-items: flex-end; }
+.bm-hud-lbl {
+  color: color-mix(in srgb, var(--hud) 60%, transparent);
+  font-size: 8.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.bm-hud-val {
+  color: var(--hud);
+  font-weight: 700;
+  font-size: 10px;
+  white-space: nowrap;
+}
+.bm-photo--inspect:hover .bm-hud-telemetry,
+.bm-hud.is-revealed .bm-hud-telemetry { opacity: 1; transform: translateY(0); }
+
+/* Reduce motion — collapse the reveal to instant */
+@media (prefers-reduced-motion: reduce) {
+  .bm-photo--inspect,
+  .bm-photo--inspect *,
+  .bm-hud,
+  .bm-hud * {
+    transition-duration: 0.01ms !important;
+    animation: none !important;
+  }
 }

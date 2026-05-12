@@ -9,6 +9,7 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
+import { photoFileId } from '../../lib/telemetry';
 import { slugify } from '../../lib/toc';
 import { cn } from '../../lib/utils';
 
@@ -111,9 +112,47 @@ const galleryFigcaption = ({ children }: { children?: React.ReactNode }) => (
   </figcaption>
 );
 
+const galleryImg = ({ src, alt }: { src?: string; alt?: string }) => {
+  if (!src) return null;
+  const fileId = photoFileId(src.split('/').pop() || src);
+  return (
+    <div className="bm-photo bm-photo--inspect">
+      <img className="bm-photo-base" src={src} alt={alt || ''} loading="lazy" decoding="async" />
+      <img
+        className="bm-photo-line"
+        src={src}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+      />
+      <div className="bm-hud" aria-hidden="true">
+        <div className="bm-hud-brackets">
+          <span className="tl" />
+          <span className="tr" />
+          <span className="bl" />
+          <span className="br" />
+        </div>
+        <div className="bm-hud-reticle">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeLinecap="round">
+            <line x1="24" y1="6" x2="24" y2="42" strokeWidth="1.25" />
+            <line x1="6" y1="24" x2="42" y2="24" strokeWidth="1.25" />
+          </svg>
+        </div>
+        <div className="bm-hud-telemetry">
+          <div className="bm-hud-col">
+            <span className="bm-hud-lbl">File</span>
+            <span className="bm-hud-val">{fileId}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function ContentRenderer({ content, gallery = false }: ContentRendererProps) {
   const components = gallery
-    ? { ...baseComponents, figcaption: galleryFigcaption }
+    ? { ...baseComponents, figcaption: galleryFigcaption, img: galleryImg }
     : baseComponents;
 
   return (

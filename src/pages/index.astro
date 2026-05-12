@@ -29,10 +29,15 @@ if (posts.length === 0 && vbcPosts.length === 0 && photos.length === 0) {
 
 const siteUrl = config.site.url;
 
-// Limit posts shown on homepage, sorted newest first
+// Limit homepage writing to 5 total cards. When the VBC series card is
+// rendered above the post list, it claims one of those slots — so the
+// number of individual posts shown drops to 4.
+const HOMEPAGE_WRITING_CARDS = 5;
+const hasVbcCard = vbcPosts.length > 0;
+const recentPostsLimit = HOMEPAGE_WRITING_CARDS - (hasVbcCard ? 1 : 0);
 const recentPosts = posts
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 5);
+  .slice(0, recentPostsLimit);
 
 // Schema.org JSON-LD for homepage
 const jsonLd = {
@@ -101,8 +106,6 @@ const jsonLd = {
     </div>
   </header>
 
-  <div class="section-rule resume-rule"></div>
-
   {/* Primary Content: Writing + Photography */}
   <div class="homepage-primary">
     {
@@ -160,11 +163,8 @@ const jsonLd = {
               </span>
               <span class="bm-eyebrow-label">Photography</span>
             </div>
-            <h2 class="bm-section-display-title">Recent Frames</h2>
-            <p class="bm-section-tagline">
-              A scanning analysis on hover &mdash; the photograph holds its quiet by default; the
-              system reveals itself when you lean in.
-            </p>
+            <h2 class="bm-section-display-title">Recent Photos</h2>
+            <p class="bm-section-tagline">The system reveals itself when you lean in.</p>
           </header>
           <div class="homepage-photo-grid">
             {photos.slice(0, 8).map((post) => (
@@ -181,52 +181,54 @@ const jsonLd = {
     }
   </div>
 
-  <div class="section-rule resume-rule"></div>
-
-  {/* Secondary Content: Experience + Sidebar */}
+  {/* Secondary Content: Currently, Experience, Publications */}
   <div class="resume-layout">
-    {/* Left Sidebar */}
-    <aside class="resume-sidebar">
-      <section>
-        <h2 class="resume-section-heading">Currently</h2>
-        <p class="text-sm text-muted-foreground">Consulting</p>
-        <p class="text-sm mt-2">
-          I work best with small teams, digging into the business to find what actually moves the
-          needle.
+    <div>
+      <section id="currently" class="currently-section">
+        <header class="bm-section-header">
+          <div class="bm-eyebrow" aria-label="Section 03, Currently">
+            <span class="bm-eyebrow-mark" aria-hidden="true">&sect;</span>
+            <span class="bm-eyebrow-num">03</span>
+            <span class="bm-eyebrow-sep" aria-hidden="true">&middot;</span>
+            <span class="bm-eyebrow-label">Currently</span>
+          </div>
+          <h2 class="bm-section-display-title">About Me</h2>
+        </header>
+        <p>
+          Consulting while working on <a href="https://www.kelp.nyc/">Kelp</a>, an AI assistant that
+          helps executives stay on top of their increasingly vast scopes. I'm drawn to product
+          problems where the hard part is messy data, complex requirements, and challenging
+          customers.
+        </p>
+        <p>Here's a little bit more about me:</p>
+        <p>
+          I came into tech through art &mdash; a fine art high school at UNCSA, BFA from the Museum
+          School in Boston, then a couple of years as a visiting researcher at the MIT Media Lab and
+          MIT CSAIL publishing in human-computer interaction, then leading web engineering at Artsy
+          through live auctions and art fairs. Most recently, I spent nine years in healthcare:
+          joined Cityblock Health as the first engineer and grew with it &mdash; eventually running
+          the engineering org as we hit a $1.3B valuation with fewer than 25 engineers (pre-AI)
+          &mdash; and three years as CTO of Firsthand, including holding the technology org together
+          through growth to ~28 offices and then a wind-down. Having now seen a full startup cycle,
+          I'm channeling that same small-team-against-hard-requirements energy into what's next.
+        </p>
+        <p>
+          Outside of work, I'm in Park Slope with my partner, spending more time building apps to
+          teach me Taiwan Mandarin than studying, and writing at <a href="/">zamiang.com</a> about team
+          trust, engineering leadership, and why VBC might just be too hard a problem to solve.
         </p>
       </section>
 
-      <section id="publications">
-        <h2 class="resume-section-heading">Publications</h2>
-        <div class="publication-entry">
-          <h4>
-            <a
-              href="https://v1.personalinformatics.org/docs/chi2010/moore_assisted_self_reflection.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Assisted Self Reflection
-            </a>
-          </h4>
-          <p><i>Moore, Van Kleek, Karger, schraefel</i> — CHI 2010</p>
-        </div>
-        <div class="publication-entry">
-          <h4>
-            <a
-              href="https://dl.acm.org/doi/10.1145/1772690.1772787"
-              target="_blank"
-              rel="noopener noreferrer">Atomate It!</a
-            >
-          </h4>
-          <p><i>Van Kleek, Moore, Karger, André, Schraefel</i> — WWW 2010</p>
-        </div>
-      </section>
-    </aside>
-
-    {/* Right Main Column */}
-    <div>
       <section id="work">
-        <h2 class="resume-section-heading">Experience</h2>
+        <header class="bm-section-header">
+          <div class="bm-eyebrow" aria-label="Section 04, Experience">
+            <span class="bm-eyebrow-mark" aria-hidden="true">&sect;</span>
+            <span class="bm-eyebrow-num">04</span>
+            <span class="bm-eyebrow-sep" aria-hidden="true">&middot;</span>
+            <span class="bm-eyebrow-label">Experience</span>
+          </div>
+          <h2 class="bm-section-display-title">Jobs</h2>
+        </header>
 
         <div class="work-card">
           <div class="work-card-header">
@@ -274,8 +276,8 @@ const jsonLd = {
           <p class="work-card-description">
             As the 3rd team member, I was instrumental in incubating and launching Cityblock from
             within Alphabet's Sidewalk Labs. My team built the core data and software technology
-            foundation, including data-sharing partnerships with payers and Commons—the proprietary
-            care management platform.
+            foundation, including data-sharing partnerships with payers and Commons&mdash;the
+            proprietary care management platform.
           </p>
         </div>
 
@@ -293,6 +295,40 @@ const jsonLd = {
             Motivate (Citi Bike), HCI research at MIT CSAIL and working at the MIT Media lab on
             visualizations for Ars Electronica.
           </p>
+        </div>
+      </section>
+
+      <section id="publications">
+        <header class="bm-section-header">
+          <div class="bm-eyebrow" aria-label="Section 05, Publications">
+            <span class="bm-eyebrow-mark" aria-hidden="true">&sect;</span>
+            <span class="bm-eyebrow-num">05</span>
+            <span class="bm-eyebrow-sep" aria-hidden="true">&middot;</span>
+            <span class="bm-eyebrow-label">Publications</span>
+          </div>
+          <h2 class="bm-section-display-title">HCI Publications</h2>
+        </header>
+        <div class="publication-entry">
+          <h4>
+            <a
+              href="https://v1.personalinformatics.org/docs/chi2010/moore_assisted_self_reflection.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Assisted Self Reflection
+            </a>
+          </h4>
+          <p><i>Moore, Van Kleek, Karger, schraefel</i> &mdash; CHI 2010</p>
+        </div>
+        <div class="publication-entry">
+          <h4>
+            <a
+              href="https://dl.acm.org/doi/10.1145/1772690.1772787"
+              target="_blank"
+              rel="noopener noreferrer">Atomate It!</a
+            >
+          </h4>
+          <p><i>Van Kleek, Moore, Karger, André, Schraefel</i> &mdash; WWW 2010</p>
         </div>
       </section>
     </div>
