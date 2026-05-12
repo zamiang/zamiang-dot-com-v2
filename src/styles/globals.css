@@ -1030,10 +1030,10 @@
      monospace meta strip bracketed by hairline rules.
      -------------------------------------------------------------------------- */
   .post-header {
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem;
   }
 
-  .post-eyebrow {
+  .post-header .post-eyebrow {
     font-family: var(--font-mono);
     font-size: 0.7rem;
     letter-spacing: 0.16em;
@@ -1042,28 +1042,27 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.625rem;
   }
 
-  .post-eyebrow-mark {
+  .post-header .post-eyebrow > * {
+    color: var(--accent-bold);
+  }
+
+  .post-header .post-eyebrow-mark {
     font-family: var(--font-serif);
     font-style: italic;
     font-size: 0.95rem;
     letter-spacing: 0;
     line-height: 1;
-    color: var(--accent-bold);
   }
 
-  .post-eyebrow-num {
+  .post-header .post-eyebrow-num {
     font-weight: 700;
   }
 
-  .post-eyebrow-sep {
+  .post-header .post-eyebrow-sep {
     color: color-mix(in srgb, var(--accent-bold) 45%, transparent);
-  }
-
-  .post-eyebrow-label {
-    color: var(--accent-bold);
   }
 
   .post-series-link {
@@ -1094,7 +1093,7 @@
     line-height: 1.08;
     letter-spacing: -0.01em;
     color: var(--foreground);
-    margin: 0 0 1rem 0;
+    margin: 0 0 0.625rem 0;
   }
 
   .post-subtitle {
@@ -1104,7 +1103,7 @@
     font-size: clamp(1.125rem, 1rem + 0.4vw, 1.35rem);
     line-height: 1.5;
     color: var(--muted-foreground);
-    margin: 0 0 2rem 0;
+    margin: 0 0 1.5rem 0;
     max-width: 60ch;
   }
 
