@@ -15,7 +15,7 @@
   /* ---------- Type families ---------- */
   --font-serif: 'EB Garamond', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
   --font-sans:  'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --font-mono:  Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  --font-mono:  'JetBrains Mono', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
 
   /* ---------- Type scale (fluid, clamp-based) ---------- */
   --font-size:       1.125rem;                                  /* 18px base */

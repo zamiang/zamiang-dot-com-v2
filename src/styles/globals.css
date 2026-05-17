@@ -23,7 +23,7 @@
   --font-sans:
     'Lato', 'EB Garamond Fallback', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     sans-serif;
-  --font-mono: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
   --color-input: var(--input);
   --color-border: var(--border);
   --color-accent-foreground: var(--accent-foreground);
@@ -1096,10 +1096,11 @@
 
   .resume-header-info h1 {
     font-family: var(--font-serif);
-    font-size: var(--font-size-2xl);
+    font-size: var(--font-size-3xl);
     font-weight: 600;
     margin: 0;
-    line-height: 1.2;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
   }
 
   .resume-header-info p {
@@ -1418,9 +1419,9 @@
 
   .bm-section-display-title {
     font-family: var(--font-serif);
-    font-size: var(--font-size-2xl);
+    font-size: var(--font-size-xl);
     font-weight: 500;
-    line-height: 1.15;
+    line-height: 1.2;
     letter-spacing: -0.005em;
     color: var(--foreground);
     margin: 0 0 0.5rem 0;
