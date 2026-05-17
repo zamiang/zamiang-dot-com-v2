@@ -8,6 +8,7 @@ import { getCollection } from 'astro:content';
 
 import PhotoCard from '../components/PhotoCard.astro';
 import PostCard from '../components/PostCard.astro';
+import SectionRail from '../components/islands/SectionRail';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { VBC_TITLE, config } from '../lib/config';
 
@@ -78,6 +79,9 @@ const jsonLd = {
   <Fragment slot="json-ld">
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </Fragment>
+
+  <SectionRail client:visible />
+
 
   {/* Compact Header */}
   <header class="resume-header">

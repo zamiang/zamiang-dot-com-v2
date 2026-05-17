@@ -158,6 +158,22 @@
     overflow-x: hidden; /* Prevent horizontal scroll from 100vw elements */
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  :target,
+  .homepage-primary > section,
+  .resume-layout section {
+    scroll-margin-top: 2rem;
+  }
+
   /* Subtle noise texture overlay for depth */
   body::after {
     content: '';
