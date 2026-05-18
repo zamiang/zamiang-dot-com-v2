@@ -8,6 +8,7 @@ import { getCollection } from 'astro:content';
 
 import PhotoCard from '../components/PhotoCard.astro';
 import PostCard from '../components/PostCard.astro';
+import SectionRail from '../components/islands/SectionRail';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { VBC_TITLE, config } from '../lib/config';
 
@@ -51,7 +52,7 @@ const jsonLd = {
       image: `${siteUrl}/about.jpg`,
       jobTitle: 'CTO / Engineering Leader',
       description:
-        'I see engineering as a creative craft. I build innovative digital products by creating elegant solutions for complex problems.',
+        'I make calm software in messy industries — most recently healthcare and value-based care. Writing, photography, and notes from the work.',
       sameAs: [],
     },
     {
@@ -79,6 +80,8 @@ const jsonLd = {
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </Fragment>
 
+  <SectionRail client:visible />
+
   {/* Compact Header */}
   <header class="resume-header">
     <img
@@ -91,7 +94,7 @@ const jsonLd = {
     />
     <div class="resume-header-info">
       <h1>Brennan Moore</h1>
-      <p>CTO / Engineering Leader — I build innovative digital products people love.</p>
+      <p>CTO / Engineering Leader — I make calm software in messy industries.</p>
       <div class="resume-links">
         <a
           href="https://www.linkedin.com/in/brennan-moore/"
@@ -133,7 +136,7 @@ const jsonLd = {
                 slug: vbcPosts[0].data.slug,
                 title: VBC_TITLE,
                 date: vbcPosts[0].data.date,
-                excerpt: `${vbcPosts.length}-part series on healthcare technology`,
+                excerpt: `A ${vbcPosts.length}-part series on why fixing American healthcare from the inside is harder than it looks.`,
               }}
             />
           )}
@@ -186,12 +189,6 @@ const jsonLd = {
     <div>
       <section id="currently" class="currently-section">
         <header class="bm-section-header">
-          <div class="bm-eyebrow" aria-label="Section 03, Currently">
-            <span class="bm-eyebrow-mark" aria-hidden="true">&sect;</span>
-            <span class="bm-eyebrow-num">03</span>
-            <span class="bm-eyebrow-sep" aria-hidden="true">&middot;</span>
-            <span class="bm-eyebrow-label">Currently</span>
-          </div>
           <h2 class="bm-section-display-title">About Me</h2>
         </header>
         <p>
@@ -221,13 +218,7 @@ const jsonLd = {
 
       <section id="work">
         <header class="bm-section-header">
-          <div class="bm-eyebrow" aria-label="Section 04, Experience">
-            <span class="bm-eyebrow-mark" aria-hidden="true">&sect;</span>
-            <span class="bm-eyebrow-num">04</span>
-            <span class="bm-eyebrow-sep" aria-hidden="true">&middot;</span>
-            <span class="bm-eyebrow-label">Experience</span>
-          </div>
-          <h2 class="bm-section-display-title">Jobs</h2>
+          <h2 class="bm-section-display-title">Selected Work</h2>
         </header>
 
         <div class="work-card">
@@ -300,12 +291,6 @@ const jsonLd = {
 
       <section id="publications">
         <header class="bm-section-header">
-          <div class="bm-eyebrow" aria-label="Section 05, Publications">
-            <span class="bm-eyebrow-mark" aria-hidden="true">&sect;</span>
-            <span class="bm-eyebrow-num">05</span>
-            <span class="bm-eyebrow-sep" aria-hidden="true">&middot;</span>
-            <span class="bm-eyebrow-label">Publications</span>
-          </div>
           <h2 class="bm-section-display-title">HCI Publications</h2>
         </header>
         <div class="publication-entry">

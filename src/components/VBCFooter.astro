@@ -1,7 +1,8 @@
 ---
 /**
  * VBCFooter Component (Astro)
- * Shows the VBC series navigation at the bottom of VBC posts
+ * Shows the VBC series navigation at the bottom of VBC posts.
+ * Uses the homepage editorial pattern (bm-section-header + tagline).
  */
 
 import type { CollectionEntry } from 'astro:content';
@@ -9,10 +10,9 @@ import { getCollection } from 'astro:content';
 
 import SeriesPostCard from './SeriesPostCard.astro';
 
-// VBC constants
 const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
-const VBC_DESCRIPTION =
-  'This series argues that U.S. healthcare is "harder than rocket science" due to its "consolidated fragmentation," where powerful, siloed players hinder effective, affordable patient care.';
+const VBC_TAGLINE =
+  'A series on why American healthcare is harder than rocket science: consolidated fragmentation, siloed power, and the patients caught in between.';
 
 interface Props {
   currentSlug: string;
@@ -20,7 +20,6 @@ interface Props {
 
 const { currentSlug } = Astro.props;
 
-// Get VBC posts from collection
 let vbcPosts: CollectionEntry<'vbcPosts'>[] = [];
 
 try {
@@ -36,23 +35,27 @@ const indexOfSlug = vbcPosts.findIndex((p) => p.data.slug === currentSlug);
 
 {
   vbcPosts.length > 0 && (
-    <section class="section-wrapper section-wrapper--accent" aria-labelledby="vbc-series-heading">
-      <div class="section-wrapper-inner">
-        <p class="section-label">VBC Deep Dive</p>
-        <h2 id="vbc-series-heading" class="section-heading">
+    <section aria-labelledby="vbc-series-heading">
+      <hr class="section-rule" aria-hidden="true" />
+      <header class="bm-section-header">
+        <div class="bm-eyebrow" aria-hidden="true">
+          <span class="bm-eyebrow-mark">&sect;</span>
+          <span class="bm-eyebrow-sep">&middot;</span>
+          <span class="bm-eyebrow-label">The Series</span>
+        </div>
+        <h2 id="vbc-series-heading" class="bm-section-display-title">
           {VBC_TITLE}
         </h2>
-        <p class="section-subtitle">{VBC_DESCRIPTION}</p>
-        <div class="section-rule" aria-hidden="true" />
-        {vbcPosts.map((post, index) => (
-          <SeriesPostCard
-            post={post.data}
-            isPast={index < indexOfSlug}
-            isCurrent={index === indexOfSlug}
-            isNext={index === indexOfSlug + 1}
-          />
-        ))}
-      </div>
+        <p class="bm-section-tagline">{VBC_TAGLINE}</p>
+      </header>
+      {vbcPosts.map((post, index) => (
+        <SeriesPostCard
+          post={post.data}
+          isPast={index < indexOfSlug}
+          isCurrent={index === indexOfSlug}
+          isNext={index === indexOfSlug + 1}
+        />
+      ))}
     </section>
   )
 }

@@ -23,7 +23,7 @@
   --font-sans:
     'Lato', 'EB Garamond Fallback', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     sans-serif;
-  --font-mono: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
   --color-input: var(--input);
   --color-border: var(--border);
   --color-accent-foreground: var(--accent-foreground);
@@ -156,6 +156,22 @@
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
     overflow-x: hidden; /* Prevent horizontal scroll from 100vw elements */
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  :target,
+  .homepage-primary > section,
+  .resume-layout section {
+    scroll-margin-top: 2rem;
   }
 
   /* Subtle noise texture overlay for depth */
@@ -1096,10 +1112,11 @@
 
   .resume-header-info h1 {
     font-family: var(--font-serif);
-    font-size: var(--font-size-2xl);
+    font-size: var(--font-size-3xl);
     font-weight: 600;
     margin: 0;
-    line-height: 1.2;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
   }
 
   .resume-header-info p {
@@ -1418,9 +1435,9 @@
 
   .bm-section-display-title {
     font-family: var(--font-serif);
-    font-size: var(--font-size-2xl);
+    font-size: var(--font-size-xl);
     font-weight: 500;
-    line-height: 1.15;
+    line-height: 1.2;
     letter-spacing: -0.005em;
     color: var(--foreground);
     margin: 0 0 0.5rem 0;
@@ -1450,6 +1467,16 @@
 
   .post-article--photos {
     max-width: 1200px;
+  }
+
+  /* Recommended-content sections rendered below post articles.
+     Match the writing column so the footer continues the reading rhythm
+     even on photo pages where the article wrapper widens to 1200px. */
+  .posts-footer-section {
+    width: 100%;
+    max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .photos-content {
