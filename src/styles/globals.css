@@ -1469,6 +1469,16 @@
     max-width: 1200px;
   }
 
+  /* Recommended-content sections rendered below post articles.
+     Match the writing column so the footer continues the reading rhythm
+     even on photo pages where the article wrapper widens to 1200px. */
+  .posts-footer-section {
+    width: 100%;
+    max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   .photos-content {
     margin-top: 2rem;
   }

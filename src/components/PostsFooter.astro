@@ -1,7 +1,8 @@
 ---
 /**
  * PostsFooter Component (Astro)
- * Shows recommended posts and photos at the bottom of a post
+ * Shows recommended posts and photos at the bottom of a post.
+ * Uses the homepage editorial pattern (bm-section-header + tagline).
  */
 
 import type { CollectionEntry } from 'astro:content';
@@ -16,7 +17,6 @@ interface Props {
 
 const { currentSlug } = Astro.props;
 
-// Get posts and photos from collections
 let posts: CollectionEntry<'posts'>[] = [];
 let photos: CollectionEntry<'photos'>[] = [];
 
@@ -34,52 +34,50 @@ const filteredPosts = posts.filter((p) => p.data.slug !== currentSlug).slice(0, 
 const filteredPhotos = photos.filter((p) => p.data.slug !== currentSlug).slice(0, 6);
 ---
 
-<div>
-  {/* Recommended Writing - Warm background */}
-  {
-    filteredPosts.length > 0 && (
-      <section
-        class="section-wrapper section-wrapper--warm"
-        aria-labelledby="recommended-writing-heading"
-      >
-        <div class="section-wrapper-inner">
-          <p class="section-label">More to Read</p>
-          <h2 id="recommended-writing-heading" class="section-heading">
-            Recommended Writing
-          </h2>
-          <p class="section-subtitle">
-            Essays on engineering leadership, startups, and building teams.
-          </p>
-          <div class="section-rule" aria-hidden="true" />
-          {filteredPosts.map((post) => (
-            <PostCard post={post.data} />
-          ))}
+{
+  filteredPosts.length > 0 && (
+    <section class="posts-footer-section" aria-labelledby="recommended-writing-heading">
+      <hr class="section-rule" aria-hidden="true" />
+      <header class="bm-section-header">
+        <div class="bm-eyebrow" aria-hidden="true">
+          <span class="bm-eyebrow-mark">&sect;</span>
+          <span class="bm-eyebrow-sep">&middot;</span>
+          <span class="bm-eyebrow-label">More Reading</span>
         </div>
-      </section>
-    )
-  }
+        <h2 id="recommended-writing-heading" class="bm-section-display-title">
+          More Essays
+        </h2>
+        <p class="bm-section-tagline">
+          On engineering leadership, value-based care, and the craft of building.
+        </p>
+      </header>
+      {filteredPosts.map((post) => (
+        <PostCard post={post.data} />
+      ))}
+    </section>
+  )
+}
 
-  {/* Recommended Photos - Muted background */}
-  {
-    filteredPhotos.length > 0 && (
-      <section
-        class="section-wrapper section-wrapper--muted"
-        aria-labelledby="recommended-photos-heading"
-      >
-        <div class="section-wrapper-inner">
-          <p class="section-label">Visual Stories</p>
-          <h2 id="recommended-photos-heading" class="section-heading">
-            Recommended Photos
-          </h2>
-          <p class="section-subtitle">Capturing moments from travels and everyday life.</p>
-          <div class="section-rule" aria-hidden="true" />
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {filteredPhotos.map((post) => (
-              <PhotoCard post={post.data} />
-            ))}
-          </div>
+{
+  filteredPhotos.length > 0 && (
+    <section class="posts-footer-section" aria-labelledby="recommended-photos-heading">
+      <hr class="section-rule" aria-hidden="true" />
+      <header class="bm-section-header">
+        <div class="bm-eyebrow" aria-hidden="true">
+          <span class="bm-eyebrow-mark">&sect;</span>
+          <span class="bm-eyebrow-sep">&middot;</span>
+          <span class="bm-eyebrow-label">More Photos</span>
         </div>
-      </section>
-    )
-  }
-</div>
+        <h2 id="recommended-photos-heading" class="bm-section-display-title">
+          Recent Frames
+        </h2>
+        <p class="bm-section-tagline">Slow looking from the same eye.</p>
+      </header>
+      <div class="homepage-photo-grid">
+        {filteredPhotos.map((post) => (
+          <PhotoCard post={post.data} shouldHideText />
+        ))}
+      </div>
+    </section>
+  )
+}
