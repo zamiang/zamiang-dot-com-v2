@@ -55,10 +55,9 @@ export default function SectionRail() {
     const hero = document.querySelector('.resume-header');
     let heroObserver: IntersectionObserver | null = null;
     if (hero) {
-      heroObserver = new IntersectionObserver(
-        ([entry]) => setVisible(!entry.isIntersecting),
-        { threshold: 0 },
-      );
+      heroObserver = new IntersectionObserver(([entry]) => setVisible(!entry.isIntersecting), {
+        threshold: 0,
+      });
       heroObserver.observe(hero);
     } else {
       setVisible(true);
@@ -72,7 +71,10 @@ export default function SectionRail() {
   }, []);
 
   return (
-    <nav className={`section-rail${visible ? ' section-rail--visible' : ''}`} aria-label="Page sections">
+    <nav
+      className={`section-rail${visible ? ' section-rail--visible' : ''}`}
+      aria-label="Page sections"
+    >
       <style>{`
         .section-rail {
           position: fixed;
