@@ -77,7 +77,9 @@ export default defineConfig({
         "img-src 'self' data: https://static.cloudflareinsights.com",
         "font-src 'self' https://fonts.gstatic.com",
         "connect-src 'self' https://cloudflareinsights.com",
-        "frame-ancestors 'none'",
+        // No frame-ancestors here: per the CSP spec, browsers ignore it when
+        // delivered via <meta http-equiv>. The X-Frame-Options: DENY header
+        // in public/_headers provides the actual framing protection.
         "base-uri 'self'",
         "form-action 'self'",
       ],
