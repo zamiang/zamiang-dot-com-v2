@@ -26,9 +26,16 @@ describe('Header', () => {
   describe('desktop navigation', () => {
     it('should render all navigation links', () => {
       render(<Header />);
-      expect(screen.getByRole('link', { name: 'Work' })).toHaveAttribute('href', '/#work');
-      expect(screen.getByRole('link', { name: 'Writing' })).toHaveAttribute('href', '/#writing');
-      expect(screen.getByRole('link', { name: 'Photography' })).toHaveAttribute(
+      // Each link appears twice (desktop nav + mobile menu). Mobile is hidden
+      // via globals.css at runtime, but that stylesheet isn't loaded in tests,
+      // so we assert on the first (desktop) match — same pattern as the
+      // resume-link test below.
+      expect(screen.getAllByRole('link', { name: 'Work' })[0]).toHaveAttribute('href', '/#work');
+      expect(screen.getAllByRole('link', { name: 'Writing' })[0]).toHaveAttribute(
+        'href',
+        '/#writing',
+      );
+      expect(screen.getAllByRole('link', { name: 'Photography' })[0]).toHaveAttribute(
         'href',
         '/#photography',
       );

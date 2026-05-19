@@ -36,50 +36,6 @@ export default function Header() {
 
   return (
     <header className="relative z-50">
-      <style>{`
-        /* Hide checkbox visually but keep it accessible */
-        .mobile-menu-toggle {
-          position: absolute;
-          opacity: 0;
-          width: 44px;
-          height: 44px;
-          cursor: pointer;
-          z-index: 100;
-          margin: 0;
-          right: 0.375rem;
-          top: 50%;
-          transform: translateY(-50%);
-        }
-
-        /* Show hamburger icon by default, hide X */
-        .mobile-menu-toggle ~ .menu-button .icon-close { display: none; }
-        .mobile-menu-toggle ~ .menu-button .icon-open { display: block; }
-
-        /* When checked: show X, hide hamburger */
-        .mobile-menu-toggle:checked ~ .menu-button .icon-close { display: block; }
-        .mobile-menu-toggle:checked ~ .menu-button .icon-open { display: none; }
-
-        /* Hide menu by default */
-        .mobile-menu { display: none; }
-
-        /* Show menu when checkbox is checked */
-        .mobile-menu-toggle:checked ~ .mobile-menu { display: block; }
-
-        /* Focus ring for accessibility */
-        .mobile-menu-toggle:focus-visible ~ .menu-button {
-          outline: 2px solid var(--color-accent);
-          outline-offset: 2px;
-          border-radius: 4px;
-        }
-
-        @media (min-width: 768px) {
-          .mobile-menu-toggle,
-          .menu-button,
-          .mobile-menu {
-            display: none !important;
-          }
-        }
-      `}</style>
       <nav aria-label="Main navigation" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 relative">
           <div className="flex items-center">
