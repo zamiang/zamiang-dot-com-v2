@@ -12,11 +12,12 @@ on:
 
 jobs:
   claude-review:
-    # Optional: Filter by PR author
-    # if: |
-    #   github.event.pull_request.user.login == 'external-contributor' ||
-    #   github.event.pull_request.user.login == 'new-developer' ||
-    #   github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR'
+    # Only review PRs from collaborators. A fork PR from a random user must not
+    # be able to spin up Claude on our account.
+    if: |
+      github.event.pull_request.author_association == 'OWNER' ||
+      github.event.pull_request.author_association == 'MEMBER' ||
+      github.event.pull_request.author_association == 'COLLABORATOR'
 
     runs-on: ubuntu-latest
     permissions:
@@ -40,14 +41,16 @@ jobs:
             REPO: ${{ github.repository }}
             PR NUMBER: ${{ github.event.pull_request.number }}
 
-            Please review this pull request and provide feedback on:
-            - Code quality and best practices
-            - Potential bugs or issues
-            - Performance considerations
-            - Security concerns
-            - Test coverage
+            Review this pull request against the guidance in CLAUDE.md.
+            Prioritize, in order:
+            1. Correctness bugs (Notion API v5 usage, Astro islands hydration, TypeScript errors, dropped promises).
+            2. Security: secrets handling, env var leaks, unsafe HTML/Notion content rendering.
+            3. Accessibility and semantic markup (WCAG 2.1 AA per design principles).
+            4. Test coverage for new behavior.
+            5. Design-system token drift if styles or `design-system/` files changed.
 
-            Use the repository's CLAUDE.md for guidance on style and conventions. Be constructive and helpful in your feedback.
+            Skip stylistic nits already covered by ESLint, Prettier, or the design system.
+            Prefix preferential feedback with "(nit)". Post one consolidated review.
 
             Use `gh pr comment` with your Bash tool to leave your review as a comment on the PR.
 
