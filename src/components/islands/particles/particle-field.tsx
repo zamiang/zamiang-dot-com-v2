@@ -76,10 +76,17 @@ export default function ParticleField() {
     let rafId = 0;
     let frozen = false;
 
-    // FPS watchdog state
-    const frameTimes: number[] = [];
+    // FPS watchdog state. We track a running average of recent frame times
+    // (cheap, no per-frame allocations) and only evaluate every WATCHDOG_WINDOW_MS.
+    // Once we've passed a few evaluations cleanly the device is clearly capable,
+    // so we disable the watchdog to avoid burning CPU on a check that won't fire.
     let lastFrameTime = startTime;
-    let watchdogTripped = false;
+    let watchdogActive = true;
+    let watchdogFrameSum = 0;
+    let watchdogFrameCount = 0;
+    let watchdogLastEval = startTime;
+    let watchdogPasses = 0;
+    const WATCHDOG_PASSES_TO_DISABLE = 5;
 
     const tick = () => {
       const now = performance.now();
@@ -99,23 +106,27 @@ export default function ParticleField() {
         return;
       }
 
-      // Watchdog: keep a sliding window of recent frame durations (cap at
-      // ~120 entries ≈ 2s @ 60fps). Skip the first 500ms to avoid mount cost.
-      if (!watchdogTripped && now - startTime > 500) {
-        frameTimes.push(dt);
-        const maxSamples = Math.ceil(WATCHDOG_WINDOW_MS / 16);
-        if (frameTimes.length > maxSamples) frameTimes.shift();
-        if (frameTimes.length >= maxSamples) {
-          const sorted = [...frameTimes].sort((a, b) => a - b);
-          const median = sorted[Math.floor(sorted.length / 2)];
-          if (median > WATCHDOG_FREEZE_THRESHOLD_MS) {
+      // Watchdog: cheap running mean over each WATCHDOG_WINDOW_MS bucket. Skip
+      // the first 500ms to avoid counting mount cost.
+      if (watchdogActive && now - startTime > 500) {
+        watchdogFrameSum += dt;
+        watchdogFrameCount += 1;
+        if (now - watchdogLastEval >= WATCHDOG_WINDOW_MS) {
+          const mean = watchdogFrameSum / watchdogFrameCount;
+          if (mean > WATCHDOG_FREEZE_THRESHOLD_MS) {
             if (import.meta.env.DEV) {
-              console.warn(`[ParticleField] watchdog: median frame ${median.toFixed(1)}ms — freezing.`);
+              console.warn(`[ParticleField] watchdog: mean frame ${mean.toFixed(1)}ms — freezing.`);
             }
             frozen = true;
-            watchdogTripped = true;
             return;
           }
+          watchdogPasses += 1;
+          if (watchdogPasses >= WATCHDOG_PASSES_TO_DISABLE) {
+            watchdogActive = false;
+          }
+          watchdogFrameSum = 0;
+          watchdogFrameCount = 0;
+          watchdogLastEval = now;
         }
       }
 
