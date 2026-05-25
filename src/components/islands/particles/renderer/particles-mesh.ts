@@ -10,8 +10,6 @@ export interface ParticlesMeshBundle {
   scene: Transform;
   uniforms: {
     uTime: { value: number };
-    uScrollY: { value: number };
-    uScrollInertia: { value: number };
     uDPR: { value: number };
     uViewHeight: { value: number };
     uAspect: { value: number };
@@ -104,8 +102,6 @@ export function createParticlesMesh(
 
   const uniforms = {
     uTime: { value: 0 },
-    uScrollY: { value: 0 },
-    uScrollInertia: { value: 0 },
     uDPR: { value: dpr },
     uViewHeight: { value: 1 },
     uAspect: { value: 1 },

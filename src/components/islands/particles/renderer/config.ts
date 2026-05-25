@@ -15,9 +15,9 @@ export function detectTier(signals: TierSignals): Tier {
 }
 
 const PARTICLE_COUNT_BY_TIER: Record<Tier, number> = {
-  desktop: 500,
-  'mobile-high': 300,
-  'mobile-low': 150,
+  desktop: 165,
+  'mobile-high': 100,
+  'mobile-low': 50,
 };
 
 export function getParticleCount(tier: Tier): number {
@@ -42,20 +42,21 @@ export const DEPTH_BAND_RANGES = {
 };
 
 // Motion constants
-export const SCROLL_INERTIA_DECAY = 0.95;
 export const FLOW_FIELD_GRID = 16; // 16x16 RG texture
 export const WATCHDOG_WINDOW_MS = 2000;
 export const WATCHDOG_FREEZE_THRESHOLD_MS = 25; // median frame time → freeze
 
 // Palettes — 6 swatches each, condensed from the previous design.
 // RGB values are normalized [0..1] for direct use as shader uniforms.
+// Muted tones around the #f0f2f5 background — two slightly lighter, three
+// slightly darker cool greys, and a faint warm note echoing the copper accent.
 export const LIGHT_PALETTE: ReadonlyArray<readonly [number, number, number]> = [
-  [0.227, 0.271, 0.333], // #3a4555 deep slate
-  [0.353, 0.420, 0.541], // #5a6b8a medium blue
-  [0.239, 0.353, 0.420], // #3d5a6b deep teal
-  [0.353, 0.502, 0.565], // #5a8090 light teal
-  [0.420, 0.353, 0.541], // #6b5a8a muted violet
-  [0.518, 0.565, 0.659], // #8490a8 pale blue
+  [0.980, 0.984, 0.988], // #fafbfc — lighter than bg
+  [0.965, 0.973, 0.984], // #f6f8fb — barely lighter
+  [0.894, 0.906, 0.925], // #e4e7ec — soft darker
+  [0.847, 0.863, 0.890], // #d8dce3 — muted slate
+  [0.812, 0.831, 0.863], // #cfd4dc — cool darker
+  [0.867, 0.839, 0.796], // #ddd6cb — faint warm beige
 ];
 
 export const DARK_PALETTE: ReadonlyArray<readonly [number, number, number]> = [

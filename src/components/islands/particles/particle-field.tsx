@@ -13,12 +13,10 @@ import {
 } from './renderer/config';
 import { generateFlowFieldTexture } from './renderer/flow-field';
 import { createParticlesMesh } from './renderer/particles-mesh';
-import { useScrollVelocity } from './hooks/use-scroll-velocity';
 import { useVisibility } from './hooks/use-visibility';
 
 export default function ParticleField() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const scroll = useScrollVelocity();
   const visibility = useVisibility();
 
   useEffect(() => {
@@ -139,9 +137,6 @@ export default function ParticleField() {
       // Per-frame uniforms
       const elapsed = now - startTime;
       mesh.uniforms.uTime.value = elapsed;
-      scroll.tick();
-      mesh.uniforms.uScrollY.value = scroll.scrollY.current / Math.max(cachedHeight, 1);
-      mesh.uniforms.uScrollInertia.value = scroll.scrollInertia.current;
 
       renderer.render({ scene: mesh.scene });
       rafId = requestAnimationFrame(tick);

@@ -16,6 +16,8 @@ void main() {
   float edgeStart = 1.0 - mix(0.7, 0.15, vDepth);
   float alpha = 1.0 - smoothstep(edgeStart, 1.0, d);
 
-  // Premultiplied additive — color carries intensity, alpha gates fragment.
-  fragColor = vec4(vColor * vIntensity * alpha, alpha);
+  // Premultiplied alpha — intensity gates opacity so light colors actually
+  // read as lighter than the page bg, dark colors as darker.
+  float a = alpha * vIntensity;
+  fragColor = vec4(vColor * a, a);
 }

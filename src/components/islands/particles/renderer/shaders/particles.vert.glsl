@@ -11,8 +11,6 @@ in float aDepth;        // 0 = far, 1 = near
 in vec2 aBaseOffset;    // normalized starting position [0..1]
 
 uniform float uTime;
-uniform float uScrollY;        // normalized: pixels / viewportHeight
-uniform float uScrollInertia;  // normalized
 uniform float uDPR;
 uniform float uViewHeight;     // CSS pixels
 uniform float uAspect;         // width / height
@@ -41,23 +39,14 @@ void main() {
   float oscAmp = mix(0.015, 0.04, aDepth);
   pos += flowSample * sin(oscPhase) * oscAmp;
 
-  // 3. Scroll parallax (per-band).
-  float parallax = mix(0.03, 0.20, aDepth);
-  pos.y -= uScrollY * parallax;
+  // 3. Wrap to keep field infinite
+  pos = fract(pos);
 
-  // 4. Scroll inertia kick (decays in JS each frame). Multiplier converts the
-  // raw pixel-velocity accumulator into normalized viewport units.
-  float inertiaFactor = mix(0.03, 0.12, aDepth);
-  pos.y -= uScrollInertia * inertiaFactor * 0.002;
-
-  // 5. Wrap vertically to keep field infinite
-  pos.y = fract(pos.y);
-
-  // 6. Convert from [0,1] normalized to clip space [-1,1]
+  // 4. Convert from [0,1] normalized to clip space [-1,1]
   vec2 clipPos = pos * 2.0 - 1.0;
 
-  // 7. Quad sizing — point size in CSS pixels → clip-space scale
-  float pointSizePx = mix(8.0, 48.0, aDepth) * uDPR;
+  // 5. Quad sizing — point size in CSS pixels → clip-space scale
+  float pointSizePx = mix(5.0, 32.0, aDepth) * uDPR;
   vec2 quadScale = vec2(pointSizePx / (uViewHeight * uAspect), pointSizePx / uViewHeight);
 
   gl_Position = vec4(clipPos + position * quadScale, 0.0, 1.0);

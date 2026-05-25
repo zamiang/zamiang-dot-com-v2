@@ -27,7 +27,7 @@ export function createRenderer(parent: HTMLElement, dpr: number): RendererBundle
 
   gl.clearColor(0, 0, 0, 0);
   gl.enable(gl.BLEND);
-  gl.blendFunc(gl.ONE, gl.ONE); // additive
+  gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA); // premultiplied alpha
 
   const canvas = gl.canvas;
   canvas.style.position = 'absolute';
