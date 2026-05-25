@@ -1,9 +1,9 @@
 import { Geometry, Mesh, Program, Texture, Transform } from 'ogl';
 import type { OGLRenderingContext } from 'ogl';
 
-import vertexShader from './shaders/particles.vert.glsl?raw';
-import fragmentShader from './shaders/particles.frag.glsl?raw';
 import { DEPTH_BAND_RANGES, DEPTH_BAND_SPLIT, FLOW_FIELD_GRID } from './config';
+import fragmentShader from './shaders/particles.frag.glsl?raw';
+import vertexShader from './shaders/particles.vert.glsl?raw';
 
 export interface ParticlesMeshBundle {
   mesh: Mesh;
@@ -28,18 +28,8 @@ export function createParticlesMesh(
   initialFlowField: Uint8Array,
 ): ParticlesMeshBundle {
   // Quad geometry: two triangles in [-0.5, 0.5]
-  const quadPos = new Float32Array([
-    -0.5, -0.5,
-     0.5, -0.5,
-    -0.5,  0.5,
-     0.5,  0.5,
-  ]);
-  const quadUv = new Float32Array([
-    0, 0,
-    1, 0,
-    0, 1,
-    1, 1,
-  ]);
+  const quadPos = new Float32Array([-0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5]);
+  const quadUv = new Float32Array([0, 0, 1, 0, 0, 1, 1, 1]);
   const quadIdx = new Uint16Array([0, 1, 2, 1, 3, 2]);
 
   // Per-instance buffers

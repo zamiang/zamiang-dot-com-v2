@@ -1,26 +1,40 @@
 import { describe, expect, it } from 'vitest';
 
-import { detectTier, getMaxDpr, getParticleCount } from '../../../../src/components/islands/particles/renderer/config';
+import {
+  detectTier,
+  getMaxDpr,
+  getParticleCount,
+} from '../../../../src/components/islands/particles/renderer/config';
 
 describe('detectTier', () => {
   it('returns "desktop" when not coarse pointer', () => {
-    expect(detectTier({ isMobile: false, hardwareConcurrency: 4, deviceMemory: 2 })).toBe('desktop');
+    expect(detectTier({ isMobile: false, hardwareConcurrency: 4, deviceMemory: 2 })).toBe(
+      'desktop',
+    );
   });
 
   it('returns "mobile-high" on mobile with >=6 cores', () => {
-    expect(detectTier({ isMobile: true, hardwareConcurrency: 6, deviceMemory: undefined })).toBe('mobile-high');
+    expect(detectTier({ isMobile: true, hardwareConcurrency: 6, deviceMemory: undefined })).toBe(
+      'mobile-high',
+    );
   });
 
   it('returns "mobile-high" on mobile with >=4GB memory', () => {
-    expect(detectTier({ isMobile: true, hardwareConcurrency: 4, deviceMemory: 4 })).toBe('mobile-high');
+    expect(detectTier({ isMobile: true, hardwareConcurrency: 4, deviceMemory: 4 })).toBe(
+      'mobile-high',
+    );
   });
 
   it('returns "mobile-low" on mobile with weak signals', () => {
-    expect(detectTier({ isMobile: true, hardwareConcurrency: 4, deviceMemory: 2 })).toBe('mobile-low');
+    expect(detectTier({ isMobile: true, hardwareConcurrency: 4, deviceMemory: 2 })).toBe(
+      'mobile-low',
+    );
   });
 
   it('returns "mobile-low" on mobile when both signals missing', () => {
-    expect(detectTier({ isMobile: true, hardwareConcurrency: undefined, deviceMemory: undefined })).toBe('mobile-low');
+    expect(
+      detectTier({ isMobile: true, hardwareConcurrency: undefined, deviceMemory: undefined }),
+    ).toBe('mobile-low');
   });
 });
 

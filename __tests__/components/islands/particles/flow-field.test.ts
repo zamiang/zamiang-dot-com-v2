@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { generateFlowFieldTexture, sampleCurl } from '../../../../src/components/islands/particles/renderer/flow-field';
+import {
+  generateFlowFieldTexture,
+  sampleCurl,
+} from '../../../../src/components/islands/particles/renderer/flow-field';
 
 describe('sampleCurl', () => {
   it('returns bounded values', () => {
@@ -41,7 +44,10 @@ describe('generateFlowFieldTexture', () => {
     const b = generateFlowFieldTexture(16, 10);
     let differs = false;
     for (let i = 0; i < a.length; i++) {
-      if (a[i] !== b[i]) { differs = true; break; }
+      if (a[i] !== b[i]) {
+        differs = true;
+        break;
+      }
     }
     expect(differs).toBe(true);
   });

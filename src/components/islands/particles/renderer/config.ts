@@ -51,19 +51,19 @@ export const WATCHDOG_FREEZE_THRESHOLD_MS = 25; // median frame time → freeze
 // Muted tones around the #f0f2f5 background — two slightly lighter, three
 // slightly darker cool greys, and a faint warm note echoing the copper accent.
 export const LIGHT_PALETTE: ReadonlyArray<readonly [number, number, number]> = [
-  [0.980, 0.984, 0.988], // #fafbfc — lighter than bg
+  [0.98, 0.984, 0.988], // #fafbfc — lighter than bg
   [0.965, 0.973, 0.984], // #f6f8fb — barely lighter
   [0.894, 0.906, 0.925], // #e4e7ec — soft darker
-  [0.847, 0.863, 0.890], // #d8dce3 — muted slate
+  [0.847, 0.863, 0.89], // #d8dce3 — muted slate
   [0.812, 0.831, 0.863], // #cfd4dc — cool darker
   [0.867, 0.839, 0.796], // #ddd6cb — faint warm beige
 ];
 
 export const DARK_PALETTE: ReadonlyArray<readonly [number, number, number]> = [
-  [1.000, 0.561, 0.000], // #ff8f00 deep orange
-  [1.000, 0.702, 0.302], // #ffb34d light orange
-  [1.000, 0.482, 0.420], // #ff7b6b coral
-  [1.000, 0.604, 0.541], // #ff9a8a light coral
-  [1.000, 0.757, 0.027], // #ffc107 gold
+  [1.0, 0.561, 0.0], // #ff8f00 deep orange
+  [1.0, 0.702, 0.302], // #ffb34d light orange
+  [1.0, 0.482, 0.42], // #ff7b6b coral
+  [1.0, 0.604, 0.541], // #ff9a8a light coral
+  [1.0, 0.757, 0.027], // #ffc107 gold
   [0.792, 0.816, 0.859], // #cad0db bright white
 ];

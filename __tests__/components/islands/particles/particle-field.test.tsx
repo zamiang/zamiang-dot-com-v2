@@ -41,7 +41,9 @@ beforeEach(() => {
   // Mock getContext to return a fake gl that lacks createVertexArray.
   // OGL's Renderer constructor will try to use this, but createRenderer's capability gate
   // checks for createVertexArray and returns null gracefully.
-  vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(function (this: HTMLCanvasElement) {
+  vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(function (
+    this: HTMLCanvasElement,
+  ) {
     // Create a Proxy to handle any gl method call with a no-op, except those that throw intentionally
     const mockGl = new Proxy(
       {
@@ -60,7 +62,7 @@ beforeEach(() => {
           // Return a no-op function for any method call
           return vi.fn();
         },
-      }
+      },
     );
     return mockGl as unknown as WebGL2RenderingContext;
   });
@@ -90,8 +92,12 @@ describe('ParticleField', () => {
     const { unmount } = render(<ParticleField />);
     unmount();
     // Every scroll/popstate listener added during mount should be removed on unmount.
-    const added = addSpy.mock.calls.filter(([type]) => type === 'scroll' || type === 'popstate').length;
-    const removed = removeSpy.mock.calls.filter(([type]) => type === 'scroll' || type === 'popstate').length;
+    const added = addSpy.mock.calls.filter(
+      ([type]) => type === 'scroll' || type === 'popstate',
+    ).length;
+    const removed = removeSpy.mock.calls.filter(
+      ([type]) => type === 'scroll' || type === 'popstate',
+    ).length;
     expect(removed).toBe(added);
   });
 });

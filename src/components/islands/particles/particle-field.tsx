@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-import { createRenderer } from './renderer/create-renderer';
+import { useVisibility } from './hooks/use-visibility';
 import {
   DARK_PALETTE,
   FLOW_FIELD_GRID,
@@ -11,9 +11,9 @@ import {
   getMaxDpr,
   getParticleCount,
 } from './renderer/config';
+import { createRenderer } from './renderer/create-renderer';
 import { generateFlowFieldTexture } from './renderer/flow-field';
 import { createParticlesMesh } from './renderer/particles-mesh';
-import { useVisibility } from './hooks/use-visibility';
 
 export default function ParticleField() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -26,7 +26,8 @@ export default function ParticleField() {
     const isMobile = window.matchMedia('(max-width: 767px)').matches;
     const tier = detectTier({
       isMobile,
-      hardwareConcurrency: typeof navigator !== 'undefined' ? navigator.hardwareConcurrency : undefined,
+      hardwareConcurrency:
+        typeof navigator !== 'undefined' ? navigator.hardwareConcurrency : undefined,
       deviceMemory: (navigator as Navigator & { deviceMemory?: number }).deviceMemory,
     });
     const count = getParticleCount(tier);
@@ -57,7 +58,13 @@ export default function ParticleField() {
     // spike (256 cells × 4 Perlin samples + texture upload) for no visual gain.
     const initialFlow = generateFlowFieldTexture(FLOW_FIELD_GRID, 0);
     const isDark = document.documentElement.classList.contains('dark');
-    const mesh = createParticlesMesh(gl, count, dpr, isDark ? DARK_PALETTE : LIGHT_PALETTE, initialFlow);
+    const mesh = createParticlesMesh(
+      gl,
+      count,
+      dpr,
+      isDark ? DARK_PALETTE : LIGHT_PALETTE,
+      initialFlow,
+    );
     setSize();
 
     // Theme observer
@@ -65,7 +72,10 @@ export default function ParticleField() {
       const dark = document.documentElement.classList.contains('dark');
       mesh.setColors(dark ? DARK_PALETTE : LIGHT_PALETTE);
     });
-    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
 
     // Resize observer (debounced)
     let resizeTimeout: ReturnType<typeof setTimeout>;
