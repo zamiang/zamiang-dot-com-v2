@@ -47,7 +47,7 @@ void main() {
 
   // 4. Scroll inertia kick (decays in JS each frame). Multiplier converts the
   // raw pixel-velocity accumulator into normalized viewport units.
-  float inertiaFactor = mix(0.06, 0.30, aDepth);
+  float inertiaFactor = mix(0.03, 0.12, aDepth);
   pos.y -= uScrollInertia * inertiaFactor * 0.002;
 
   // 5. Wrap vertically to keep field infinite
