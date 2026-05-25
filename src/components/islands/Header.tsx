@@ -51,7 +51,7 @@ export default function Header() {
                 key={link.href}
                 href={link.href}
                 className="text-foreground text-sm border-none hover:text-accent transition-colors duration-150 inline-flex items-center gap-1"
-                {...(link.external ? { target: '_blank', rel: 'noopener' } : {})}
+                {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               >
                 {link.label}
                 {link.external && (
@@ -125,7 +125,7 @@ export default function Header() {
                   href={link.href}
                   className="text-foreground text-base py-2 border-none hover:text-accent transition-colors duration-150 inline-flex items-center gap-1"
                   onClick={closeMenu}
-                  {...(link.external ? { target: '_blank', rel: 'noopener' } : {})}
+                  {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 >
                   {link.label}
                   {link.external && (
