@@ -4,7 +4,6 @@ import { createRenderer } from './renderer/create-renderer';
 import {
   DARK_PALETTE,
   FLOW_FIELD_GRID,
-  FLOW_FIELD_UPDATE_HZ,
   LIGHT_PALETTE,
   WATCHDOG_FREEZE_THRESHOLD_MS,
   WATCHDOG_WINDOW_MS,
@@ -40,17 +39,25 @@ export default function ParticleField() {
 
     const { renderer, gl, resize, destroy } = bundle;
 
-    // Initial size
+    // Cached viewport size — clientWidth/clientHeight reads can trigger forced
+    // layout, so we sample them only on resize and read the cached values per frame.
+    let cachedWidth = container.clientWidth;
+    let cachedHeight = container.clientHeight;
+
     const setSize = () => {
-      resize(container.clientWidth, container.clientHeight);
-      mesh.uniforms.uViewHeight.value = container.clientHeight;
-      mesh.uniforms.uAspect.value = container.clientWidth / Math.max(container.clientHeight, 1);
+      cachedWidth = container.clientWidth;
+      cachedHeight = container.clientHeight;
+      resize(cachedWidth, cachedHeight);
+      mesh.uniforms.uViewHeight.value = cachedHeight;
+      mesh.uniforms.uAspect.value = cachedWidth / Math.max(cachedHeight, 1);
       mesh.uniforms.uDPR.value = dpr;
     };
 
-    // Initial flow field
-    let flowTime = 0;
-    const initialFlow = generateFlowFieldTexture(FLOW_FIELD_GRID, flowTime);
+    // Flow field — generated once at mount. With the bounded-oscillation motion
+    // model, the flow vector is a direction, not a velocity, so slow evolution
+    // wouldn't be visible anyway. Regenerating every 500ms was a periodic CPU
+    // spike (256 cells × 4 Perlin samples + texture upload) for no visual gain.
+    const initialFlow = generateFlowFieldTexture(FLOW_FIELD_GRID, 0);
     const isDark = document.documentElement.classList.contains('dark');
     const mesh = createParticlesMesh(gl, count, dpr, isDark ? DARK_PALETTE : LIGHT_PALETTE, initialFlow);
     setSize();
@@ -72,7 +79,6 @@ export default function ParticleField() {
 
     // Animation loop
     const startTime = performance.now();
-    let lastFlowUpdate = 0;
     let rafId = 0;
     let frozen = false;
 
@@ -134,16 +140,8 @@ export default function ParticleField() {
       const elapsed = now - startTime;
       mesh.uniforms.uTime.value = elapsed;
       scroll.tick();
-      mesh.uniforms.uScrollY.value = scroll.scrollY.current / Math.max(container.clientHeight, 1);
+      mesh.uniforms.uScrollY.value = scroll.scrollY.current / Math.max(cachedHeight, 1);
       mesh.uniforms.uScrollInertia.value = scroll.scrollInertia.current;
-
-      // Flow-field regeneration (twice per second)
-      const flowInterval = 1000 / FLOW_FIELD_UPDATE_HZ;
-      if (now - lastFlowUpdate > flowInterval) {
-        flowTime = elapsed * 0.001;
-        mesh.setFlowFieldData(generateFlowFieldTexture(FLOW_FIELD_GRID, flowTime));
-        lastFlowUpdate = now;
-      }
 
       renderer.render({ scene: mesh.scene });
       rafId = requestAnimationFrame(tick);

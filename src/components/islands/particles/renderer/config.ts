@@ -44,7 +44,6 @@ export const DEPTH_BAND_RANGES = {
 // Motion constants
 export const SCROLL_INERTIA_DECAY = 0.95;
 export const FLOW_FIELD_GRID = 16; // 16x16 RG texture
-export const FLOW_FIELD_UPDATE_HZ = 2; // regenerate twice per second
 export const WATCHDOG_WINDOW_MS = 2000;
 export const WATCHDOG_FREEZE_THRESHOLD_MS = 25; // median frame time → freeze
 
