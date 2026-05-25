@@ -30,9 +30,16 @@ void main() {
   vec2 pos = aBaseOffset;
 
   // 2. Sample flow field at current position. Texture is RG, [-1,1] after decode.
+  // The flow vector modulates the DIRECTION of a bounded per-particle oscillation,
+  // not a velocity to integrate. We don't keep per-particle state across frames, so
+  // multiplying flow by uTime would mean each fresh flow texture (regenerated every
+  // 500ms) recomputes position from scratch with the new vector — at large uTime
+  // that snaps positions by Δflow * uTime. A bounded sin() keeps the contribution
+  // small regardless of elapsed time, so regen produces only sub-pixel discontinuities.
   vec2 flowSample = texture(uFlowField, pos).rg * 2.0 - 1.0;
-  float flowStrength = mix(0.3, 1.0, aDepth) * 0.04;
-  pos += flowSample * flowStrength * (uTime - aSeed.w * 1000.0) * 0.001;
+  float oscPhase = uTime * 0.0004 + aSeed.w * 6.2831;
+  float oscAmp = mix(0.015, 0.04, aDepth);
+  pos += flowSample * sin(oscPhase) * oscAmp;
 
   // 3. Scroll parallax (per-band)
   float parallax = mix(0.02, 0.18, aDepth);
