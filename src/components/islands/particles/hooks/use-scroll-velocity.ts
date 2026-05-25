@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-import { SCROLL_INERTIA_DECAY, SCROLL_THROTTLE_MS } from '../renderer/config';
+import { SCROLL_INERTIA_DECAY } from '../renderer/config';
 
 export interface ScrollRefs {
   scrollY: React.MutableRefObject<number>;
@@ -14,7 +14,6 @@ export interface ScrollRefs {
 export function useScrollVelocity(): ScrollRefs {
   const scrollY = useRef(0);
   const scrollInertia = useRef(0);
-  const lastScrollTime = useRef(0);
 
   const tick = () => {
     scrollInertia.current *= SCROLL_INERTIA_DECAY;
@@ -28,10 +27,10 @@ export function useScrollVelocity(): ScrollRefs {
   useEffect(() => {
     scrollY.current = window.scrollY;
 
+    // No throttle: we're only writing to a ref. The render loop reads it once
+    // per frame; throttling here just makes uScrollY update on a slower clock
+    // than the frame loop, producing visible stepping during fast scrolls.
     const onScroll = () => {
-      const now = performance.now();
-      if (now - lastScrollTime.current < SCROLL_THROTTLE_MS) return;
-      lastScrollTime.current = now;
       const next = window.scrollY;
       scrollInertia.current += next - scrollY.current;
       scrollY.current = next;

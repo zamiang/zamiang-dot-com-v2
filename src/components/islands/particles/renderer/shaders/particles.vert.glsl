@@ -41,13 +41,15 @@ void main() {
   float oscAmp = mix(0.015, 0.04, aDepth);
   pos += flowSample * sin(oscPhase) * oscAmp;
 
-  // 3. Scroll parallax (per-band)
-  float parallax = mix(0.02, 0.18, aDepth);
+  // 3. Scroll parallax (per-band). Range chosen so far particles are visibly
+  // anchored to the scroll while near particles drift well clear of the page.
+  float parallax = mix(0.08, 0.45, aDepth);
   pos.y -= uScrollY * parallax;
 
-  // 4. Scroll inertia kick (decays in JS each frame)
-  float inertiaFactor = mix(0.05, 0.35, aDepth);
-  pos.y -= uScrollInertia * inertiaFactor * 0.002;
+  // 4. Scroll inertia kick (decays in JS each frame). Multiplier converts raw
+  // pixel-velocity accumulator into normalized viewport units.
+  float inertiaFactor = mix(0.12, 0.55, aDepth);
+  pos.y -= uScrollInertia * inertiaFactor * 0.003;
 
   // 5. Wrap vertically to keep field infinite
   pos.y = fract(pos.y);
