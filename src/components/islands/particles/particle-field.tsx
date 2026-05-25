@@ -1,8 +1,5 @@
-'use client';
-
 import { useEffect, useRef } from 'react';
 
-import { useIsMobile } from '../../../hooks/use-mobile';
 import { createRenderer } from './renderer/create-renderer';
 import {
   DARK_PALETTE,
@@ -22,7 +19,6 @@ import { useVisibility } from './hooks/use-visibility';
 
 export default function ParticleField() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const isMobile = useIsMobile();
   const scroll = useScrollVelocity();
   const visibility = useVisibility();
 
@@ -30,6 +26,7 @@ export default function ParticleField() {
     const container = containerRef.current;
     if (!container) return;
 
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
     const tier = detectTier({
       isMobile,
       hardwareConcurrency: typeof navigator !== 'undefined' ? navigator.hardwareConcurrency : undefined,
@@ -88,10 +85,12 @@ export default function ParticleField() {
       const now = performance.now();
       const dt = now - lastFrameTime;
       lastFrameTime = now;
-      rafId = requestAnimationFrame(tick);
 
       if (frozen) return;
-      if (!visibility.isVisible.current) return;
+      if (!visibility.isVisible.current) {
+        rafId = requestAnimationFrame(tick);
+        return;
+      }
       if (visibility.prefersReducedMotion.current) {
         // Render exactly one freeze frame at uTime=0, then stop ticking.
         mesh.uniforms.uTime.value = 0;
@@ -136,6 +135,7 @@ export default function ParticleField() {
       }
 
       renderer.render({ scene: mesh.scene });
+      rafId = requestAnimationFrame(tick);
     };
 
     rafId = requestAnimationFrame(tick);
@@ -147,7 +147,7 @@ export default function ParticleField() {
       clearTimeout(resizeTimeout);
       destroy();
     };
-  }, [isMobile]);
+  }, []);
 
   return (
     <div
