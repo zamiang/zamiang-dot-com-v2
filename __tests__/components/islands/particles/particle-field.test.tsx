@@ -56,7 +56,7 @@ beforeEach(() => {
       } as Record<string, any>,
       {
         get: (target, prop) => {
-          if (prop in target) return target[prop];
+          if (typeof prop === 'string' && prop in target) return target[prop];
           // Return a no-op function for any method call
           return vi.fn();
         },

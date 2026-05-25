@@ -1,2 +1,1 @@
-export { ParticleCanvas } from './particle-canvas';
-export { useParticles } from './use-particles';
+export { default as ParticleField } from './particle-field';
