@@ -48,7 +48,7 @@ describe('Header', () => {
       const resumeLink = resumeLinks[0];
       expect(resumeLink).toHaveAttribute('href', '/resume.pdf');
       expect(resumeLink).toHaveAttribute('target', '_blank');
-      expect(resumeLink).toHaveAttribute('rel', 'noopener');
+      expect(resumeLink).toHaveAttribute('rel', 'noopener noreferrer');
     });
   });
 
@@ -103,7 +103,7 @@ describe('Header', () => {
       const mobileNav = container.querySelector('.mobile-menu');
       const resumeLink = mobileNav?.querySelector('a[href="/resume.pdf"]');
       expect(resumeLink).toHaveAttribute('target', '_blank');
-      expect(resumeLink).toHaveAttribute('rel', 'noopener');
+      expect(resumeLink).toHaveAttribute('rel', 'noopener noreferrer');
     });
 
     it('should uncheck checkbox when navigation link is clicked', () => {

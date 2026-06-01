@@ -82,7 +82,7 @@ const baseComponents = {
   },
   h5: ({ children }: { children?: React.ReactNode }) => {
     const id = slugify(getTextContent(children));
-    return <h5 id={id}>{children}</h5>;
+    return <h6 id={id}>{children}</h6>;
   },
   h6: ({ children }: { children?: React.ReactNode }) => {
     const id = slugify(getTextContent(children));

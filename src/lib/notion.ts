@@ -64,9 +64,9 @@ export async function getPostFromNotion(pageId: string): Promise<Post | null> {
       const { image } = block as ImageBlockObjectResponse;
       const src = image.type === 'external' ? image.external.url : image.file.url;
       const filename = getFilename(src);
+      if (!filename) return '';
 
-      // Download image for local serving
-      downloadImage(src);
+      await downloadImage(src);
 
       return `<figure><img src="/images/${filename}" /></figure>`;
     });
