@@ -19,10 +19,8 @@
   --font-size: var(--font-size);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-serif: 'EB Garamond', 'EB Garamond Fallback', Georgia, 'Times New Roman', serif;
-  --font-sans:
-    'Lato', 'EB Garamond Fallback', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    sans-serif;
+  --font-serif: 'EB Garamond', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
   --color-input: var(--input);
   --color-border: var(--border);
@@ -1121,7 +1119,9 @@
 
   .resume-header-info p {
     margin: 0;
-    font-size: var(--font-size-sm);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: var(--font-size-base);
     color: var(--muted-foreground);
     line-height: 1.4;
   }
@@ -1283,10 +1283,22 @@
   }
 
   .publication-intro {
+    font-family: var(--font-serif);
     font-size: var(--font-size-base);
     color: var(--foreground);
-    line-height: 1.65;
+    line-height: var(--line-height-body);
     margin: 0 0 1.75rem 0;
+  }
+
+  /* Lead-in paragraph and bulleted list both inherit the serif voice from the
+     wrapping `.publication-intro` div. The list lives outside the paragraph so
+     the markup stays valid (a `<ul>` is not permitted inside a `<p>`). */
+  .publication-intro p {
+    margin: 0 0 0.5em 0;
+  }
+
+  .publication-intro ul {
+    margin: 0;
   }
 
   .publication-entry {
@@ -1309,13 +1321,16 @@
   }
 
   .publication-entry .publication-meta {
+    font-size: var(--font-size-sm);
     font-style: italic;
+    color: var(--muted-foreground);
   }
 
   .publication-entry .publication-summary {
     font-size: var(--font-size-sm);
     line-height: 1.6;
     margin-top: 0.5rem;
+    color: var(--foreground);
   }
 
   .publication-entry .publication-links {
@@ -1326,10 +1341,15 @@
   .publication-links a {
     color: var(--accent-bold);
     text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition:
+      color var(--transition-fast) var(--ease-out),
+      border-color var(--transition-normal) var(--ease-out);
   }
 
   .publication-links a:hover {
-    text-decoration: underline;
+    color: var(--accent-bold-hover);
+    border-bottom-color: color-mix(in srgb, var(--accent-bold) 50%, transparent);
   }
 
   /* View all link */

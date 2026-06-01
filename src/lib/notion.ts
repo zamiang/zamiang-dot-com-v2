@@ -30,7 +30,7 @@ export function getWordCount(content: string): number {
 }
 
 export const fetchPublishedPosts = async (notion: Client, dataSourceID: string) => {
-  const posts = await notion.dataSources.query({
+  const queryParams = {
     data_source_id: dataSourceID!,
     filter: {
       and: [
@@ -45,12 +45,24 @@ export const fetchPublishedPosts = async (notion: Client, dataSourceID: string) 
     sorts: [
       {
         property: 'Published Date',
-        direction: 'descending',
+        direction: 'descending' as const,
       },
     ],
-  });
+  };
 
-  return posts.results as PageObjectResponse[];
+  // Paginate past the 100-item per-query limit so large databases aren't
+  // silently truncated to the first page.
+  const all: PageObjectResponse[] = [];
+  let cursor: string | undefined;
+  do {
+    const response = await notion.dataSources.query(
+      cursor ? { ...queryParams, start_cursor: cursor } : queryParams,
+    );
+    all.push(...(response.results as PageObjectResponse[]));
+    cursor = response.has_more && response.next_cursor ? response.next_cursor : undefined;
+  } while (cursor);
+
+  return all;
 };
 
 export async function getPostFromNotion(pageId: string): Promise<Post | null> {
@@ -80,7 +92,7 @@ export async function getPostFromNotion(pageId: string): Promise<Post | null> {
     ${contentString}</div>`;
       });
 
-      return `<div className="column">${strings.join('')}</div>`;
+      return `<div class="column">${strings.join('')}</div>`;
     });
 
     const page = (await notion.pages.retrieve({

@@ -12,8 +12,45 @@ import { NotionToMarkdown } from 'notion-to-md';
 
 import { downloadImage, getFilename } from './download-image';
 
-const escapeHtml = (s: string) =>
+export const escapeHtml = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+/**
+ * Builds the `<figure>` markup for a downloaded Notion image.
+ *
+ * Returns an empty string when `filename` is missing so a malformed image URL
+ * (or a failed filename extraction) never renders `<img src="/images/undefined">`.
+ */
+export const buildImageFigure = (filename: string | undefined, captionText: string): string => {
+  if (!filename) return '';
+
+  const caption = captionText ? `<figcaption>${escapeHtml(captionText)}</figcaption>` : '';
+  return `<figure><img src="/images/${filename}" alt="${escapeHtml(captionText)}" />${caption}</figure>`;
+};
+
+/**
+ * Queries every page of a Notion data source, following `next_cursor` until
+ * `has_more` is false. `dataSources.query` returns at most 100 results per
+ * call, so without this loop any database with more than 100 published entries
+ * would be silently truncated to the first page at build time.
+ */
+export async function queryAllPages(
+  notion: Client,
+  queryParams: Parameters<typeof notion.dataSources.query>[0],
+): Promise<PageObjectResponse[]> {
+  const all: PageObjectResponse[] = [];
+  let cursor: string | undefined;
+
+  do {
+    const response = await notion.dataSources.query(
+      cursor ? { ...queryParams, start_cursor: cursor } : queryParams,
+    );
+    all.push(...(response.results as PageObjectResponse[]));
+    cursor = response.has_more && response.next_cursor ? response.next_cursor : undefined;
+  } while (cursor);
+
+  return all;
+}
 
 export interface NotionLoaderOptions {
   /** Notion data source ID (database ID) */
@@ -74,11 +111,20 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
         const src = image.type === 'external' ? image.external.url : image.file.url;
         const filename = getFilename(src);
 
-        // Download image for local serving
+        // A malformed URL yields no filename — omit the image rather than
+        // emit <img src="/images/undefined">.
+        if (!filename) {
+          logger.warn(`Could not extract filename from image URL: ${src}`);
+          return '';
+        }
+
+        // Download image for local serving. If the download fails the local
+        // file won't exist, so skip the image instead of rendering a broken tag.
         try {
           await downloadImage(src);
         } catch {
-          logger.warn(`Failed to download image: ${src}`);
+          logger.warn(`Failed to download image, skipping: ${src}`);
+          return '';
         }
 
         // Notion image blocks carry an optional rich-text caption — surface it
@@ -88,9 +134,8 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
           .map((rt) => rt.plain_text)
           .join('')
           .trim();
-        const caption = captionText ? `<figcaption>${escapeHtml(captionText)}</figcaption>` : '';
 
-        return `<figure><img src="/images/${filename}" alt="${escapeHtml(captionText)}" />${caption}</figure>`;
+        return buildImageFigure(filename, captionText);
       });
 
       // Custom transformer for column layouts
@@ -126,8 +171,9 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
           });
         }
 
-        // Fetch published posts from Notion
-        const response = await notion.dataSources.query({
+        // Fetch all published posts from Notion, paginating past the 100-item
+        // per-query limit so large databases aren't silently truncated.
+        const pages = await queryAllPages(notion, {
           data_source_id: options.dataSourceId,
           filter: { and: filterConditions } as Parameters<
             typeof notion.dataSources.query
@@ -140,7 +186,6 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
           ],
         });
 
-        const pages = response.results as PageObjectResponse[];
         logger.info(`Found ${pages.length} pages in Notion`);
 
         // Process each page
