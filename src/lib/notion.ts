@@ -6,6 +6,7 @@ import { NotionToMarkdown } from 'notion-to-md';
 import { config } from './config';
 import { downloadImage, getFilename } from './download-image';
 import { ValidationError, logError } from './errors';
+import { queryAllPages } from './notion-loader';
 
 export interface Post {
   id: string;
@@ -52,17 +53,7 @@ export const fetchPublishedPosts = async (notion: Client, dataSourceID: string) 
 
   // Paginate past the 100-item per-query limit so large databases aren't
   // silently truncated to the first page.
-  const all: PageObjectResponse[] = [];
-  let cursor: string | undefined;
-  do {
-    const response = await notion.dataSources.query(
-      cursor ? { ...queryParams, start_cursor: cursor } : queryParams,
-    );
-    all.push(...(response.results as PageObjectResponse[]));
-    cursor = response.has_more && response.next_cursor ? response.next_cursor : undefined;
-  } while (cursor);
-
-  return all;
+  return queryAllPages(notion, queryParams);
 };
 
 export async function getPostFromNotion(pageId: string): Promise<Post | null> {
