@@ -6,6 +6,7 @@ import { NotionToMarkdown } from 'notion-to-md';
 import { config } from './config';
 import { downloadImage, getFilename } from './download-image';
 import { ValidationError, logError } from './errors';
+import { queryAllPages } from './notion-loader';
 
 export interface Post {
   id: string;
@@ -30,7 +31,7 @@ export function getWordCount(content: string): number {
 }
 
 export const fetchPublishedPosts = async (notion: Client, dataSourceID: string) => {
-  const posts = await notion.dataSources.query({
+  const queryParams = {
     data_source_id: dataSourceID!,
     filter: {
       and: [
@@ -45,12 +46,14 @@ export const fetchPublishedPosts = async (notion: Client, dataSourceID: string) 
     sorts: [
       {
         property: 'Published Date',
-        direction: 'descending',
+        direction: 'descending' as const,
       },
     ],
-  });
+  };
 
-  return posts.results as PageObjectResponse[];
+  // Paginate past the 100-item per-query limit so large databases aren't
+  // silently truncated to the first page.
+  return queryAllPages(notion, queryParams);
 };
 
 export async function getPostFromNotion(pageId: string): Promise<Post | null> {
@@ -80,7 +83,7 @@ export async function getPostFromNotion(pageId: string): Promise<Post | null> {
     ${contentString}</div>`;
       });
 
-      return `<div className="column">${strings.join('')}</div>`;
+      return `<div class="column">${strings.join('')}</div>`;
     });
 
     const page = (await notion.pages.retrieve({
