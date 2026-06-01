@@ -39,16 +39,16 @@ describe('detectTier', () => {
 });
 
 describe('getParticleCount', () => {
-  it('returns 500 for desktop', () => {
-    expect(getParticleCount('desktop')).toBe(500);
+  it('returns 165 for desktop', () => {
+    expect(getParticleCount('desktop')).toBe(165);
   });
 
-  it('returns 300 for mobile-high', () => {
-    expect(getParticleCount('mobile-high')).toBe(300);
+  it('returns 100 for mobile-high', () => {
+    expect(getParticleCount('mobile-high')).toBe(100);
   });
 
-  it('returns 150 for mobile-low', () => {
-    expect(getParticleCount('mobile-low')).toBe(150);
+  it('returns 50 for mobile-low', () => {
+    expect(getParticleCount('mobile-low')).toBe(50);
   });
 });
 
