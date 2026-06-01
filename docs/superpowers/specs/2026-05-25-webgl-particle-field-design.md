@@ -31,11 +31,11 @@ The current `FloatingParticles` is 16 SVG circles with a Gaussian blur filter, a
 
 Three logical depth bands drive size, brightness, scroll-parallax strength, and flow-field speed:
 
-| Band | Depth range | Particle share | Size | Parallax | Intensity |
-| ---- | ----------- | -------------- | ---- | -------- | --------- |
-| Far  | 0.00–0.33   | ~60%           | small | weak    | dim       |
-| Mid  | 0.33–0.66   | ~30%           | medium | medium | medium    |
-| Near | 0.66–1.00   | ~10%           | large | strong  | brightest |
+| Band | Depth range | Particle share | Size   | Parallax | Intensity |
+| ---- | ----------- | -------------- | ------ | -------- | --------- |
+| Far  | 0.00–0.33   | ~60%           | small  | weak     | dim       |
+| Mid  | 0.33–0.66   | ~30%           | medium | medium   | medium    |
+| Near | 0.66–1.00   | ~10%           | large  | strong   | brightest |
 
 Depth is a per-instance attribute. All depth-derived properties are computed in the vertex shader via `mix(farValue, nearValue, aDepth)`.
 
@@ -140,11 +140,11 @@ The split between `particle-field.tsx` and `renderer/` exists so the React layer
 
 ### Particle count by tier (detected once at mount)
 
-| Tier                                                                 | Count |
-| -------------------------------------------------------------------- | ----- |
-| Desktop                                                              | 500   |
+| Tier                                                                  | Count |
+| --------------------------------------------------------------------- | ----- |
+| Desktop                                                               | 500   |
 | Mobile with `navigator.hardwareConcurrency ≥ 6` or `deviceMemory ≥ 4` | 300   |
-| Mobile (low-end)                                                     | 150   |
+| Mobile (low-end)                                                      | 150   |
 
 ### DPR
 
@@ -169,11 +169,11 @@ If `canvas.getContext('webgl2')` returns null → unmount the canvas, render not
 
 ### Targets
 
-| Device                                       | Target                                  |
-| -------------------------------------------- | --------------------------------------- |
-| Desktop (M-series Mac, mid-range Windows)    | 60fps locked, <1% main-thread, <3% GPU |
-| Mobile (iPhone 12 era and newer, mid-Android) | 60fps, <2% main-thread                 |
-| Older mobile                                 | 30fps acceptable; else watchdog freezes |
+| Device                                        | Target                                  |
+| --------------------------------------------- | --------------------------------------- |
+| Desktop (M-series Mac, mid-range Windows)     | 60fps locked, <1% main-thread, <3% GPU  |
+| Mobile (iPhone 12 era and newer, mid-Android) | 60fps, <2% main-thread                  |
+| Older mobile                                  | 30fps acceptable; else watchdog freezes |
 
 ### Bundle impact
 

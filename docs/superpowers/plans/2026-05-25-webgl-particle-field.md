@@ -15,6 +15,7 @@
 ## File Structure
 
 **Create:**
+
 - `src/components/islands/particles/particle-field.tsx` — React component: canvas mount, capability gate, lifecycle, FPS watchdog
 - `src/components/islands/particles/renderer/config.ts` — particle-count tiers, depth-band split, palettes, motion constants, `detectTier()`
 - `src/components/islands/particles/renderer/flow-field.ts` — curl-noise sampler, 16×16 RG texture data generator
@@ -30,11 +31,13 @@
 - `__tests__/components/islands/particles/particle-field.test.tsx`
 
 **Modify:**
+
 - `src/components/islands/FloatingParticles.tsx` — replace internals with `<ParticleField />`, drop `useIsMobile` gate
 - `src/components/islands/particles/index.ts` — re-export new `ParticleField` (keep barrel)
 - `package.json` — add `ogl` dependency
 
 **Delete:**
+
 - `src/components/islands/particles/particle-canvas.tsx`
 - `src/components/islands/particles/particle-config.ts`
 - `src/components/islands/particles/use-particles.ts`
@@ -45,6 +48,7 @@
 ## Task 1: Install OGL and add GLSL type declaration
 
 **Files:**
+
 - Modify: `package.json`
 - Create: `src/types/glsl.d.ts`
 
@@ -83,6 +87,7 @@ git commit -m "Add OGL dependency and GLSL ?raw type declaration"
 ## Task 2: Renderer config — constants and tier detection
 
 **Files:**
+
 - Create: `src/components/islands/particles/renderer/config.ts`
 - Test: `__tests__/components/islands/particles/config.test.ts`
 
@@ -93,27 +98,40 @@ Create `__tests__/components/islands/particles/config.test.ts`:
 ```typescript
 import { describe, expect, it } from 'vitest';
 
-import { detectTier, getParticleCount } from '../../../../src/components/islands/particles/renderer/config';
+import {
+  detectTier,
+  getParticleCount,
+} from '../../../../src/components/islands/particles/renderer/config';
 
 describe('detectTier', () => {
   it('returns "desktop" when not coarse pointer', () => {
-    expect(detectTier({ isMobile: false, hardwareConcurrency: 4, deviceMemory: 2 })).toBe('desktop');
+    expect(detectTier({ isMobile: false, hardwareConcurrency: 4, deviceMemory: 2 })).toBe(
+      'desktop',
+    );
   });
 
   it('returns "mobile-high" on mobile with >=6 cores', () => {
-    expect(detectTier({ isMobile: true, hardwareConcurrency: 6, deviceMemory: undefined })).toBe('mobile-high');
+    expect(detectTier({ isMobile: true, hardwareConcurrency: 6, deviceMemory: undefined })).toBe(
+      'mobile-high',
+    );
   });
 
   it('returns "mobile-high" on mobile with >=4GB memory', () => {
-    expect(detectTier({ isMobile: true, hardwareConcurrency: 4, deviceMemory: 4 })).toBe('mobile-high');
+    expect(detectTier({ isMobile: true, hardwareConcurrency: 4, deviceMemory: 4 })).toBe(
+      'mobile-high',
+    );
   });
 
   it('returns "mobile-low" on mobile with weak signals', () => {
-    expect(detectTier({ isMobile: true, hardwareConcurrency: 4, deviceMemory: 2 })).toBe('mobile-low');
+    expect(detectTier({ isMobile: true, hardwareConcurrency: 4, deviceMemory: 2 })).toBe(
+      'mobile-low',
+    );
   });
 
   it('returns "mobile-low" on mobile when both signals missing', () => {
-    expect(detectTier({ isMobile: true, hardwareConcurrency: undefined, deviceMemory: undefined })).toBe('mobile-low');
+    expect(
+      detectTier({ isMobile: true, hardwareConcurrency: undefined, deviceMemory: undefined }),
+    ).toBe('mobile-low');
   });
 });
 
@@ -197,19 +215,19 @@ export const WATCHDOG_FREEZE_THRESHOLD_MS = 25; // median frame time → freeze
 // RGB values are normalized [0..1] for direct use as shader uniforms.
 export const LIGHT_PALETTE: ReadonlyArray<readonly [number, number, number]> = [
   [0.227, 0.271, 0.333], // #3a4555 deep slate
-  [0.353, 0.420, 0.541], // #5a6b8a medium blue
-  [0.239, 0.353, 0.420], // #3d5a6b deep teal
+  [0.353, 0.42, 0.541], // #5a6b8a medium blue
+  [0.239, 0.353, 0.42], // #3d5a6b deep teal
   [0.353, 0.502, 0.565], // #5a8090 light teal
-  [0.420, 0.353, 0.541], // #6b5a8a muted violet
+  [0.42, 0.353, 0.541], // #6b5a8a muted violet
   [0.518, 0.565, 0.659], // #8490a8 pale blue
 ];
 
 export const DARK_PALETTE: ReadonlyArray<readonly [number, number, number]> = [
-  [1.000, 0.561, 0.000], // #ff8f00 deep orange
-  [1.000, 0.702, 0.302], // #ffb34d light orange
-  [1.000, 0.482, 0.420], // #ff7b6b coral
-  [1.000, 0.604, 0.541], // #ff9a8a light coral
-  [1.000, 0.757, 0.027], // #ffc107 gold
+  [1.0, 0.561, 0.0], // #ff8f00 deep orange
+  [1.0, 0.702, 0.302], // #ffb34d light orange
+  [1.0, 0.482, 0.42], // #ff7b6b coral
+  [1.0, 0.604, 0.541], // #ff9a8a light coral
+  [1.0, 0.757, 0.027], // #ffc107 gold
   [0.792, 0.816, 0.859], // #cad0db bright white
 ];
 ```
@@ -231,6 +249,7 @@ git commit -m "Add particle renderer config with tier detection"
 ## Task 3: Flow-field — curl noise + texture data generator
 
 **Files:**
+
 - Create: `src/components/islands/particles/renderer/flow-field.ts`
 - Test: `__tests__/components/islands/particles/flow-field.test.ts`
 
@@ -241,7 +260,10 @@ Create `__tests__/components/islands/particles/flow-field.test.ts`:
 ```typescript
 import { describe, expect, it } from 'vitest';
 
-import { generateFlowFieldTexture, sampleCurl } from '../../../../src/components/islands/particles/renderer/flow-field';
+import {
+  generateFlowFieldTexture,
+  sampleCurl,
+} from '../../../../src/components/islands/particles/renderer/flow-field';
 
 describe('sampleCurl', () => {
   it('returns bounded values', () => {
@@ -282,7 +304,10 @@ describe('generateFlowFieldTexture', () => {
     const b = generateFlowFieldTexture(16, 10);
     let differs = false;
     for (let i = 0; i < a.length; i++) {
-      if (a[i] !== b[i]) { differs = true; break; }
+      if (a[i] !== b[i]) {
+        differs = true;
+        break;
+      }
     }
     expect(differs).toBe(true);
   });
@@ -306,22 +331,19 @@ Create `src/components/islands/particles/renderer/flow-field.ts`:
 const PERM: number[] = (() => {
   const p = new Array<number>(512);
   const source = [
-    151, 160, 137, 91, 90, 15, 131, 13, 201, 95, 96, 53, 194, 233, 7, 225,
-    140, 36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23, 190, 6, 148,
-    247, 120, 234, 75, 0, 26, 197, 62, 94, 252, 219, 203, 117, 35, 11, 32,
-    57, 177, 33, 88, 237, 149, 56, 87, 174, 20, 125, 136, 171, 168, 68, 175,
-    74, 165, 71, 134, 139, 48, 27, 166, 77, 146, 158, 231, 83, 111, 229, 122,
-    60, 211, 133, 230, 220, 105, 92, 41, 55, 46, 245, 40, 244, 102, 143, 54,
-    65, 25, 63, 161, 1, 216, 80, 73, 209, 76, 132, 187, 208, 89, 18, 169,
-    200, 196, 135, 130, 116, 188, 159, 86, 164, 100, 109, 198, 173, 186, 3, 64,
-    52, 217, 226, 250, 124, 123, 5, 202, 38, 147, 118, 126, 255, 82, 85, 212,
-    207, 206, 59, 227, 47, 16, 58, 17, 182, 189, 28, 42, 223, 183, 170, 213,
-    119, 248, 152, 2, 44, 154, 163, 70, 221, 153, 101, 155, 167, 43, 172, 9,
-    129, 22, 39, 253, 19, 98, 108, 110, 79, 113, 224, 232, 178, 185, 112, 104,
-    218, 246, 97, 228, 251, 34, 242, 193, 238, 210, 144, 12, 191, 179, 162, 241,
-    81, 51, 145, 235, 249, 14, 239, 107, 49, 192, 214, 31, 181, 199, 106, 157,
-    184, 84, 204, 176, 115, 121, 50, 45, 127, 4, 150, 254, 138, 236, 205, 93,
-    222, 114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66, 215, 61, 156, 180,
+    151, 160, 137, 91, 90, 15, 131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 69,
+    142, 8, 99, 37, 240, 21, 10, 23, 190, 6, 148, 247, 120, 234, 75, 0, 26, 197, 62, 94, 252, 219,
+    203, 117, 35, 11, 32, 57, 177, 33, 88, 237, 149, 56, 87, 174, 20, 125, 136, 171, 168, 68, 175,
+    74, 165, 71, 134, 139, 48, 27, 166, 77, 146, 158, 231, 83, 111, 229, 122, 60, 211, 133, 230,
+    220, 105, 92, 41, 55, 46, 245, 40, 244, 102, 143, 54, 65, 25, 63, 161, 1, 216, 80, 73, 209, 76,
+    132, 187, 208, 89, 18, 169, 200, 196, 135, 130, 116, 188, 159, 86, 164, 100, 109, 198, 173, 186,
+    3, 64, 52, 217, 226, 250, 124, 123, 5, 202, 38, 147, 118, 126, 255, 82, 85, 212, 207, 206, 59,
+    227, 47, 16, 58, 17, 182, 189, 28, 42, 223, 183, 170, 213, 119, 248, 152, 2, 44, 154, 163, 70,
+    221, 153, 101, 155, 167, 43, 172, 9, 129, 22, 39, 253, 19, 98, 108, 110, 79, 113, 224, 232, 178,
+    185, 112, 104, 218, 246, 97, 228, 251, 34, 242, 193, 238, 210, 144, 12, 191, 179, 162, 241, 81,
+    51, 145, 235, 249, 14, 239, 107, 49, 192, 214, 31, 181, 199, 106, 157, 184, 84, 204, 176, 115,
+    121, 50, 45, 127, 4, 150, 254, 138, 236, 205, 93, 222, 114, 67, 29, 24, 72, 243, 141, 128, 195,
+    78, 66, 215, 61, 156, 180,
   ];
   for (let i = 0; i < 256; i++) {
     p[i] = source[i];
@@ -388,10 +410,7 @@ export function sampleCurl(x: number, y: number, z: number): [number, number] {
   const dy = -(n3 - n4) / (2 * EPS);
   // Empirical magnitude is small; scale and clamp to [-1, 1].
   const scale = 0.5;
-  return [
-    Math.max(-1, Math.min(1, dx * scale)),
-    Math.max(-1, Math.min(1, dy * scale)),
-  ];
+  return [Math.max(-1, Math.min(1, dx * scale)), Math.max(-1, Math.min(1, dy * scale))];
 }
 
 // Generates a grid×grid RG texture (Uint8Array of length grid*grid*2).
@@ -431,6 +450,7 @@ git commit -m "Add curl-noise flow-field sampler and texture generator"
 ## Task 4: `useVisibility` hook — tab visibility + reduced motion
 
 **Files:**
+
 - Create: `src/components/islands/particles/hooks/use-visibility.ts`
 
 This hook returns refs (not state) so the render loop can read them without re-rendering. No standalone unit tests; behavior is covered by the component test in Task 9.
@@ -492,6 +512,7 @@ git commit -m "Add useVisibility hook for tab + reduced-motion refs"
 ## Task 5: `useScrollVelocity` hook — throttled scroll + inertia state
 
 **Files:**
+
 - Create: `src/components/islands/particles/hooks/use-scroll-velocity.ts`
 
 Like `useVisibility`, this exposes refs only.
@@ -573,6 +594,7 @@ git commit -m "Add useScrollVelocity hook with throttled scroll + inertia"
 ## Task 6: Write the GLSL shaders
 
 **Files:**
+
 - Create: `src/components/islands/particles/renderer/shaders/particles.vert.glsl`
 - Create: `src/components/islands/particles/renderer/shaders/particles.frag.glsl`
 
@@ -688,6 +710,7 @@ git commit -m "Add WebGL2 vertex + fragment shaders for bokeh particles"
 ## Task 7: Create the OGL renderer factory and instanced mesh
 
 **Files:**
+
 - Create: `src/components/islands/particles/renderer/create-renderer.ts`
 - Create: `src/components/islands/particles/renderer/particles-mesh.ts`
 
@@ -755,9 +778,9 @@ Create `src/components/islands/particles/renderer/particles-mesh.ts`:
 ```typescript
 import { Geometry, Mesh, Program, Texture, Transform } from 'ogl';
 
-import vertexShader from './shaders/particles.vert.glsl?raw';
-import fragmentShader from './shaders/particles.frag.glsl?raw';
 import { DEPTH_BAND_RANGES, DEPTH_BAND_SPLIT, FLOW_FIELD_GRID } from './config';
+import fragmentShader from './shaders/particles.frag.glsl?raw';
+import vertexShader from './shaders/particles.vert.glsl?raw';
 
 export interface ParticlesMeshBundle {
   mesh: Mesh;
@@ -784,18 +807,8 @@ export function createParticlesMesh(
   initialFlowField: Uint8Array,
 ): ParticlesMeshBundle {
   // Quad geometry: two triangles in [-0.5, 0.5]
-  const quadPos = new Float32Array([
-    -0.5, -0.5,
-     0.5, -0.5,
-    -0.5,  0.5,
-     0.5,  0.5,
-  ]);
-  const quadUv = new Float32Array([
-    0, 0,
-    1, 0,
-    0, 1,
-    1, 1,
-  ]);
+  const quadPos = new Float32Array([-0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5]);
+  const quadUv = new Float32Array([0, 0, 1, 0, 0, 1, 1, 1]);
   const quadIdx = new Uint16Array([0, 1, 2, 1, 3, 2]);
 
   // Per-instance buffers
@@ -925,6 +938,7 @@ git commit -m "Add OGL renderer factory and instanced particles mesh"
 ## Task 8: Build the `ParticleField` React component
 
 **Files:**
+
 - Create: `src/components/islands/particles/particle-field.tsx`
 
 This is the only file that touches React. It owns: capability gate, mount/unmount, animation loop, watchdog, theme observer, flow-field regeneration, scroll/visibility ref wiring.
@@ -939,7 +953,8 @@ Create `src/components/islands/particles/particle-field.tsx`:
 import { useEffect, useRef } from 'react';
 
 import { useIsMobile } from '../../hooks/use-mobile';
-import { createRenderer } from './renderer/create-renderer';
+import { useScrollVelocity } from './hooks/use-scroll-velocity';
+import { useVisibility } from './hooks/use-visibility';
 import {
   DARK_PALETTE,
   FLOW_FIELD_GRID,
@@ -951,10 +966,9 @@ import {
   getMaxDpr,
   getParticleCount,
 } from './renderer/config';
+import { createRenderer } from './renderer/create-renderer';
 import { generateFlowFieldTexture } from './renderer/flow-field';
 import { createParticlesMesh } from './renderer/particles-mesh';
-import { useScrollVelocity } from './hooks/use-scroll-velocity';
-import { useVisibility } from './hooks/use-visibility';
 
 export default function ParticleField() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -968,7 +982,8 @@ export default function ParticleField() {
 
     const tier = detectTier({
       isMobile,
-      hardwareConcurrency: typeof navigator !== 'undefined' ? navigator.hardwareConcurrency : undefined,
+      hardwareConcurrency:
+        typeof navigator !== 'undefined' ? navigator.hardwareConcurrency : undefined,
       deviceMemory: (navigator as Navigator & { deviceMemory?: number }).deviceMemory,
     });
     const count = getParticleCount(tier);
@@ -991,7 +1006,13 @@ export default function ParticleField() {
     let flowTime = 0;
     const initialFlow = generateFlowFieldTexture(FLOW_FIELD_GRID, flowTime);
     const isDark = document.documentElement.classList.contains('dark');
-    const mesh = createParticlesMesh(gl, count, dpr, isDark ? DARK_PALETTE : LIGHT_PALETTE, initialFlow);
+    const mesh = createParticlesMesh(
+      gl,
+      count,
+      dpr,
+      isDark ? DARK_PALETTE : LIGHT_PALETTE,
+      initialFlow,
+    );
     setSize();
 
     // Theme observer
@@ -999,7 +1020,10 @@ export default function ParticleField() {
       const dark = document.documentElement.classList.contains('dark');
       mesh.setColors(dark ? DARK_PALETTE : LIGHT_PALETTE);
     });
-    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
 
     // Resize observer (debounced)
     let resizeTimeout: ReturnType<typeof setTimeout>;
@@ -1048,7 +1072,9 @@ export default function ParticleField() {
           const median = sorted[Math.floor(sorted.length / 2)];
           if (median > WATCHDOG_FREEZE_THRESHOLD_MS) {
             if (import.meta.env.DEV) {
-              console.warn(`[ParticleField] watchdog: median frame ${median.toFixed(1)}ms — freezing.`);
+              console.warn(
+                `[ParticleField] watchdog: median frame ${median.toFixed(1)}ms — freezing.`,
+              );
             }
             frozen = true;
             watchdogTripped = true;
@@ -1114,6 +1140,7 @@ git commit -m "Add ParticleField component with capability gate and watchdog"
 ## Task 9: Component test for `ParticleField`
 
 **Files:**
+
 - Create: `__tests__/components/islands/particles/particle-field.test.tsx`
 
 - [ ] **Step 1: Write the test**
@@ -1157,8 +1184,12 @@ describe('ParticleField', () => {
     const { unmount } = render(<ParticleField />);
     unmount();
     // Every scroll/popstate listener added during mount should be removed on unmount.
-    const added = addSpy.mock.calls.filter(([type]) => type === 'scroll' || type === 'popstate').length;
-    const removed = removeSpy.mock.calls.filter(([type]) => type === 'scroll' || type === 'popstate').length;
+    const added = addSpy.mock.calls.filter(
+      ([type]) => type === 'scroll' || type === 'popstate',
+    ).length;
+    const removed = removeSpy.mock.calls.filter(
+      ([type]) => type === 'scroll' || type === 'popstate',
+    ).length;
     expect(removed).toBe(added);
   });
 });
@@ -1181,6 +1212,7 @@ git commit -m "Add ParticleField component test for capability gate + cleanup"
 ## Task 10: Wire `FloatingParticles` to `ParticleField`; delete old code
 
 **Files:**
+
 - Modify: `src/components/islands/FloatingParticles.tsx`
 - Modify: `src/components/islands/particles/index.ts`
 - Delete: `src/components/islands/particles/particle-canvas.tsx`
@@ -1191,9 +1223,11 @@ git commit -m "Add ParticleField component test for capability gate + cleanup"
 - [ ] **Step 1: Find tests that reference the old modules**
 
 Run:
+
 ```bash
 grep -rl "particle-canvas\|particle-config\|use-particles\|useParticles\|ParticleCanvas" __tests__/ || true
 ```
+
 Expected: a list of test files (possibly empty). Delete each listed file.
 
 - [ ] **Step 2: Replace `FloatingParticles.tsx` internals**
@@ -1298,6 +1332,7 @@ Save in a temp location and attach to the PR description. Do not commit screensh
 - [ ] **Step 10: Open PR**
 
 Push the branch and open a PR titled `Replace SVG particle background with WebGL field`. PR body should include:
+
 - Link to the design spec (`docs/superpowers/specs/2026-05-25-webgl-particle-field-design.md`).
 - Before/after screenshots.
 - A note that this overrides the May 17 critique recommendation to scope/kill the particles.
