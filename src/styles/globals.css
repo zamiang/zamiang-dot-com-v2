@@ -1282,8 +1282,15 @@
     background: transparent;
   }
 
+  .publication-intro {
+    font-size: var(--font-size-base);
+    color: var(--foreground);
+    line-height: 1.65;
+    margin: 0 0 1.75rem 0;
+  }
+
   .publication-entry {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.75rem;
   }
 
   .publication-entry h4 {
@@ -1299,6 +1306,30 @@
     color: var(--muted-foreground);
     margin: 0;
     line-height: 1.5;
+  }
+
+  .publication-entry .publication-meta {
+    font-style: italic;
+  }
+
+  .publication-entry .publication-summary {
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+    margin-top: 0.5rem;
+  }
+
+  .publication-entry .publication-links {
+    font-size: var(--font-size-sm);
+    margin-top: 0.5rem;
+  }
+
+  .publication-links a {
+    color: var(--accent-bold);
+    text-decoration: none;
+  }
+
+  .publication-links a:hover {
+    text-decoration: underline;
   }
 
   /* View all link */
