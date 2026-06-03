@@ -28,6 +28,9 @@ const minLevel = Math.min(...items.map((item) => item.level));
 // site's CSP blocks inline `style` attributes: Astro auto-hashes its own inline
 // <style> tags, and per the CSP spec a present hash makes 'unsafe-inline' inert.
 // Class names must be written as full literals so Tailwind detects them.
+// Five indent steps cover h1→h5 relative to the shallowest heading. Anything
+// deeper (a lone h6 under an h1) is intentionally capped at ml-16 rather than
+// growing unbounded — article ToCs effectively never nest that deep.
 const indentClasses = ['ml-0', 'ml-4', 'ml-8', 'ml-12', 'ml-16'];
 const indentFor = (level: number) =>
   indentClasses[Math.min(level - minLevel, indentClasses.length - 1)];

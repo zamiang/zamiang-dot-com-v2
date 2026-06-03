@@ -17,6 +17,9 @@ const eslintConfig = [
   {
     rules: {
       '@typescript-eslint/no-require-imports': 'off',
+      // Allow dropping a prop via a rest sibling, e.g.
+      // `function CodeTag({ style, ...rest })` in ContentRenderer.tsx.
+      '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],
     },
   },
   {

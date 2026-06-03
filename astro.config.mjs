@@ -87,8 +87,14 @@ export default defineConfig({
         resources: ["'self'", 'https://static.cloudflareinsights.com'],
       },
       styleDirective: {
-        // 'unsafe-inline' covers React-emitted <style> tags and inline
-        // style="..." attributes that Astro's hasher doesn't see.
+        // 'self' + fonts.googleapis.com cover external stylesheets. Note that
+        // 'unsafe-inline' is effectively INERT here: Astro appends sha256
+        // hashes for its own inline <style> tags, and per the CSP spec a
+        // present hash makes 'unsafe-inline' ignored — including for
+        // style="..." attributes. Inline styles are therefore blocked; theme
+        // code blocks via CSS classes, not inline styles (see
+        // TableOfContents.astro / ContentRenderer.tsx). Kept only as a no-op
+        // fallback for any page that ships no hashed inline style.
         resources: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
       },
     },

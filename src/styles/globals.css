@@ -511,7 +511,7 @@
   .code-block .token.atrule,
   .code-block .token.rule,
   .code-block .token.important {
-    color: #a85a36; /* darkened copper */
+    color: #8f4c2e; /* darkened copper — WCAG AA on --muted (~5.4:1) */
     font-weight: 600;
   }
 
@@ -526,7 +526,7 @@
   .code-block .token.char,
   .code-block .token.attr-value,
   .code-block .token.regex {
-    color: #4f7d5f; /* darkened success green */
+    color: #436a51; /* darkened success green — WCAG AA on --muted (~5.1:1) */
   }
 
   .code-block .token.number,
@@ -540,6 +540,25 @@
   .code-block .token.property,
   .code-block .token.attr-name {
     color: #3f5d8a; /* deep indigo-blue */
+  }
+
+  /* CSS custom properties, shell/template variables, TS namespaces, XML
+     prefixes. Without these Prism falls back to --foreground (readable but
+     undifferentiated). Reuse existing AA-passing token hues. */
+  .code-block .token.variable {
+    color: #2f6d80; /* deep teal — matches number/constant family */
+  }
+
+  .code-block .token.namespace {
+    color: #46627a; /* darkened steel blue — matches class-name family */
+  }
+
+  .code-block .token.template-string {
+    color: #436a51; /* darkened success green — matches string family */
+  }
+
+  .code-block .token.template-punctuation {
+    color: var(--muted-foreground); /* matches punctuation */
   }
 
   .code-block .token.deleted {
