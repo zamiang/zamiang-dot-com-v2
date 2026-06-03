@@ -5,7 +5,6 @@
 import React, { ReactNode, isValidElement } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
@@ -16,6 +15,14 @@ import { cn } from '../../lib/utils';
 interface ContentRendererProps {
   content: string;
   gallery?: boolean;
+}
+
+// Custom code tag that drops react-syntax-highlighter's hardcoded inline
+// `white-space:pre` style. The CSP blocks inline styles, and `.code-block`
+// already supplies `white-space: pre` (inherited by this <code>), so the
+// inline style is both blocked and redundant.
+function CodeTag({ style: _style, ...rest }: React.HTMLAttributes<HTMLElement>) {
+  return <code {...rest} />;
 }
 
 function getTextContent(children: ReactNode): string {
@@ -41,12 +48,17 @@ const baseComponents = {
   code: ({ className, children, ...props }: { className?: string; children?: React.ReactNode }) => {
     const match = /language-(\w+)/.exec(className || '');
     return match ? (
+      // useInlineStyles={false}: tokens are colored via the `.token.*` classes
+      // styled in globals.css, not inline `style` attributes. The site's CSP
+      // blocks inline styles (Astro's auto-hashed <style> tags make
+      // 'unsafe-inline' inert), which previously rendered code white-on-white.
       <SyntaxHighlighter
-        style={vscDarkPlus}
+        useInlineStyles={false}
         language={match[1]}
         PreTag="div"
+        CodeTag={CodeTag}
         {...props}
-        className="rounded-md [&>code]:bg-transparent [&>code]:p-2 [&>code]:rounded-md"
+        className="code-block"
       >
         {String(children).replace(/\n$/, '')}
       </SyntaxHighlighter>

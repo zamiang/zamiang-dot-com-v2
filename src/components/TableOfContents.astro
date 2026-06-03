@@ -23,6 +23,14 @@ if (items.length < 3) {
 
 // Find the minimum heading level to use as baseline for indentation
 const minLevel = Math.min(...items.map((item) => item.level));
+
+// Indentation is applied via Tailwind classes (not inline styles) because the
+// site's CSP blocks inline `style` attributes: Astro auto-hashes its own inline
+// <style> tags, and per the CSP spec a present hash makes 'unsafe-inline' inert.
+// Class names must be written as full literals so Tailwind detects them.
+const indentClasses = ['ml-0', 'ml-4', 'ml-8', 'ml-12', 'ml-16'];
+const indentFor = (level: number) =>
+  indentClasses[Math.min(level - minLevel, indentClasses.length - 1)];
 ---
 
 <nav
@@ -38,7 +46,7 @@ const minLevel = Math.min(...items.map((item) => item.level));
   <ul class="space-y-1.5 m-0 p-0 list-none">
     {
       items.map((item) => (
-        <li class="m-0" style={`margin-left: ${(item.level - minLevel) * 1}rem`}>
+        <li class={`m-0 ${indentFor(item.level)}`}>
           <a
             href={`#${item.id}`}
             class="text-sm text-foreground/70 hover:text-foreground transition-colors duration-150 !border-none !no-underline leading-relaxed"
