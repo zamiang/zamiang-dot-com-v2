@@ -21,7 +21,7 @@ interface ContentRendererProps {
 // `white-space:pre` style. The CSP blocks inline styles, and `.code-block`
 // already supplies `white-space: pre` (inherited by this <code>), so the
 // inline style is both blocked and redundant.
-function CodeTag({ style: _style, ...rest }: React.HTMLAttributes<HTMLElement>) {
+function CodeTag({ style, ...rest }: React.HTMLAttributes<HTMLElement>) {
   return <code {...rest} />;
 }
 
