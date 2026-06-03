@@ -30,15 +30,22 @@ if (posts.length === 0 && vbcPosts.length === 0 && photos.length === 0) {
 
 const siteUrl = config.site.url;
 
-// Limit homepage writing to 5 total cards. When the VBC series card is
-// rendered above the post list, it claims one of those slots — so the
-// number of individual posts shown drops to 4.
+// Homepage writing list: the VBC series is shown as a single card that sorts
+// chronologically alongside individual posts (dated by its first part), rather
+// than being pinned to the top. Limit to 5 total cards.
 const HOMEPAGE_WRITING_CARDS = 5;
-const hasVbcCard = vbcPosts.length > 0;
-const recentPostsLimit = HOMEPAGE_WRITING_CARDS - (hasVbcCard ? 1 : 0);
-const recentPosts = posts
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, recentPostsLimit);
+const vbcCard =
+  vbcPosts.length > 0
+    ? {
+        slug: vbcPosts[0].data.slug,
+        title: VBC_TITLE,
+        date: vbcPosts[0].data.date,
+        excerpt: `A ${vbcPosts.length}-part series on why fixing American healthcare from the inside is harder than it looks.`,
+      }
+    : null;
+const writingCards = [...posts.map((p) => p.data), ...(vbcCard ? [vbcCard] : [])]
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  .slice(0, HOMEPAGE_WRITING_CARDS);
 
 // Schema.org JSON-LD for homepage
 const jsonLd = {
@@ -128,20 +135,10 @@ const jsonLd = {
             <h2 class="bm-section-display-title">Recent Essays</h2>
             <p class="bm-section-tagline">How I got my gray hairs.</p>
           </header>
-          {vbcPosts.length > 0 && (
-            <PostCard
-              post={{
-                slug: vbcPosts[0].data.slug,
-                title: VBC_TITLE,
-                date: vbcPosts[0].data.date,
-                excerpt: `A ${vbcPosts.length}-part series on why fixing American healthcare from the inside is harder than it looks.`,
-              }}
-            />
-          )}
-          {recentPosts.map((post) => (
-            <PostCard post={post.data} />
+          {writingCards.map((post) => (
+            <PostCard post={post} />
           ))}
-          {posts.length > recentPosts.length && (
+          {posts.length + (vbcCard ? 1 : 0) > writingCards.length && (
             <a href="/writing" class="view-all-link">
               View all writing →
             </a>
