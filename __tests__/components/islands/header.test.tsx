@@ -46,7 +46,7 @@ describe('Header', () => {
       const resumeLinks = screen.getAllByRole('link', { name: /Resume/ });
       // There are two resume links (desktop and mobile), check the first
       const resumeLink = resumeLinks[0];
-      expect(resumeLink).toHaveAttribute('href', '/resume.pdf');
+      expect(resumeLink).toHaveAttribute('href', '/brennan-moore-resume-2026.pdf');
       expect(resumeLink).toHaveAttribute('target', '_blank');
       expect(resumeLink).toHaveAttribute('rel', 'noopener noreferrer');
     });
@@ -95,13 +95,15 @@ describe('Header', () => {
       expect(mobileNav?.querySelector('a[href="/#work"]')).toBeInTheDocument();
       expect(mobileNav?.querySelector('a[href="/#writing"]')).toBeInTheDocument();
       expect(mobileNav?.querySelector('a[href="/#photography"]')).toBeInTheDocument();
-      expect(mobileNav?.querySelector('a[href="/resume.pdf"]')).toBeInTheDocument();
+      expect(
+        mobileNav?.querySelector('a[href="/brennan-moore-resume-2026.pdf"]'),
+      ).toBeInTheDocument();
     });
 
     it('should have external link attributes on resume in mobile menu', () => {
       const { container } = render(<Header />);
       const mobileNav = container.querySelector('.mobile-menu');
-      const resumeLink = mobileNav?.querySelector('a[href="/resume.pdf"]');
+      const resumeLink = mobileNav?.querySelector('a[href="/brennan-moore-resume-2026.pdf"]');
       expect(resumeLink).toHaveAttribute('target', '_blank');
       expect(resumeLink).toHaveAttribute('rel', 'noopener noreferrer');
     });

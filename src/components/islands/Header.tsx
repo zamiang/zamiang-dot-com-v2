@@ -22,7 +22,7 @@ const navLinks: NavLink[] = [
   { href: '/#work', label: 'Work' },
   { href: '/#writing', label: 'Writing' },
   { href: '/#photography', label: 'Photography' },
-  { href: '/resume.pdf', label: 'Resume', external: true },
+  { href: '/brennan-moore-resume-2026.pdf', label: 'Resume', external: true },
 ];
 
 export default function Header() {
