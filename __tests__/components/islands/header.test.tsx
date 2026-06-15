@@ -95,7 +95,9 @@ describe('Header', () => {
       expect(mobileNav?.querySelector('a[href="/#work"]')).toBeInTheDocument();
       expect(mobileNav?.querySelector('a[href="/#writing"]')).toBeInTheDocument();
       expect(mobileNav?.querySelector('a[href="/#photography"]')).toBeInTheDocument();
-      expect(mobileNav?.querySelector('a[href="/brennan-moore-resume-2026.pdf"]')).toBeInTheDocument();
+      expect(
+        mobileNav?.querySelector('a[href="/brennan-moore-resume-2026.pdf"]'),
+      ).toBeInTheDocument();
     });
 
     it('should have external link attributes on resume in mobile menu', () => {
