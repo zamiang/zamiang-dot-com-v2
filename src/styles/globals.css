@@ -1678,13 +1678,30 @@
     display: none;
   }
 
-  /* Each <figure> is one grid cell. The inspect card inside provides the
-     square crop, so the figure just stacks photo + caption. */
+  /* Each <figure> is one grid cell, stacking photo + caption. */
   .photos-content .prose figure {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     margin: 0 !important;
+  }
+
+  /* Post bodies show full-frame photos at their native aspect ratio — 4:5
+     portraits, 3:2 landscapes, and squares all display uncropped. The uniform
+     square crop (`.bm-photo` aspect-ratio: 1/1 + object-fit: cover) is kept on
+     the homepage grid and photo-index cards, where a tidy grid matters. */
+  .photos-content .prose .bm-photo {
+    aspect-ratio: auto;
+  }
+
+  /* Let the base image flow in normal layout so its intrinsic ratio sets the
+     container height; the edge-detect line + HUD stay absolute overlays pinned
+     to that box (see ContentRenderer galleryImg). */
+  .photos-content .prose .bm-photo--inspect .bm-photo-base {
+    position: static;
+    width: 100%;
+    height: auto;
+    object-fit: fill;
   }
 
   /* Caption row: italic serif title beneath each photo */
