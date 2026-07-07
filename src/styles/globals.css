@@ -1094,6 +1094,21 @@
    ========================================================================== */
 
 @layer components {
+  /* Off-screen SVG holding the #bm-edge filter def. Positioned via class
+     (not a style="" attr) because the CSP blocks inline styles. */
+  .bm-filter-svg {
+    position: absolute;
+  }
+
+  /* FloatingParticles WebGL canvas. Applied via className instead of
+     element.style to satisfy the CSP (inline styles are blocked). */
+  .particles-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
   .section-wrapper {
     /* Break out of parent container for full-bleed */
     width: 100vw;

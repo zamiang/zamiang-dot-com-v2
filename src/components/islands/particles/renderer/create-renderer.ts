@@ -30,10 +30,10 @@ export function createRenderer(parent: HTMLElement, dpr: number): RendererBundle
   gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA); // premultiplied alpha
 
   const canvas = gl.canvas;
-  canvas.style.position = 'absolute';
-  canvas.style.inset = '0';
-  canvas.style.width = '100%';
-  canvas.style.height = '100%';
+  // Positioned via a CSS class rather than element.style — the CSP blocks
+  // inline styles (Astro's hashes make 'unsafe-inline' inert). See .particles-canvas
+  // in globals.css.
+  (canvas as HTMLCanvasElement).classList.add('particles-canvas');
   parent.appendChild(canvas);
 
   const resize = (width: number, height: number) => {
