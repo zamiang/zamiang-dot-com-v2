@@ -48,12 +48,13 @@
 - ✅ Comprehensive API route testing (RSS, JSON Feed, Sitemap)
 
 **Coverage Analysis by Module**:
-| Module | Coverage | Notes |
-|--------|----------|-------|
-| API Routes (RSS, Feed, Sitemap) | 100% | Excellent |
-| Components | 85% | Good, minor gaps in particles |
-| Lib utilities | 72% | notion.ts at 48% (acceptable for cache script) |
-| Hooks | 93% | Very good |
+
+| Module                          | Coverage | Notes                                          |
+| ------------------------------- | -------- | ---------------------------------------------- |
+| API Routes (RSS, Feed, Sitemap) | 100%     | Excellent                                      |
+| Components                      | 85%      | Good, minor gaps in particles                  |
+| Lib utilities                   | 72%      | notion.ts at 48% (acceptable for cache script) |
+| Hooks                           | 93%      | Very good                                      |
 
 **Under-tested Areas**:
 
@@ -93,13 +94,14 @@ it('should render anchor with href', () => {
 - Largest file: `src/app/page.tsx` (286 lines) - justified as main homepage with work history
 
 **File Size Distribution**:
-| File | Lines | Assessment |
-|------|-------|------------|
-| page.tsx (homepage) | 286 | ✅ Justified - contains work history, all sections |
-| notion.ts | 247 | ✅ Justified - core API integration |
-| use-particles.ts | 213 | ✅ Justified - complex animation logic |
-| particle-config.ts | 170 | ✅ Justified - configuration constants |
-| page-utils.ts | 134 | ✅ Appropriate utility collection |
+
+| File                | Lines | Assessment                                         |
+| ------------------- | ----- | -------------------------------------------------- |
+| page.tsx (homepage) | 286   | ✅ Justified - contains work history, all sections |
+| notion.ts           | 247   | ✅ Justified - core API integration                |
+| use-particles.ts    | 213   | ✅ Justified - complex animation logic             |
+| particle-config.ts  | 170   | ✅ Justified - configuration constants             |
+| page-utils.ts       | 134   | ✅ Appropriate utility collection                  |
 
 **Architecture Evaluation**:
 
