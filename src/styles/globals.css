@@ -995,6 +995,26 @@
     transform: translateY(0);
   }
 
+  /* Touch devices (iOS Safari, etc.) have no true hover: a tap latches the
+     :hover state, revealing the #bm-edge line-art overlay whose edge-detection
+     convolution paints an outline around the photo. The inspect treatment is a
+     desktop hover affordance only — suppress the reveal on coarse pointers so
+     touch users see a clean static image. */
+  @media (hover: none), (pointer: coarse) {
+    .bm-photo--inspect:hover .bm-photo-base {
+      filter: none;
+    }
+    .bm-photo--inspect:hover .bm-photo-line {
+      opacity: 0;
+    }
+    .bm-photo--inspect:hover::before,
+    .bm-photo--inspect:hover .bm-hud-brackets span,
+    .bm-photo--inspect:hover .bm-hud-reticle,
+    .bm-photo--inspect:hover .bm-hud-telemetry {
+      opacity: 0;
+    }
+  }
+
   /* Tighter post cards in homepage primary section */
   .homepage-primary .post {
     margin-top: 0;
