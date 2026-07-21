@@ -1940,6 +1940,11 @@
 
 .post-article:not(.post-article--photos) .prose :is(p, li) {
   line-height: var(--line-height-body);
+  /* Tailwind Typography colors list text via --tw-prose-body (slate-700),
+     while paragraphs are set to text-foreground/90 in ContentRenderer, so list
+     items read cooler/darker than their surrounding prose. Bind both to the
+     same 90%-opacity site ink. */
+  color: color-mix(in oklab, var(--foreground) 90%, transparent);
 }
 
 .post-article:not(.post-article--photos) .prose :is(h2, h3, h4) {
