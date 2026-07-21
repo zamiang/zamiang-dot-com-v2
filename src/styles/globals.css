@@ -1930,6 +1930,12 @@
 .post-article:not(.post-article--photos) .prose {
   font-size: var(--article-font-size);
   line-height: var(--line-height-body);
+  /* Tailwind Typography colors list markers lighter than body text via
+     --tw-prose-bullets (slate-300) and --tw-prose-counters (slate-500), so
+     bullets/numbers read as a different, paler gray than their text. Bind both
+     to the site ink so markers match the list text they belong to. */
+  --tw-prose-bullets: var(--foreground);
+  --tw-prose-counters: var(--foreground);
 }
 
 .post-article:not(.post-article--photos) .prose :is(p, li) {
