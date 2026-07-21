@@ -9,7 +9,7 @@ import type { TocItem } from '../components/TableOfContents.astro';
 import TableOfContents from '../components/TableOfContents.astro';
 import { config } from '../lib/config';
 import { extractHeadings } from '../lib/toc';
-import { calculateReadingTime } from '../lib/utils';
+import { calculateReadingTime, stripLeadingTitleHeading } from '../lib/utils';
 import BaseLayout from './BaseLayout.astro';
 
 interface PostData {
@@ -32,6 +32,11 @@ interface Props {
 }
 
 const { post, type = 'writing' } = Astro.props;
+
+// Notion bodies repeat the title as a leading H1, which would render the
+// headline twice (layout <h1> + body heading). Drop it for the rendered
+// article only; wordCount/JSON-LD below still use the canonical raw content.
+const bodyContent = stripLeadingTitleHeading(post.content, post.title);
 
 const postDate = new Date(post.date);
 const siteUrl = config.site.url;
@@ -200,10 +205,10 @@ const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
     {
       type === 'photos' ? (
         <div class="photos-content">
-          <ContentRenderer content={post.content} gallery client:load />
+          <ContentRenderer content={bodyContent} gallery client:load />
         </div>
       ) : (
-        <ContentRenderer content={post.content} client:load />
+        <ContentRenderer content={bodyContent} client:load />
       )
     }
 

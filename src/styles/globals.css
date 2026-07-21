@@ -1912,3 +1912,54 @@
     }
   }
 }
+
+/* ============================================================================
+   Article body typography — override Tailwind Typography (`.prose`)
+
+   Tailwind's typography plugin registers `prose` in a later cascade layer than
+   `@layer components`, so its heading font-size/weight/line-height win over any
+   layered rule regardless of specificity. Its defaults render in-body headings
+   at weight 500 with loose leading on an em-based scale disconnected from our
+   `--font-size-*` tokens, flattening the hierarchy (section heads land only
+   ~1.2x the body size). These UNLAYERED rules (which beat every @layer) rebind
+   the article body to the site's committed serif scale for long-form reading.
+   `ContentRenderer` demotes headings one level (md `##` -> h3), so h3 is the
+   primary in-body section head and carries the strongest treatment. Scoped to
+   writing articles; photo galleries keep their own `.prose` treatment.
+   ============================================================================ */
+.post-article:not(.post-article--photos) .prose {
+  font-size: var(--article-font-size);
+  line-height: var(--line-height-body);
+}
+
+.post-article:not(.post-article--photos) .prose :is(p, li) {
+  line-height: var(--line-height-body);
+}
+
+.post-article:not(.post-article--photos) .prose :is(h2, h3, h4) {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.post-article:not(.post-article--photos) .prose h2 {
+  font-size: var(--font-size-2xl); /* Fluid: 24-30px — matches site h2 token */
+  line-height: 1.2;
+  margin-top: 2.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.post-article:not(.post-article--photos) .prose h3 {
+  font-size: var(--font-size-xl); /* Fluid: 20-24px — matches site h3 token */
+  line-height: 1.25;
+  margin-top: 2.25rem;
+  margin-bottom: 0.4rem;
+}
+
+.post-article:not(.post-article--photos) .prose h4 {
+  font-size: var(--font-size-lg); /* Fluid: 18-20px — matches site h4 token */
+  line-height: 1.35;
+  letter-spacing: -0.005em;
+  margin-top: 1.75rem;
+  margin-bottom: 0.35rem;
+}
