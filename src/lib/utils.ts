@@ -20,7 +20,10 @@ export function calculateReadingTime(wordCount: number): string {
  * original source. Returns the content unchanged when nothing matches.
  */
 export function stripLeadingTitleHeading(content: string, title: string): string {
-  const normalize = (s: string) => s.trim().toLowerCase().replace(/\s+/g, ' ');
+  // Strip inline emphasis/code markers so a `# **Title**` heading still matches
+  // a plain frontmatter title, mirroring how extractHeadings() normalizes text.
+  const normalize = (s: string) =>
+    s.trim().replace(/[*_`]/g, '').replace(/\s+/g, ' ').toLowerCase();
   const target = normalize(title);
   if (!target) return content;
 

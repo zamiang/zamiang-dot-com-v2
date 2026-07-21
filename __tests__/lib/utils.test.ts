@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { extractHeadings } from '../../src/lib/toc';
 import { calculateReadingTime, stripLeadingTitleHeading } from '../../src/lib/utils';
 
 describe('calculateReadingTime', () => {
@@ -29,6 +30,11 @@ describe('stripLeadingTitleHeading', () => {
     expect(stripLeadingTitleHeading(content, title)).toBe('Body.');
   });
 
+  it('matches a heading wrapped in bold/emphasis markers', () => {
+    const content = `# **${title}**\n\nBody.`;
+    expect(stripLeadingTitleHeading(content, title)).toBe('Body.');
+  });
+
   it('leaves a non-matching leading heading untouched', () => {
     const content = `# A different heading\n\nBody.`;
     expect(stripLeadingTitleHeading(content, title)).toBe(content);
@@ -47,5 +53,16 @@ describe('stripLeadingTitleHeading', () => {
   it('returns content unchanged when the title is empty', () => {
     const content = `# ${title}\n\nBody.`;
     expect(stripLeadingTitleHeading(content, '')).toBe(content);
+  });
+
+  it('keeps TOC extraction in sync — the stripped title is not a heading', () => {
+    // PostLayout feeds bodyContent to both the renderer and extractHeadings;
+    // the duplicate-title H1 must be gone from both so no phantom TOC anchor
+    // (linking to a now-missing element) is produced.
+    const content = `# ${title}\n\n## Real section\n\nBody.\n\n### Subsection\n\nMore.`;
+    const body = stripLeadingTitleHeading(content, title);
+    const headings = extractHeadings(body);
+    expect(headings.map((h) => h.text)).toEqual(['Real section', 'Subsection']);
+    expect(headings.some((h) => h.text === title)).toBe(false);
   });
 });
