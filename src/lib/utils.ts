@@ -20,11 +20,7 @@ export function calculateReadingTime(wordCount: number): string {
  * original source. Returns the content unchanged when nothing matches.
  */
 export function stripLeadingTitleHeading(content: string, title: string): string {
-  const normalize = (s: string) =>
-    s
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, ' ');
+  const normalize = (s: string) => s.trim().toLowerCase().replace(/\s+/g, ' ');
   const target = normalize(title);
   if (!target) return content;
 
