@@ -34,8 +34,10 @@ interface Props {
 const { post, type = 'writing' } = Astro.props;
 
 // Notion bodies repeat the title as a leading H1, which would render the
-// headline twice (layout <h1> + body heading). Drop it for the rendered
-// article only; wordCount/JSON-LD below still use the canonical raw content.
+// headline twice (layout <h1> + body heading). Strip it, then derive
+// everything about the rendered article — markup, TOC, word count — from this
+// so they stay in sync. Only the raw `.md` endpoint and RSS/JSON feeds keep
+// the canonical unstripped source.
 const bodyContent = stripLeadingTitleHeading(post.content, post.title);
 
 const postDate = new Date(post.date);
@@ -64,16 +66,19 @@ const hasMeaningfulModified =
   !!post.dateModified && post.dateModified.split('T')[0] !== post.date.split('T')[0];
 const lastUpdatedLabel = hasMeaningfulModified ? formatIsoDate(post.dateModified) : '';
 
-// Calculate reading time
-const wordCount = post.content
+// Calculate reading time. Use `bodyContent` (the actually-rendered article)
+// so a stripped duplicate-title heading isn't counted.
+const wordCount = bodyContent
   .replace(/[^\w\s]/g, ' ')
   .replace(/\s+/g, ' ')
   .trim()
   .split(' ').length;
 const readingTime = calculateReadingTime(wordCount);
 
-// Extract TOC items if enabled
-const tocItems: TocItem[] = post.showToc ? extractHeadings(post.content) : [];
+// Extract TOC items if enabled. Read from `bodyContent`, not the raw content,
+// so the TOC stays in sync with the rendered DOM — otherwise a stripped
+// duplicate-title H1 would produce a phantom entry linking to a missing anchor.
+const tocItems: TocItem[] = post.showToc ? extractHeadings(bodyContent) : [];
 const showToc = post.showToc && tocItems.length >= 3;
 
 // Generate JSON-LD
