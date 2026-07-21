@@ -64,16 +64,19 @@ const hasMeaningfulModified =
   !!post.dateModified && post.dateModified.split('T')[0] !== post.date.split('T')[0];
 const lastUpdatedLabel = hasMeaningfulModified ? formatIsoDate(post.dateModified) : '';
 
-// Calculate reading time
-const wordCount = post.content
+// Calculate reading time. Use `bodyContent` (the actually-rendered article)
+// so a stripped duplicate-title heading isn't counted.
+const wordCount = bodyContent
   .replace(/[^\w\s]/g, ' ')
   .replace(/\s+/g, ' ')
   .trim()
   .split(' ').length;
 const readingTime = calculateReadingTime(wordCount);
 
-// Extract TOC items if enabled
-const tocItems: TocItem[] = post.showToc ? extractHeadings(post.content) : [];
+// Extract TOC items if enabled. Read from `bodyContent`, not the raw content,
+// so the TOC stays in sync with the rendered DOM — otherwise a stripped
+// duplicate-title H1 would produce a phantom entry linking to a missing anchor.
+const tocItems: TocItem[] = post.showToc ? extractHeadings(bodyContent) : [];
 const showToc = post.showToc && tocItems.length >= 3;
 
 // Generate JSON-LD
