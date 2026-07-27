@@ -6,7 +6,7 @@ A personal blog built with [Astro](https://astro.build/) using [Notion](https://
 
 ## Tech Stack
 
-- **Astro 5** – Static site generation
+- **Astro 7** – Static site generation
 - **React 19** – Interactive components (islands)
 - **Tailwind CSS 4** – Styling
 - **Notion API** – Content management

@@ -83,8 +83,6 @@ This command delegates to `scripts/tdd.js` which handles:
 - RED-GREEN-REFACTOR cycle enforcement
 - Success tracking and metrics
 
-For more patterns, see [TDD with Claude](../../docs/TDD_WITH_CLAUDE.md).
-
 ---
 
 _"TDD with Claude isn't a process, it's a superpower." - Every developer who tried it_

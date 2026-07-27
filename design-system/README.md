@@ -7,11 +7,11 @@
 
 A design system distilled from the personal website of **Brennan Moore** — engineer, writer, photographer. The system is sophisticated, restrained, and reading-first: a "Slate Executive" palette, EB Garamond serif headings, Lato body, generous whitespace, and a quiet copper accent for emphasis.
 
-> "Slate Executive — sophisticated minimalism with warmth. Light mode only, serif typography (EB Garamond), 680px content width."
-> — `CLAUDE.md`, project guide
+> "Slate Executive — sophisticated minimalism with warmth. Light mode only, serif typography (EB Garamond), 600px article width."
+> — `PRODUCT.md` / `CLAUDE.md`, project guides
 
 **Live site:** [www.zamiang.com](https://www.zamiang.com/)
-**Source repo:** [zamiang/zamiang-dot-com-v2](https://github.com/zamiang/zamiang-dot-com-v2) (Astro 5 + React 19 islands + Tailwind 4)
+**Source repo:** [zamiang/zamiang-dot-com-v2](https://github.com/zamiang/zamiang-dot-com-v2) (Astro 7 + React 19 islands + Tailwind 4)
 
 ---
 
@@ -20,11 +20,11 @@ A design system distilled from the personal website of **Brennan Moore** — eng
 | Source | What was used |
 | --- | --- |
 | `src/styles/globals.css` | Color tokens, fluid type scale, motion timings, semantic component styles. |
-| `CLAUDE.md` | Brand voice, audience, design principles, "Slate Executive" naming. |
+| `PRODUCT.md` | Brand voice, audience, design principles, "Slate Executive" naming. |
 | `src/layouts/BaseLayout.astro`, `PostLayout.astro` | Page chrome, OG/SEO, favicon set, font preconnect. |
 | `src/components/*.astro` | PostCard, PhotoCard, SeriesPostCard, Footer, TableOfContents, section wrappers. |
 | `src/components/islands/Header.tsx` | Nav structure, mobile menu, link list. |
-| `src/components/islands/particles/particle-config.ts` | Light/dark particle palettes (decorative only — not part of core token set). |
+| `src/components/islands/particles/renderer/config.ts` | Light/dark particle palettes (decorative only — not part of core token set). |
 | `public/about.jpg`, `public/images/*.jpg` | Sample photography in `assets/photos/` for reference imagery. |
 
 ---
@@ -107,14 +107,14 @@ Single light-mode palette, "Slate Executive."
 ### Type
 - **Serif:** EB Garamond — every heading, every "tagline" intro, blockquotes, post titles, work-card titles. Italics are used (rarely) inside articles for emphasis.
 - **Sans:** Lato 400 / 700 — body, nav, meta, labels, buttons.
-- **Mono:** Consolas / Monaco / Andale Mono / Ubuntu Mono fallback stack — for code only.
+- **Mono:** JetBrains Mono, falling back to Consolas / Monaco / Andale Mono / Ubuntu Mono (`--font-mono`) — code, and the eyebrow chrome (`.bm-eyebrow` section numbers and labels).
 - **Base size:** 18px (`1.125rem`). Reading is the priority.
 - **Fluid scale:** `clamp()`-based from `--font-size-sm` to `--font-size-4xl` so type scales smoothly between mobile and desktop without media queries.
 - **Line height:** 1.7 for body, 1.8 for long-form articles, 1.3 for headings.
-- **Measure:** `max-width: 65ch` for `article p, article li`. Page width capped at 680px.
+- **Measure:** `max-width: 65ch` for `article p, article li`. Article column capped at 600px (`--article-max-width`).
 
 ### Spacing & Layout
-- Article width: **680px**, centered.
+- Article width: **600px** (`--article-max-width`), centered. `.section-wrapper-inner` is **680px**; `.post-article` widens to **42rem** for post bodies and photo galleries.
 - Resume / homepage two-column: **960px**, `260px / 1fr` grid above 1024px.
 - Photo grid: 2 columns, `gap: 0.375rem` (6px) — photos breathe better when they almost touch.
 - Section padding: `4rem 1rem` on `.section-wrapper`.
