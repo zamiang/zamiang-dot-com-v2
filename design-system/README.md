@@ -107,7 +107,7 @@ Single light-mode palette, "Slate Executive."
 ### Type
 - **Serif:** EB Garamond — every heading, every "tagline" intro, blockquotes, post titles, work-card titles. Italics are used (rarely) inside articles for emphasis.
 - **Sans:** Lato 400 / 700 — body, nav, meta, labels, buttons.
-- **Mono:** Consolas / Monaco / Andale Mono / Ubuntu Mono fallback stack — for code only.
+- **Mono:** JetBrains Mono, falling back to Consolas / Monaco / Andale Mono / Ubuntu Mono (`--font-mono`) — code, and the eyebrow chrome (`.bm-eyebrow` section numbers and labels).
 - **Base size:** 18px (`1.125rem`). Reading is the priority.
 - **Fluid scale:** `clamp()`-based from `--font-size-sm` to `--font-size-4xl` so type scales smoothly between mobile and desktop without media queries.
 - **Line height:** 1.7 for body, 1.8 for long-form articles, 1.3 for headings.
