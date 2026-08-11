@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Brush &amp; Handedness — Chinese stroke simulation</title>
+<style>
+  :root {
+    --paper: #f7f1e4;
+    --page: #fbf8f1;
+    --ink: #1c1a17;
+    --muted: #6b6357;
+    --accent: #b0592f;
+    --pull: #2a7a7c;
+    --push: #b33a2c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--page);
+    color: var(--ink);
+    font-family: "EB Garamond", Georgia, "Times New Roman", serif;
+    padding: 40px 24px 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  header { max-width: 900px; text-align: center; margin-bottom: 22px; }
+  h1 { font-size: 34px; font-weight: 500; letter-spacing: 0.01em; }
+  h1 .zh { color: var(--accent); font-weight: 400; }
+  .sub {
+    color: var(--muted); font-size: 17px; line-height: 1.5;
+    margin-top: 10px; font-style: italic;
+  }
+  .controls {
+    display: flex; gap: 22px; align-items: center; flex-wrap: wrap;
+    justify-content: center; margin: 20px 0 24px;
+    font-size: 15px; color: var(--muted);
+  }
+  button {
+    font: inherit; font-size: 15px;
+    background: var(--ink); color: var(--paper);
+    border: none; border-radius: 3px;
+    padding: 8px 22px; cursor: pointer; letter-spacing: 0.03em;
+  }
+  button:hover { background: #3a362f; }
+  label.toggle { display: flex; align-items: center; gap: 7px; cursor: pointer; user-select: none; }
+  input[type="checkbox"] { accent-color: var(--accent); width: 15px; height: 15px; cursor: pointer; }
+  .legend { display: flex; gap: 16px; align-items: center; font-size: 14px; }
+  .legend .chip { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+  .chip.pull { background: var(--pull); opacity: 0.75; }
+  .chip.push { background: var(--push); opacity: 0.75; }
+  .legend { opacity: 0; transition: opacity 0.3s; }
+  .legend.show { opacity: 1; }
+  .panels { display: flex; gap: 26px; flex-wrap: wrap; justify-content: center; }
+  .panel { text-align: center; }
+  .panel h2 { font-size: 18.5px; font-weight: 500; margin-bottom: 3px; }
+  .panel h2 .zh { color: var(--accent); margin-left: 6px; font-weight: 400; }
+  .panel .hint {
+    font-size: 13px; color: var(--muted); font-style: italic;
+    margin-bottom: 10px; height: 34px; line-height: 1.3;
+    max-width: 330px; margin-left: auto; margin-right: auto;
+  }
+  canvas {
+    background: var(--paper);
+    border: 1px solid #d9d0bd;
+    box-shadow: 0 2px 14px rgba(60, 50, 30, 0.10);
+    border-radius: 2px;
+  }
+  footer {
+    max-width: 820px; margin-top: 30px; color: var(--muted);
+    font-size: 14.5px; line-height: 1.65; text-align: center;
+  }
+  footer b { color: var(--ink); font-weight: 600; }
+  footer .lineage { margin-top: 10px; font-style: italic; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Eight Strokes, Three Hands <span class="zh">&nbsp;左笔</span></h1>
+  <p class="sub">A brush pulled toward the hand glides; a brush pushed away from it splays and frays.
+  Mirror the hand, and canonical directions turn into pushes. The historical left-brush (左笔) masters
+  answered not by reversing strokes but by adapting technique: paper turned, tip centered,
+  and the leftover rawness kept as style (将左就左, “lean into the left”).</p>
+</header>
+
+<div class="controls">
+  <button id="replay">Replay strokes</button>
+  <label class="toggle"><input type="checkbox" id="halo" /> Show pull vs. push</label>
+  <span class="legend" id="legend">
+    <span><span class="chip pull"></span>pulling (toward hand)</span>
+    <span><span class="chip push"></span>pushing (away from hand)</span>
+  </span>
+</div>
+
+<div class="panels">
+  <div class="panel">
+    <h2>Right-handed<span class="zh">右手</span></h2>
+    <div class="hint">canonical technique &amp; direction</div>
+    <canvas id="right"></canvas>
+  </div>
+  <div class="panel">
+    <h2>Left, day one<span class="zh">左手 · 生</span></h2>
+    <div class="hint">right-handed technique mirrored as-is —
+    canonical directions become raw pushes</div>
+    <canvas id="naive"></canvas>
+  </div>
+  <div class="panel">
+    <h2>Left, adapted<span class="zh">左笔</span></h2>
+    <div class="hint">paper rotated ~20°, hidden-tip entry (藏锋),
+    centered tip (中锋) — bold irregularity kept, not corrected</div>
+    <canvas id="adapted"></canvas>
+  </div>
+</div>
+
+<footer>
+  Simulation notes: the brush is a small state machine built on the three classical motion
+  primitives. Translation carries the <b>pull/push factor</b> (stroke direction · hand direction);
+  pushing raises edge jitter, splay, and dry skipping. Lift-press (<b>提按</b>) makes press depth
+  lay the brush belly down behind the tip (a teardrop contact patch, not a disc), drain the ink
+  reservoir faster, and recover slowly on lift. Twist (<b>捻管</b>) gives the tip azimuth inertia:
+  corners and hooks need an active twist whose easy rotation direction mirrors with the hand, so a
+  missed twist leaves the tip sideways (偏锋): one clean edge, one ragged pale one. The adapted
+  panel keeps the documented left-brush adjustments: paper rotated ~20°, centered tip, rounded
+  entries, and the rawness (生) kept as style.
+  <div class="lineage">After the 左笔 lineage — Zheng Yuanyou (Yuan), Gao Fenghan (Qing), Fei Xinwo (modern).</div>
+</footer>
+
+<script>
+"use strict";
+
+/* ---------- deterministic RNG + 1D value noise ---------- */
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function makeNoise1D(seed) {
+  const rng = mulberry32(seed);
+  const grid = new Array(256).fill(0).map(() => rng() * 2 - 1);
+  return function (x) {
+    const i = Math.floor(x), f = x - i;
+    const a = grid[((i % 256) + 256) % 256];
+    const b = grid[(((i + 1) % 256) + 256) % 256];
+    const u = f * f * (3 - 2 * f);
+    return a + (b - a) * u; // -1..1
+  };
+}
+
+/* ---------- Catmull-Rom sampling, arc-length uniform ---------- */
+function catmullRom(pts, t) {
+  const n = pts.length - 1;
+  const seg = Math.min(Math.floor(t * n), n - 1);
+  const u = t * n - seg;
+  const p0 = pts[Math.max(0, seg - 1)], p1 = pts[seg],
+        p2 = pts[seg + 1], p3 = pts[Math.min(n, seg + 2)];
+  const u2 = u * u, u3 = u2 * u;
+  const f = (a, b, c, d) =>
+    0.5 * ((2 * b) + (-a + c) * u + (2 * a - 5 * b + 4 * c - d) * u2 + (-a + 3 * b - 3 * c + d) * u3);
+  return [f(p0[0], p1[0], p2[0], p3[0]), f(p0[1], p1[1], p2[1], p3[1])];
+}
+function resamplePath(pts, spacing) {
+  const dense = [];
+  const N = 400;
+  for (let i = 0; i <= N; i++) dense.push(catmullRom(pts, i / N));
+  const out = [{ p: dense[0], s: 0 }];
+  let total = 0;
+  const lens = [];
+  for (let i = 1; i <= N; i++) {
+    const dx = dense[i][0] - dense[i - 1][0], dy = dense[i][1] - dense[i - 1][1];
+    lens.push(Math.hypot(dx, dy)); total += lens[i - 1];
+  }
+  let target = spacing, acc = 0;
+  for (let i = 1; i <= N; i++) {
+    acc += lens[i - 1];
+    while (acc >= target) {
+      const over = acc - target;
+      const l = lens[i - 1];
+      const f = l > 0 ? 1 - over / l : 0;
+      out.push({
+        p: [
+          dense[i - 1][0] + (dense[i][0] - dense[i - 1][0]) * f,
+          dense[i - 1][1] + (dense[i][1] - dense[i - 1][1]) * f,
+        ],
+        s: target / total,
+      });
+      target += spacing;
+    }
+  }
+  out.push({ p: dense[N], s: 1 });
+  for (let i = 0; i < out.length; i++) {
+    const a = out[Math.max(0, i - 1)].p, b = out[Math.min(out.length - 1, i + 1)].p;
+    const dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1;
+    out[i].dir = [dx / l, dy / l];
+  }
+  return out;
+}
+function envelope(arr, s) {
+  const n = arr.length - 1;
+  const i = Math.min(Math.floor(s * n), n - 1);
+  const f = s * n - i;
+  return arr[i] + (arr[i + 1] - arr[i]) * f;
+}
+
+/* ---------- the eight most common strokes (cell space 0..1, y down) ----------
+   Geometry and rhythm follow regular script (楷书): angled press entries, the
+   slightly rising héng ending in a wedge, the nà's flat pressed foot, short
+   sharp hooks. `speed` is the writing-velocity profile along the stroke —
+   integrated to pace the animation, and fed back into the ink (fast = dry
+   and thin, slow press = dark and full). Low first/last values are the 顿. */
+const STROKES = [
+  {
+    zh: "点", pin: "diǎn", en: "dot",
+    path: [[0.44, 0.24], [0.52, 0.40], [0.60, 0.58], [0.63, 0.70]],
+    pressure: [0.15, 0.5, 0.9, 1.0],
+    speed: [0.35, 0.7, 0.55, 0.28],
+    dur: 0.5,
+  },
+  {
+    zh: "横", pin: "héng", en: "horizontal",
+    path: [[0.10, 0.575], [0.30, 0.53], [0.60, 0.49], [0.86, 0.475], [0.885, 0.535]],
+    pressure: [0.4, 0.95, 0.6, 0.5, 0.55, 0.75, 1.0, 0.7],
+    speed: [0.18, 0.5, 1.2, 1.4, 1.2, 0.7, 0.2],
+    dur: 1,
+  },
+  {
+    zh: "竖", pin: "shù", en: "vertical",
+    path: [[0.51, 0.06], [0.515, 0.36], [0.51, 0.66], [0.505, 0.94]],
+    pressure: [0.75, 1.0, 0.85, 0.65, 0.45, 0.25, 0.06],
+    speed: [0.2, 0.7, 1.1, 1.5, 2.0],
+    dur: 0.9,
+  },
+  {
+    zh: "撇", pin: "piě", en: "left-falling",
+    path: [[0.78, 0.07], [0.74, 0.28], [0.62, 0.52], [0.42, 0.74], [0.20, 0.90]],
+    pressure: [0.85, 1.0, 0.8, 0.5, 0.25, 0.06],
+    speed: [0.22, 0.7, 1.2, 1.8, 2.4],
+    dur: 0.9,
+  },
+  {
+    zh: "捺", pin: "nà", en: "right-falling",
+    path: [[0.12, 0.14], [0.28, 0.30], [0.46, 0.48], [0.62, 0.64], [0.74, 0.74], [0.84, 0.775], [0.94, 0.765]],
+    pressure: [0.18, 0.35, 0.55, 0.8, 1.0, 0.92, 0.1],
+    speed: [0.4, 0.8, 1.1, 0.9, 0.5, 0.3, 1.8],
+    dur: 1.1,
+  },
+  {
+    zh: "提", pin: "tí", en: "rising flick",
+    path: [[0.17, 0.80], [0.32, 0.70], [0.55, 0.53], [0.84, 0.30]],
+    pressure: [1.0, 0.82, 0.42, 0.05],
+    speed: [0.18, 0.9, 1.8, 2.6],
+    dur: 0.7,
+  },
+  {
+    zh: "竖钩", pin: "shù gōu", en: "vertical hook",
+    path: [[0.56, 0.06], [0.57, 0.34], [0.565, 0.62], [0.555, 0.82], [0.52, 0.875], [0.44, 0.845]],
+    pressure: [0.75, 1.0, 0.85, 0.8, 1.0, 0.12],
+    speed: [0.2, 0.9, 1.2, 0.9, 0.32, 2.0],
+    dur: 1,
+    twist: [{ s0: 0.72, s1: 0.94 }],
+  },
+  {
+    zh: "横折", pin: "héng zhé", en: "horizontal turn",
+    path: [[0.14, 0.30], [0.40, 0.27], [0.66, 0.25], [0.735, 0.27], [0.75, 0.50], [0.735, 0.70], [0.72, 0.86]],
+    pressure: [0.5, 0.5, 0.58, 1.0, 0.75, 0.68, 0.4],
+    speed: [0.2, 0.8, 1.2, 0.32, 0.8, 1.0, 0.55],
+    dur: 1.15,
+    twist: [{ s0: 0.45, s1: 0.68 }],
+  },
+];
+
+/* ---------- layout ---------- */
+const CANVAS_W = 340, CANVAS_H = 700;
+const LABEL_W = 72, PAD_TOP = 14;
+const CELL_W = CANVAS_W - LABEL_W - 22;
+const CELL_H = (CANVAS_H - PAD_TOP * 2) / STROKES.length;
+const INK_SCALE = 0.74;
+
+const STROKE_MS = 1050, GAP_MS = 220;
+
+/* stroke schedule (per-stroke durations) */
+const SCHEDULE = [];
+{
+  let t = 0;
+  for (const def of STROKES) {
+    const d = STROKE_MS * (def.dur || 1);
+    SCHEDULE.push({ start: t, dur: d });
+    t += d + GAP_MS;
+  }
+}
+function totalDuration() {
+  const last = SCHEDULE[SCHEDULE.length - 1];
+  return last.start + last.dur + GAP_MS;
+}
+
+function rotate(v, deg) {
+  const r = (deg * Math.PI) / 180, c = Math.cos(r), s = Math.sin(r);
+  return [v[0] * c - v[1] * s, v[0] * s + v[1] * c];
+}
+
+/* ---------- panel modes ----------
+   right   — canonical right-handed technique
+   naive   — left hand, right-handed technique mirrored as-is
+   adapted — left brush 左笔: paper rotated, centered tip, rawness kept */
+/* easyTwist: the anatomically easy barrel-rotation direction (捻管), mirrored
+   between hands. twistSkill: how well a mismatched-direction twist is executed. */
+const MODES = {
+  right:   { handSign: +1, handDir: [0.8, 0.6],            pushScale: 1.0,  tipTrail: 0.10, entryRound: false, rawWobble: 0.00, easyTwist: +1, twistSkill: 0.7 },
+  naive:   { handSign: -1, handDir: [-0.8, 0.6],           pushScale: 1.0,  tipTrail: 0.10, entryRound: false, rawWobble: 0.00, easyTwist: -1, twistSkill: 0.3 },
+  adapted: { handSign: -1, handDir: rotate([-0.8, 0.6], -20), pushScale: 0.35, tipTrail: 0.02, entryRound: true,  rawWobble: 0.14, easyTwist: -1, twistSkill: 0.8 },
+};
+
+/* ---------- panel renderer ---------- */
+class Panel {
+  constructor(canvas, mode) {
+    this.canvas = canvas;
+    this.mode = MODES[mode];
+    this.dpr = Math.min(2, window.devicePixelRatio || 1);
+    canvas.width = CANVAS_W * this.dpr;
+    canvas.height = CANVAS_H * this.dpr;
+    canvas.style.width = CANVAS_W + "px";
+    canvas.style.height = CANVAS_H + "px";
+    this.ctx = canvas.getContext("2d");
+    this.ctx.scale(this.dpr, this.dpr);
+    this.stamp = this.makeStamp("rgba(28,26,23,");
+    this.haloPull = this.makeStamp("rgba(42,122,124,");
+    this.haloPush = this.makeStamp("rgba(179,58,44,");
+  }
+  makeStamp(rgbaPrefix) {
+    const c = document.createElement("canvas");
+    c.width = c.height = 64;
+    const g = c.getContext("2d");
+    // harder-edged stamp than a plain gradient: kaishu lines are crisp
+    const grad = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    grad.addColorStop(0, rgbaPrefix + "0.95)");
+    grad.addColorStop(0.68, rgbaPrefix + "0.75)");
+    grad.addColorStop(0.92, rgbaPrefix + "0.22)");
+    grad.addColorStop(1, rgbaPrefix + "0)");
+    g.fillStyle = grad;
+    g.fillRect(0, 0, 64, 64);
+    return c;
+  }
+
+  build(opts, seed) {
+    this.opts = opts;
+    const m = this.mode;
+    this.strokes = STROKES.map((def, idx) => {
+      const rng = mulberry32(seed + idx * 977 + m.handSign * 31 + Math.round(m.pushScale * 100));
+      const noise = makeNoise1D(seed + idx * 313 + m.handSign * 131 + Math.round(m.tipTrail * 1000));
+
+      const cx = LABEL_W + 12, cy = PAD_TOP + idx * CELL_H;
+      const inset = (1 - INK_SCALE) / 2;
+      const raw = def.path.map((p) => [
+        cx + (inset + p[0] * INK_SCALE) * CELL_W,
+        cy + (inset + p[1] * INK_SCALE) * CELL_H,
+      ]);
+      // wrist-pivot curvature bias, mirrored with the hand
+      const start = raw[0], end = raw[raw.length - 1];
+      const axis = [end[0] - start[0], end[1] - start[1]];
+      const al = Math.hypot(axis[0], axis[1]) || 1;
+      const perp = [-axis[1] / al, axis[0] / al];
+      const curl = 0.035 * m.handSign;
+      const bowed = raw.map((p, i) => {
+        const s = i / (raw.length - 1);
+        const bow = Math.sin(Math.PI * s) * curl * al;
+        return [p[0] + perp[0] * bow, p[1] + perp[1] * bow];
+      });
+
+      const samples = resamplePath(bowed, 1.6);
+      const maxW = CELL_H * INK_SCALE * 0.36;
+
+      const bristles = new Array(9).fill(0).map(() => ({
+        u: (rng() * 2 - 1),
+        alpha: 0.5 + rng() * 0.5,
+        phase: rng() * 100,
+      }));
+
+      // integrate the speed profile into a time map: cumT[j] = fraction of the
+      // stroke's duration needed to reach arc position j/M
+      const M = 200;
+      const cumT = [0];
+      let acc = 0;
+      for (let j = 1; j <= M; j++) {
+        acc += 1 / Math.max(0.08, envelope(def.speed, (j - 0.5) / M));
+        cumT.push(acc);
+      }
+      for (let j = 0; j <= M; j++) cumT[j] /= acc;
+
+      return { def, samples, pressure: def.pressure, maxW, rng, noise, bristles,
+               cumT, speedMax: Math.max(...def.speed), drawn: 0,
+               // brush state: tip azimuth (T, the direction the belly trails),
+               // laid-down belly length, and the ink reservoir
+               T: null, belly: 0, ink: 1 };
+    });
+  }
+
+  paper() {
+    const g = this.ctx;
+    g.save();
+    g.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+    g.clearRect(0, 0, CANVAS_W, CANVAS_H);
+    const rng = mulberry32(7);
+    g.fillStyle = "rgba(120,100,70,0.045)";
+    for (let i = 0; i < 900; i++) g.fillRect(rng() * CANVAS_W, rng() * CANVAS_H, 1, 1);
+    g.strokeStyle = "rgba(60,50,30,0.08)";
+    g.lineWidth = 1;
+    g.textBaseline = "middle";
+    STROKES.forEach((def, idx) => {
+      const y = PAD_TOP + idx * CELL_H;
+      if (idx > 0) { g.beginPath(); g.moveTo(12, y); g.lineTo(CANVAS_W - 12, y); g.stroke(); }
+      const my = y + CELL_H / 2;
+      g.fillStyle = "#4a443a";
+      g.font = "19px Georgia, serif";
+      g.fillText(def.zh, 14, my - 11);
+      g.fillStyle = "#8a8171";
+      g.font = "italic 12px Georgia, serif";
+      g.fillText(def.pin, 14, my + 10);
+      g.font = "italic 10.5px Georgia, serif";
+      g.fillText(def.en, 14, my + 25);
+    });
+    g.restore();
+  }
+
+  // invert the integrated speed profile: normalized time → arc position
+  sOfT(stroke, t) {
+    t = Math.min(1, Math.max(0, t));
+    const cum = stroke.cumT;
+    let lo = 0, hi = cum.length - 1;
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1;
+      if (cum[mid] < t) lo = mid + 1; else hi = mid;
+    }
+    const j = Math.max(1, lo);
+    const f = cum[j] > cum[j - 1] ? (t - cum[j - 1]) / (cum[j] - cum[j - 1]) : 0;
+    return (j - 1 + f) / (cum.length - 1);
+  }
+
+  drawTo(strokeIdx, t) {
+    const st = this.strokes[strokeIdx];
+    if (!st) return;
+    const m = this.mode;
+    const s = this.sOfT(st, t);
+    const targetIdx = Math.floor(s * (st.samples.length - 1));
+    const g = this.ctx;
+    const hd = m.handDir;
+    const showHalo = this.opts.halo;
+
+    while (st.drawn <= targetIdx) {
+      const i = st.drawn++;
+      const smp = st.samples[i];
+      const ss = smp.s;
+      const dir = smp.dir;
+      const perp = [-dir[1], dir[0]];
+
+      const pull = dir[0] * hd[0] + dir[1] * hd[1]; // -1..1, raw direction geometry
+      const push = Math.max(0, -pull) * m.pushScale; // technique-scaled consequence
+      const spN = envelope(st.def.speed, ss) / st.speedMax; // 0 slow press … 1 fastest sweep
+
+      /* --- 提按 lift-press: z is press depth, not just a width knob --- */
+      let z = envelope(st.pressure, ss);
+      z *= 1 - 0.22 * push * (0.5 + 0.5 * st.noise(ss * 26 + 3));
+      // hidden-tip entry: the wrapped start rounds off instead of flicking thin
+      if (m.entryRound && ss < 0.10) z = Math.max(z, 0.6);
+      // 生 — bold low-frequency irregularity kept as style, not corrected
+      if (m.rawWobble > 0) z *= 1 + m.rawWobble * st.noise(ss * 7 + 11);
+
+      /* --- 捻管 twist: tip azimuth T trails the motion with lag; corners
+         need an active twist whose easy direction mirrors with the hand --- */
+      const Tt = [-dir[0], -dir[1]];
+      if (!st.T) st.T = [Tt[0], Tt[1]];
+      let k = 0.03; // passive re-alignment from drag alone
+      const inTwist = (st.def.twist || []).some((e) => ss >= e.s0 && ss <= e.s1);
+      if (inTwist) {
+        const cross = st.T[0] * Tt[1] - st.T[1] * Tt[0];
+        const matched = cross === 0 || Math.sign(cross) === m.easyTwist;
+        k = 0.03 + 0.5 * (matched ? 1 : m.twistSkill);
+      }
+      st.T[0] += (Tt[0] - st.T[0]) * k;
+      st.T[1] += (Tt[1] - st.T[1]) * k;
+      const tl = Math.hypot(st.T[0], st.T[1]) || 1;
+      st.T[0] /= tl; st.T[1] /= tl;
+      // centered tip: T opposes travel. side tip (偏锋): T swings perpendicular
+      const align = -(st.T[0] * dir[0] + st.T[1] * dir[1]);
+      const side = Math.min(1, Math.max(0, 1 - align));
+      const sB = Math.sign(dir[0] * st.T[1] - dir[1] * st.T[0]) || 1; // which edge the belly rides
+
+      /* --- belly hysteresis: bristles lay down fast, recover slowly --- */
+      const bellyTarget = st.maxW * (0.12 + 0.65 * z);
+      st.belly += (bellyTarget - st.belly) * (bellyTarget > st.belly ? 0.45 : 0.07);
+
+      /* --- ink reservoir: pressed contact drains it --- */
+      st.ink -= 0.0022 * (0.3 + 1.2 * z);
+
+      const jitterAmp = st.maxW * (0.02 + 0.16 * push + 0.06 * side);
+      const jx = st.noise(ss * 34) * jitterAmp;
+      const splay = 1 + 0.55 * push + 0.35 * side;
+
+      const skipProb = (0.35 * push + Math.max(0, 0.5 - st.ink)) * (0.5 + 0.5 * st.noise(ss * 18 + 50));
+      if (st.rng() < skipProb) continue;
+
+      const trail = st.maxW * m.tipTrail;
+      const ox = hd[0] * trail * (1 - z) + perp[0] * jx;
+      const oy = hd[1] * trail * (1 - z) + perp[1] * jx;
+      const x = smp.p[0] + ox, y = smp.p[1] + oy;
+
+      // fast passages ride lighter and narrower; slow presses sit full
+      const w = st.maxW * (0.16 + 0.72 * Math.max(0.05, z)) * (1.04 - 0.12 * spN);
+
+      if (showHalo && Math.abs(pull) > 0.12) {
+        const sprite = pull > 0 ? this.haloPull : this.haloPush;
+        const hw = w * 2.6;
+        g.globalAlpha = 0.05 * Math.min(1, Math.abs(pull) * 1.6);
+        g.drawImage(sprite, x - hw / 2, y - hw / 2, hw, hw);
+      }
+
+      // paleness: pushing, side-tip contact, and a drained reservoir all thin the ink
+      const pale = (1 - 0.30 * push) * (1 - 0.28 * side)
+        * (0.55 + 0.45 * Math.min(1, st.ink + 0.5))
+        * Math.min(1, 1.08 - 0.22 * spN);
+
+      // tip stamp, then the pressed belly trailing along T — a teardrop, not a disc
+      g.globalAlpha = 0.30 * pale;
+      g.drawImage(this.stamp, x - w / 2, y - w / 2, w, w);
+      for (const [f, wf, af] of [[0.4, 0.8, 0.75], [0.8, 0.55, 0.4]]) {
+        const bx = x + st.T[0] * st.belly * f, by = y + st.T[1] * st.belly * f;
+        const bw = w * wf;
+        g.globalAlpha = 0.30 * pale * af;
+        g.drawImage(this.stamp, bx - bw / 2, by - bw / 2, bw, bw);
+      }
+
+      // bristles: ragged and pale on the belly edge when side-tipped, clean on the tip edge
+      for (const b of st.bristles) {
+        const onBelly = b.u * sB > 0;
+        let off = b.u * (w / 2) * splay;
+        if (onBelly) off += sB * side * 0.25 * w * Math.abs(st.noise(ss * 40 + b.phase));
+        const alive = 0.5 + 0.5 * st.noise(ss * 22 + b.phase);
+        // speed dries the line: 飞白 streaks appear on the fastest passages
+        if (alive > st.ink + 0.15 + push * 0.3 - 0.35 * Math.max(0, spN - 0.55) && st.rng() < 0.6) continue;
+        const bw = w * (0.16 + 0.10 * st.rng());
+        let ba = 0.20 * b.alpha * (1 - 0.2 * push);
+        if (onBelly) ba *= 1 - 0.55 * side;
+        g.globalAlpha = ba;
+        g.drawImage(this.stamp,
+          x + perp[0] * off - bw / 2,
+          y + perp[1] * off - bw / 2, bw, bw);
+      }
+      g.globalAlpha = 1;
+    }
+  }
+
+  reset(opts, seed) {
+    this.build(opts, seed);
+    this.paper();
+  }
+}
+
+/* ---------- orchestration ---------- */
+const panels = [
+  new Panel(document.getElementById("right"), "right"),
+  new Panel(document.getElementById("naive"), "naive"),
+  new Panel(document.getElementById("adapted"), "adapted"),
+];
+const haloBox = document.getElementById("halo");
+const legend = document.getElementById("legend");
+
+let startTime = 0, rafId = 0, replaySeed = 42;
+
+function frame(now) {
+  const el = now - startTime;
+  for (let i = 0; i < STROKES.length; i++) {
+    const { start, dur } = SCHEDULE[i];
+    if (el >= start) {
+      const t = (el - start) / dur;
+      for (const p of panels) p.drawTo(i, t);
+    }
+  }
+  if (el < totalDuration()) rafId = requestAnimationFrame(frame);
+}
+
+function replay(newSeed) {
+  cancelAnimationFrame(rafId);
+  if (newSeed) replaySeed = (replaySeed * 16807) % 2147483647;
+  const opts = { halo: haloBox.checked };
+  for (const p of panels) p.reset(opts, replaySeed);
+  legend.classList.toggle("show", opts.halo);
+  startTime = performance.now();
+  rafId = requestAnimationFrame(frame);
+}
+
+document.getElementById("replay").addEventListener("click", () => replay(true));
+haloBox.addEventListener("change", () => replay(false));
+
+replay(false);
+</script>
+</body>
+</html>
