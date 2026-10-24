@@ -33,29 +33,27 @@ try {
 const indexOfSlug = vbcPosts.findIndex((p) => p.data.slug === currentSlug);
 ---
 
-{
-  vbcPosts.length > 0 && (
-    <section class="posts-footer-section" aria-labelledby="vbc-series-heading">
-      <hr class="section-rule" aria-hidden="true" />
-      <header class="bm-section-header">
-        <div class="bm-eyebrow" aria-hidden="true">
-          <span class="bm-eyebrow-mark">&sect;</span>
-          <span class="bm-eyebrow-sep">&middot;</span>
-          <span class="bm-eyebrow-label">The Series</span>
-        </div>
-        <h2 id="vbc-series-heading" class="bm-section-display-title">
-          {VBC_TITLE}
-        </h2>
-        <p class="bm-section-tagline">{VBC_TAGLINE}</p>
-      </header>
-      {vbcPosts.map((post, index) => (
-        <SeriesPostCard
-          post={post.data}
-          isPast={index < indexOfSlug}
-          isCurrent={index === indexOfSlug}
-          isNext={index === indexOfSlug + 1}
-        />
-      ))}
-    </section>
-  )
-}
+{vbcPosts.length > 0 && (
+  <section class="posts-footer-section" aria-labelledby="vbc-series-heading">
+    <hr class="section-rule" aria-hidden="true" />
+    <header class="bm-section-header">
+      <div class="bm-eyebrow" aria-hidden="true">
+        <span class="bm-eyebrow-mark">&sect;</span>
+        <span class="bm-eyebrow-sep">&middot;</span>
+        <span class="bm-eyebrow-label">The Series</span>
+      </div>
+      <h2 id="vbc-series-heading" class="bm-section-display-title">
+        {VBC_TITLE}
+      </h2>
+      <p class="bm-section-tagline">{VBC_TAGLINE}</p>
+    </header>
+    {vbcPosts.map((post, index) => (
+      <SeriesPostCard
+        post={post.data}
+        isPast={index < indexOfSlug}
+        isCurrent={index === indexOfSlug}
+        isNext={index === indexOfSlug + 1}
+      />
+    ))}
+  </section>
+)}

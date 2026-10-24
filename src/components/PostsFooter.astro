@@ -34,50 +34,46 @@ const filteredPosts = posts.filter((p) => p.data.slug !== currentSlug).slice(0, 
 const filteredPhotos = photos.filter((p) => p.data.slug !== currentSlug).slice(0, 6);
 ---
 
-{
-  filteredPosts.length > 0 && (
-    <section class="posts-footer-section" aria-labelledby="recommended-writing-heading">
-      <hr class="section-rule" aria-hidden="true" />
-      <header class="bm-section-header">
-        <div class="bm-eyebrow" aria-hidden="true">
-          <span class="bm-eyebrow-mark">&sect;</span>
-          <span class="bm-eyebrow-sep">&middot;</span>
-          <span class="bm-eyebrow-label">More Reading</span>
-        </div>
-        <h2 id="recommended-writing-heading" class="bm-section-display-title">
-          More Essays
-        </h2>
-        <p class="bm-section-tagline">
-          On engineering leadership, value-based care, and the craft of building.
-        </p>
-      </header>
-      {filteredPosts.map((post) => (
-        <PostCard post={post.data} />
-      ))}
-    </section>
-  )
-}
-
-{
-  filteredPhotos.length > 0 && (
-    <section class="posts-footer-section" aria-labelledby="recommended-photos-heading">
-      <hr class="section-rule" aria-hidden="true" />
-      <header class="bm-section-header">
-        <div class="bm-eyebrow" aria-hidden="true">
-          <span class="bm-eyebrow-mark">&sect;</span>
-          <span class="bm-eyebrow-sep">&middot;</span>
-          <span class="bm-eyebrow-label">More Photos</span>
-        </div>
-        <h2 id="recommended-photos-heading" class="bm-section-display-title">
-          Recent Frames
-        </h2>
-        <p class="bm-section-tagline">A selection of my favorites.</p>
-      </header>
-      <div class="homepage-photo-grid">
-        {filteredPhotos.map((post) => (
-          <PhotoCard post={post.data} shouldHideText />
-        ))}
+{filteredPosts.length > 0 && (
+  <section class="posts-footer-section" aria-labelledby="recommended-writing-heading">
+    <hr class="section-rule" aria-hidden="true" />
+    <header class="bm-section-header">
+      <div class="bm-eyebrow" aria-hidden="true">
+        <span class="bm-eyebrow-mark">&sect;</span>
+        <span class="bm-eyebrow-sep">&middot;</span>
+        <span class="bm-eyebrow-label">More Reading</span>
       </div>
-    </section>
-  )
-}
+      <h2 id="recommended-writing-heading" class="bm-section-display-title">
+        More Essays
+      </h2>
+      <p class="bm-section-tagline">
+        On engineering leadership, value-based care, and the craft of building.
+      </p>
+    </header>
+    {filteredPosts.map((post) => (
+      <PostCard post={post.data} />
+    ))}
+  </section>
+)}
+
+{filteredPhotos.length > 0 && (
+  <section class="posts-footer-section" aria-labelledby="recommended-photos-heading">
+    <hr class="section-rule" aria-hidden="true" />
+    <header class="bm-section-header">
+      <div class="bm-eyebrow" aria-hidden="true">
+        <span class="bm-eyebrow-mark">&sect;</span>
+        <span class="bm-eyebrow-sep">&middot;</span>
+        <span class="bm-eyebrow-label">More Photos</span>
+      </div>
+      <h2 id="recommended-photos-heading" class="bm-section-display-title">
+        Recent Frames
+      </h2>
+      <p class="bm-section-tagline">A selection of my favorites.</p>
+    </header>
+    <div class="homepage-photo-grid">
+      {filteredPhotos.map((post) => (
+        <PhotoCard post={post.data} shouldHideText />
+      ))}
+    </div>
+  </section>
+)}

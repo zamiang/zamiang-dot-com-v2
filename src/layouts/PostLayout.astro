@@ -152,20 +152,22 @@ const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
     <header class="post-header">
       {/* Eyebrow: § NN · CATEGORY */}
       <div class="bm-eyebrow" aria-label={`Section ${eyebrowNumber}, ${eyebrowLabel}`}>
-        <span class="bm-eyebrow-mark" aria-hidden="true">&sect;</span>
+        <span class="bm-eyebrow-mark" aria-hidden="true">
+          &sect;
+        </span>
         <span class="bm-eyebrow-num">{eyebrowNumber}</span>
-        <span class="bm-eyebrow-sep" aria-hidden="true">&middot;</span>
+        <span class="bm-eyebrow-sep" aria-hidden="true">
+          &middot;
+        </span>
         <span class="bm-eyebrow-label">{eyebrowLabel}</span>
       </div>
 
       {/* Optional VBC series tie-in — quieter than the old pill */}
-      {
-        post.section === 'VBC' && (
-          <a href="/#vbc" class="post-series-link">
-            From the series: <em>{VBC_TITLE}</em>
-          </a>
-        )
-      }
+      {post.section === 'VBC' && (
+        <a href="/#vbc" class="post-series-link">
+          From the series: <em>{VBC_TITLE}</em>
+        </a>
+      )}
 
       {/* Title */}
       <h1 class="post-title">{post.title}</h1>
@@ -176,30 +178,28 @@ const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
       {/* Meta strip — monospace, hairline-bracketed */}
       <div class="post-meta-strip" role="group" aria-label="Post details">
         <span>{eyebrowLabel}</span>
-        <span class="sep" aria-hidden="true">&middot;</span>
+        <span class="sep" aria-hidden="true">
+          &middot;
+        </span>
         <span>
           <time datetime={post.date.split('T')[0]}>{datePublishedLabel}</time>
         </span>
-        {
-          type === 'writing' && (
-            <>
-              <span class="sep" aria-hidden="true">
-                &middot;
-              </span>
-              <span>{readingTime.toUpperCase()}</span>
-            </>
-          )
-        }
-        {
-          hasMeaningfulModified && (
-            <>
-              <span class="sep" aria-hidden="true">
-                &middot;
-              </span>
-              <span>Last updated {lastUpdatedLabel}</span>
-            </>
-          )
-        }
+        {type === 'writing' && (
+          <>
+            <span class="sep" aria-hidden="true">
+              &middot;
+            </span>
+            <span>{readingTime.toUpperCase()}</span>
+          </>
+        )}
+        {hasMeaningfulModified && (
+          <>
+            <span class="sep" aria-hidden="true">
+              &middot;
+            </span>
+            <span>Last updated {lastUpdatedLabel}</span>
+          </>
+        )}
       </div>
     </header>
 
@@ -207,15 +207,13 @@ const VBC_TITLE = 'Why Value-Based Care is Harder Than Rocket Science';
     {showToc && <TableOfContents items={tocItems} />}
 
     {/* Content - React island for markdown rendering */}
-    {
-      type === 'photos' ? (
-        <div class="photos-content">
-          <ContentRenderer content={bodyContent} gallery client:load />
-        </div>
-      ) : (
-        <ContentRenderer content={bodyContent} client:load />
-      )
-    }
+    {type === 'photos' ? (
+      <div class="photos-content">
+        <ContentRenderer content={bodyContent} gallery client:load />
+      </div>
+    ) : (
+      <ContentRenderer content={bodyContent} client:load />
+    )}
 
     {/* Footer slot for VBCFooter and PostsFooter */}
     <slot name="footer" />
