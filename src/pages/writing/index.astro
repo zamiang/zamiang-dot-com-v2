@@ -30,26 +30,22 @@ const vbcPosts = (await getCollection('vbcPosts')).sort((a, b) =>
       </p>
     </header>
 
-    {
-      posts.length > 0 && (
-        <section class="mb-12">
-          {posts.map((post) => (
-            <PostCard post={post.data} />
-          ))}
-        </section>
-      )
-    }
+    {posts.length > 0 && (
+      <section class="mb-12">
+        {posts.map((post) => (
+          <PostCard post={post.data} />
+        ))}
+      </section>
+    )}
 
-    {
-      vbcPosts.length > 0 && (
-        <section>
-          <h2 class="resume-section-heading">{VBC_TITLE}</h2>
-          <p class="text-sm text-muted-foreground mb-4">{vbcPosts.length}-part series</p>
-          {vbcPosts.map((post) => (
-            <PostCard post={post.data} />
-          ))}
-        </section>
-      )
-    }
+    {vbcPosts.length > 0 && (
+      <section>
+        <h2 class="resume-section-heading">{VBC_TITLE}</h2>
+        <p class="text-sm text-muted-foreground mb-4">{vbcPosts.length}-part series</p>
+        {vbcPosts.map((post) => (
+          <PostCard post={post.data} />
+        ))}
+      </section>
+    )}
   </div>
 </BaseLayout>

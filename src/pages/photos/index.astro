@@ -18,21 +18,21 @@ const photos = (await getCollection('photos')).sort(
   <div class="max-w-[960px] mx-auto">
     <header class="bm-section-header">
       <div class="bm-eyebrow" aria-label="Photography">
-        <span class="bm-eyebrow-mark" aria-hidden="true">&sect;</span>
+        <span class="bm-eyebrow-mark" aria-hidden="true">
+          &sect;
+        </span>
         <span class="bm-eyebrow-label">Photography</span>
       </div>
       <h1 class="bm-section-display-title">Recent Photos</h1>
       <p class="bm-section-tagline">The system reveals itself when you lean in.</p>
     </header>
 
-    {
-      photos.length > 0 && (
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {photos.map((post) => (
-            <PhotoCard post={post.data} />
-          ))}
-        </div>
-      )
-    }
+    {photos.length > 0 && (
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {photos.map((post) => (
+          <PhotoCard post={post.data} />
+        ))}
+      </div>
+    )}
   </div>
 </BaseLayout>

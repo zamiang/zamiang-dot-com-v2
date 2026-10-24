@@ -103,11 +103,9 @@ const canonical = canonicalUrl || Astro.url.href;
     <slot name="head" />
   </head>
   <body class="font-sans bg-background text-foreground">
-    {
-      /* #bm-edge filter — required by .bm-photo--inspect, used on all photo cards.
+    {/* #bm-edge filter — required by .bm-photo--inspect, used on all photo cards.
         Canonical source: design-system/bm-filters.svg. Keep this block in sync
-        with that file when tuning the edge-detection pipeline. */
-    }
+        with that file when tuning the edge-detection pipeline. */}
     <svg width="0" height="0" class="bm-filter-svg" aria-hidden="true">
       <defs>
         <filter
@@ -122,13 +120,15 @@ const canonical = canonicalUrl || Astro.url.href;
             in="SourceGraphic"
             type="matrix"
             values="0.33 0.34 0.33 0 0  0.33 0.34 0.33 0 0  0.33 0.34 0.33 0 0  0 0 0 1 0"
-            result="g"></feColorMatrix>
+            result="g"
+          ></feColorMatrix>
           <feConvolveMatrix
             in="g"
             order="3"
             preserveAlpha="true"
             kernelMatrix="-1 -1 -1 -1 8 -1 -1 -1 -1"
-            result="edge"></feConvolveMatrix>
+            result="edge"
+          ></feConvolveMatrix>
           <feComponentTransfer in="edge" result="boost">
             <feFuncR type="linear" slope="3.2"></feFuncR>
             <feFuncG type="linear" slope="3.2"></feFuncG>
@@ -138,11 +138,13 @@ const canonical = canonicalUrl || Astro.url.href;
             in="boost"
             type="matrix"
             values="-1 0 0 0 0.94  0 -1 0 0 0.95  0 0 -1 0 0.96  0 0 0 1 0"
-            result="inv"></feColorMatrix>
+            result="inv"
+          ></feColorMatrix>
           <feColorMatrix
             in="inv"
             type="matrix"
-            values="0.70 0 0 0 0.10  0 0.74 0 0 0.12  0 0 0.78 0 0.14  0 0 0 1 0"></feColorMatrix>
+            values="0.70 0 0 0 0.10  0 0.74 0 0 0.12  0 0 0.78 0 0.14  0 0 0 1 0"
+          ></feColorMatrix>
         </filter>
       </defs>
     </svg>
@@ -159,20 +161,16 @@ const canonical = canonicalUrl || Astro.url.href;
         Skip to main content
       </a>
 
-      {
-        /* Header (React island - has mobile menu state)
+      {/* Header (React island - has mobile menu state)
           Using client:load for iOS Safari compatibility.
-          iOS Safari requires immediate hydration for reliable touch events. */
-      }
-      {
-        hideDesktopNav ? (
-          <div class="hide-nav-desktop">
-            <Header client:load />
-          </div>
-        ) : (
+          iOS Safari requires immediate hydration for reliable touch events. */}
+      {hideDesktopNav ? (
+        <div class="hide-nav-desktop">
           <Header client:load />
-        )
-      }
+        </div>
+      ) : (
+        <Header client:load />
+      )}
 
       {/* Main content */}
       <main

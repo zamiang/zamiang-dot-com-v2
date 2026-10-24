@@ -47,17 +47,15 @@ const indentFor = (level: number) =>
     In This Article
   </p>
   <ul class="space-y-1.5 m-0 p-0 list-none">
-    {
-      items.map((item) => (
-        <li class={`m-0 ${indentFor(item.level)}`}>
-          <a
-            href={`#${item.id}`}
-            class="text-sm text-foreground/70 hover:text-foreground transition-colors duration-150 !border-none !no-underline leading-relaxed"
-          >
-            {item.text}
-          </a>
-        </li>
-      ))
-    }
+    {items.map((item) => (
+      <li class={`m-0 ${indentFor(item.level)}`}>
+        <a
+          href={`#${item.id}`}
+          class="text-sm text-foreground/70 hover:text-foreground transition-colors duration-150 !border-none !no-underline leading-relaxed"
+        >
+          {item.text}
+        </a>
+      </li>
+    ))}
   </ul>
 </nav>

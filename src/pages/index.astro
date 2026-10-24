@@ -106,77 +106,83 @@ const jsonLd = {
         <a
           href="https://www.linkedin.com/in/brennan-moore/"
           target="_blank"
-          rel="noopener noreferrer">LinkedIn</a
+          rel="noopener noreferrer"
         >
-        <span class="sep" aria-hidden="true">&middot;</span>
-        <a href="/brennan-moore-resume-2026.pdf" download>Resume</a>
-        <span class="sep" aria-hidden="true">&middot;</span>
-        <a href="https://github.com/zamiang" target="_blank" rel="noopener noreferrer">GitHub</a>
+          LinkedIn
+        </a>
+        <span class="sep" aria-hidden="true">
+          &middot;
+        </span>
+        <a href="/brennan-moore-resume-2026.pdf" download>
+          Resume
+        </a>
+        <span class="sep" aria-hidden="true">
+          &middot;
+        </span>
+        <a href="https://github.com/zamiang" target="_blank" rel="noopener noreferrer">
+          GitHub
+        </a>
       </div>
     </div>
   </header>
 
   {/* Primary Content: Writing + Photography */}
   <div class="homepage-primary">
-    {
-      posts.length > 0 && (
-        <section id="writing">
-          <header class="bm-section-header">
-            <div class="bm-eyebrow" aria-label="Section 01, Writing">
-              <span class="bm-eyebrow-mark" aria-hidden="true">
-                &sect;
-              </span>
-              <span class="bm-eyebrow-num">01</span>
-              <span class="bm-eyebrow-sep" aria-hidden="true">
-                &middot;
-              </span>
-              <span class="bm-eyebrow-label">Writing</span>
-            </div>
-            <h2 class="bm-section-display-title">Recent Essays</h2>
-            <p class="bm-section-tagline">How I got my gray hairs.</p>
-          </header>
-          {writingCards.map((post) => (
-            <PostCard post={post} />
-          ))}
-          {posts.length + (vbcCard ? 1 : 0) > writingCards.length && (
-            <a href="/writing" class="view-all-link">
-              View all writing →
-            </a>
-          )}
-        </section>
-      )
-    }
-
-    {
-      photos.length > 0 && (
-        <section id="photography">
-          <header class="bm-section-header">
-            <div class="bm-eyebrow" aria-label="Section 02, Photography">
-              <span class="bm-eyebrow-mark" aria-hidden="true">
-                &sect;
-              </span>
-              <span class="bm-eyebrow-num">02</span>
-              <span class="bm-eyebrow-sep" aria-hidden="true">
-                &middot;
-              </span>
-              <span class="bm-eyebrow-label">Photography</span>
-            </div>
-            <h2 class="bm-section-display-title">Recent Photos</h2>
-            <p class="bm-section-tagline">The system reveals itself when you hover.</p>
-          </header>
-          <div class="homepage-photo-grid">
-            {photos.slice(0, 8).map((post) => (
-              <PhotoCard post={post.data} shouldHideText />
-            ))}
+    {posts.length > 0 && (
+      <section id="writing">
+        <header class="bm-section-header">
+          <div class="bm-eyebrow" aria-label="Section 01, Writing">
+            <span class="bm-eyebrow-mark" aria-hidden="true">
+              &sect;
+            </span>
+            <span class="bm-eyebrow-num">01</span>
+            <span class="bm-eyebrow-sep" aria-hidden="true">
+              &middot;
+            </span>
+            <span class="bm-eyebrow-label">Writing</span>
           </div>
-          {photos.length > 8 && (
-            <a href="/photos" class="view-all-link">
-              View all photos →
-            </a>
-          )}
-        </section>
-      )
-    }
+          <h2 class="bm-section-display-title">Recent Essays</h2>
+          <p class="bm-section-tagline">How I got my gray hairs.</p>
+        </header>
+        {writingCards.map((post) => (
+          <PostCard post={post} />
+        ))}
+        {posts.length + (vbcCard ? 1 : 0) > writingCards.length && (
+          <a href="/writing" class="view-all-link">
+            View all writing →
+          </a>
+        )}
+      </section>
+    )}
+
+    {photos.length > 0 && (
+      <section id="photography">
+        <header class="bm-section-header">
+          <div class="bm-eyebrow" aria-label="Section 02, Photography">
+            <span class="bm-eyebrow-mark" aria-hidden="true">
+              &sect;
+            </span>
+            <span class="bm-eyebrow-num">02</span>
+            <span class="bm-eyebrow-sep" aria-hidden="true">
+              &middot;
+            </span>
+            <span class="bm-eyebrow-label">Photography</span>
+          </div>
+          <h2 class="bm-section-display-title">Recent Photos</h2>
+          <p class="bm-section-tagline">The system reveals itself when you hover.</p>
+        </header>
+        <div class="homepage-photo-grid">
+          {photos.slice(0, 8).map((post) => (
+            <PhotoCard post={post.data} shouldHideText />
+          ))}
+        </div>
+        {photos.length > 8 && (
+          <a href="/photos" class="view-all-link">
+            View all photos →
+          </a>
+        )}
+      </section>
+    )}
   </div>
 
   {/* Secondary Content: Currently, Experience, Publications */}
@@ -185,9 +191,13 @@ const jsonLd = {
       <section id="currently" class="currently-section">
         <header class="bm-section-header">
           <div class="bm-eyebrow" aria-label="Section 03, Currently">
-            <span class="bm-eyebrow-mark" aria-hidden="true">&sect;</span>
+            <span class="bm-eyebrow-mark" aria-hidden="true">
+              &sect;
+            </span>
             <span class="bm-eyebrow-num">03</span>
-            <span class="bm-eyebrow-sep" aria-hidden="true">&middot;</span>
+            <span class="bm-eyebrow-sep" aria-hidden="true">
+              &middot;
+            </span>
             <span class="bm-eyebrow-label">Currently</span>
           </div>
           <h2 class="bm-section-display-title">About Me</h2>
@@ -223,9 +233,13 @@ const jsonLd = {
       <section id="work">
         <header class="bm-section-header">
           <div class="bm-eyebrow" aria-label="Section 04, Experience">
-            <span class="bm-eyebrow-mark" aria-hidden="true">&sect;</span>
+            <span class="bm-eyebrow-mark" aria-hidden="true">
+              &sect;
+            </span>
             <span class="bm-eyebrow-num">04</span>
-            <span class="bm-eyebrow-sep" aria-hidden="true">&middot;</span>
+            <span class="bm-eyebrow-sep" aria-hidden="true">
+              &middot;
+            </span>
             <span class="bm-eyebrow-label">Experience</span>
           </div>
           <h2 class="bm-section-display-title">Selected Work</h2>
@@ -234,7 +248,9 @@ const jsonLd = {
         <div class="work-card">
           <div class="work-card-header">
             <time class="work-card-date">2022–2025</time>
-            <span class="work-card-sep" aria-hidden="true">&middot;</span>
+            <span class="work-card-sep" aria-hidden="true">
+              &middot;
+            </span>
             <span class="work-card-role">CTO</span>
           </div>
           <h3 class="work-card-title">
@@ -251,7 +267,9 @@ const jsonLd = {
         <div class="work-card">
           <div class="work-card-header">
             <time class="work-card-date">2022–2026</time>
-            <span class="work-card-sep" aria-hidden="true">&middot;</span>
+            <span class="work-card-sep" aria-hidden="true">
+              &middot;
+            </span>
             <span class="work-card-role">Founder</span>
           </div>
           <h3 class="work-card-title">
@@ -268,7 +286,9 @@ const jsonLd = {
         <div class="work-card">
           <div class="work-card-header">
             <time class="work-card-date">2017–2021</time>
-            <span class="work-card-sep" aria-hidden="true">&middot;</span>
+            <span class="work-card-sep" aria-hidden="true">
+              &middot;
+            </span>
             <span class="work-card-role">Founding Engineer</span>
           </div>
           <h3 class="work-card-title">
@@ -285,7 +305,9 @@ const jsonLd = {
         <div class="work-card">
           <div class="work-card-header">
             <time class="work-card-date">2009–2015</time>
-            <span class="work-card-sep" aria-hidden="true">&middot;</span>
+            <span class="work-card-sep" aria-hidden="true">
+              &middot;
+            </span>
             <span class="work-card-role">Lots of projects</span>
           </div>
           <h3 class="work-card-title">
@@ -302,20 +324,24 @@ const jsonLd = {
       <section id="publications">
         <header class="bm-section-header">
           <div class="bm-eyebrow" aria-label="Section 05, Publications">
-            <span class="bm-eyebrow-mark" aria-hidden="true">&sect;</span>
+            <span class="bm-eyebrow-mark" aria-hidden="true">
+              &sect;
+            </span>
             <span class="bm-eyebrow-num">05</span>
-            <span class="bm-eyebrow-sep" aria-hidden="true">&middot;</span>
+            <span class="bm-eyebrow-sep" aria-hidden="true">
+              &middot;
+            </span>
             <span class="bm-eyebrow-label">Publications</span>
           </div>
           <h2 class="bm-section-display-title">HCI Publications</h2>
         </header>
         <div class="publication-intro">
           <p>
-            At MIT CSAIL (2008&ndash;2010), in David Karger's group, I built systems around <i
-              >personal informatics</i
-            >, helping people make sense of their own digital lives. Most software is designed to
-            make us more productive, so I asked whether user-controlled, passively tracked data like
-            web browsing, fitness trackers, messages and calendars could be used to foster:
+            At MIT CSAIL (2008&ndash;2010), in David Karger's group, I built systems around{' '}
+            <i>personal informatics</i>, helping people make sense of their own digital lives. Most
+            software is designed to make us more productive, so I asked whether user-controlled,
+            passively tracked data like web browsing, fitness trackers, messages and calendars could
+            be used to foster:
           </p>
           <ul>
             <li>Self-understanding: Am I unfocused and burnt out, and need a recharge?</li>
@@ -346,8 +372,10 @@ const jsonLd = {
             <a
               href="https://dl.acm.org/doi/10.1145/1772690.1772787"
               target="_blank"
-              rel="noopener noreferrer">ACM</a
+              rel="noopener noreferrer"
             >
+              ACM
+            </a>
           </p>
         </div>
         <div class="publication-entry">
@@ -375,8 +403,10 @@ const jsonLd = {
             <a
               href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=jlJmQGcAAAAJ&citation_for_view=jlJmQGcAAAAJ:u5HHmVD_uO8C"
               target="_blank"
-              rel="noopener noreferrer">Google Scholar</a
+              rel="noopener noreferrer"
             >
+              Google Scholar
+            </a>
           </p>
         </div>
         <div class="publication-entry">
@@ -399,8 +429,10 @@ const jsonLd = {
             <a
               href="https://dl.acm.org/doi/10.1145/1753846.1754032"
               target="_blank"
-              rel="noopener noreferrer">ACM</a
+              rel="noopener noreferrer"
             >
+              ACM
+            </a>
           </p>
         </div>
       </section>

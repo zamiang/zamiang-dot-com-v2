@@ -28,17 +28,15 @@ const classNames = [
 ---
 
 <div class={classNames}>
-  {
-    isNext && (
-      <a
-        href={`/writing/${post.slug}`}
-        aria-label={`Next post: ${post.title}`}
-        class="next-button focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded-sm"
-      >
-        Next
-      </a>
-    )
-  }
+  {isNext && (
+    <a
+      href={`/writing/${post.slug}`}
+      aria-label={`Next post: ${post.title}`}
+      class="next-button focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded-sm"
+    >
+      Next
+    </a>
+  )}
   <h4 class="mt-0 font-serif font-medium">
     <a
       href={`/writing/${post.slug}`}
@@ -47,9 +45,7 @@ const classNames = [
       {post.title}
     </a>
   </h4>
-  {
-    !isPast && !isCurrent && post.excerpt && (
-      <p class="truncated-text text-foreground/70">{post.excerpt}</p>
-    )
-  }
+  {!isPast && !isCurrent && post.excerpt && (
+    <p class="truncated-text text-foreground/70">{post.excerpt}</p>
+  )}
 </div>

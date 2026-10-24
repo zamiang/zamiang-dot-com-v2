@@ -25,27 +25,25 @@ const footerLinks = [
     {/* Navigation links with 44px minimum touch targets */}
     <nav aria-label="Footer navigation" class="text-center mb-4">
       <ul class="flex justify-center items-center gap-1 list-none m-0 p-0 flex-wrap">
-        {
-          footerLinks.map((link, index) => (
-            <>
-              <li>
-                <a
-                  class="!border-none hover:text-accent transition-colors duration-150 text-muted-foreground text-sm px-3 py-2 inline-flex items-center min-h-[44px]"
-                  href={link.href}
-                  target={link.external ? '_blank' : undefined}
-                  rel={link.external ? 'noopener' : undefined}
-                >
-                  {link.label}
-                </a>
+        {footerLinks.map((link, index) => (
+          <>
+            <li>
+              <a
+                class="!border-none hover:text-accent transition-colors duration-150 text-muted-foreground text-sm px-3 py-2 inline-flex items-center min-h-[44px]"
+                href={link.href}
+                target={link.external ? '_blank' : undefined}
+                rel={link.external ? 'noopener' : undefined}
+              >
+                {link.label}
+              </a>
+            </li>
+            {index < footerLinks.length - 1 && (
+              <li aria-hidden="true" class="text-muted-foreground/50">
+                ·
               </li>
-              {index < footerLinks.length - 1 && (
-                <li aria-hidden="true" class="text-muted-foreground/50">
-                  ·
-                </li>
-              )}
-            </>
-          ))
-        }
+            )}
+          </>
+        ))}
       </ul>
     </nav>
 
